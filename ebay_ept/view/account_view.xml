@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<data>
+	
+		<!-- Inherited Form View Section -->
+		<record id="view_tax_form_ebay" model="ir.ui.view">
+			<field name="name">account.tax.form.ebay</field>
+			<field name="model">account.tax</field>
+			<field name="type">form</field>
+			<field name="inherit_id" ref="account.view_tax_form" />
+			<field name="arch" type="xml">
+				<field name="include_base_amount" position="after">
+					<field name="export_in_ebay" attrs="{'invisible':[('amount_type','!=','percent'),('type_tax_use','!=','sale')]}" />
+				</field>
+			</field>
+		</record>
+	
+	</data>
+</odoo>

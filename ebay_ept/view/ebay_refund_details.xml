@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<data>
+		
+		<!-- Menu Section -->
+		<menuitem id="menu_ebayerp_refund_details" name="Refund Details"
+			sequence="12"
+			parent="ebay_ept.ebay_instance_menu_item_core_settings" />
+
+		<record id="view_ebay_tree_refund_options" model="ir.ui.view">
+			<field name="name">eBay Refund Options</field>
+			<field name="model">ebay.refund.options</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Refund Options" create="false">
+					<field name="name" />
+					<field name="description" />
+				</tree>
+			</field>
+		</record>
+		
+		<record id="view_ebay_form_refund_options" model="ir.ui.view">
+			<field name="name">eBay Refund Options</field>
+			<field name="model">ebay.refund.options</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Refund Options" create="false">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="description" readonly="1" />
+							</group>
+							<group>
+								<field name="site_ids" readonly="1" widget="many2many_tags" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_refund_options" model="ir.actions.act_window">
+			<field name="name">Refund Options</field>
+			<field name="res_model">ebay.refund.options</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="action_refund_options" id="menu_refund_options"
+			parent="menu_ebayerp_refund_details" sequence="1" />
+
+
+		<record id="view_ebay_tree_refund_days" model="ir.ui.view">
+			<field name="name">eBay Refund Days</field>
+			<field name="model">ebay.return.days</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Refund Days" create="false">
+					<field name="name" />
+					<field name="description" />
+				</tree>
+			</field>
+		</record>
+		
+		<record id="view_ebay_form_refund_days" model="ir.ui.view">
+			<field name="name">Refund Days</field>
+			<field name="model">ebay.return.days</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Refund Days" create="false">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="description" readonly="1" />
+							</group>
+							<group>
+								<field name="site_ids" readonly="1" widget="many2many_tags" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_refund_days" model="ir.actions.act_window">
+			<field name="name">Refund Days</field>
+			<field name="res_model">ebay.return.days</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="action_refund_days" id="menu_refund_days"
+			parent="menu_ebayerp_refund_details" sequence="1" />
+
+		<record id="view_ebay_tree_shipping_cost_options" model="ir.ui.view">
+			<field name="name">eBay Refund Shipping Cost Options</field>
+			<field name="model">ebay.refund.shipping.cost.options</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Refund Days" create="false">
+					<field name="name" />
+					<field name="description" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_ebay_form_refund_shipping_cost_options" model="ir.ui.view">
+			<field name="name">Shipping Cost Options</field>
+			<field name="model">ebay.refund.shipping.cost.options</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Refund Shipping Cost Options" create="false">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="description" readonly="1" />
+							</group>
+							<group>
+								<field name="site_ids" readonly="1" widget="many2many_tags" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="action_refund_shipping_cost_options" model="ir.actions.act_window">
+			<field name="name">Shipping Cost Options</field>
+			<field name="res_model">ebay.refund.shipping.cost.options</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="action_refund_shipping_cost_options" id="menu_shipping_cost_options"
+			parent="menu_ebayerp_refund_details" sequence="1" />
+
+
+		<record id="view_ebay_tree_restock_fee" model="ir.ui.view">
+			<field name="name">eBay Refund Restock Fee</field>
+			<field name="model">ebay.restock.fee.options</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Refund Days" create="false">
+					<field name="name" />
+					<field name="description" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_ebay_form_restock_fee" model="ir.ui.view">
+			<field name="name">eBay Refund Restock Fee</field>
+			<field name="model">ebay.restock.fee.options</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Refund Restock Fee" create="false">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="description" readonly="1" />
+							</group>
+							<group>
+								<field name="site_ids" readonly="1" widget="many2many_tags" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_refund_restock_fee" model="ir.actions.act_window">
+			<field name="name">Restock Fee</field>
+			<field name="res_model">ebay.restock.fee.options</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="action_refund_restock_fee" id="menu_restock_fee"
+			parent="menu_ebayerp_refund_details" sequence="1" />
+
+	</data>
+</odoo>        

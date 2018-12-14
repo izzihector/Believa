@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="amazon_get_fulfillment_from_instance_form_view" model="ir.ui.view">
+            <field name="name"> Get Fulfillment Orders</field>
+            <field name="model">amazon.outbound.order.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Get Fulfillment Order">
+                    <footer>
+                        <button name="get_fulfillment_by_instance" string="Get Fulfillment Order" type="object" class="oe_highlight"/>
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+                    </footer>
+
+				</form>
+			</field>
+		</record>
+
+        <record id="amazon_list_fulfillment_form_view" model="ir.ui.view">
+            <field name="name"> List Fulfillment Orders</field>
+            <field name="model">amazon.outbound.order.wizard</field>
+            <field name="arch" type="xml">
+                <form string="List Fulfillment Order">
+                	<group>
+                		<field name="query_start_date_time"/>
+                	</group>
+                    <footer>
+                        <button name="list_fulfillment_orders" string="List Fulfillment Order" type="object" class="oe_highlight"/>
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+                    </footer>
+
+				</form>
+			</field>
+		</record>
+
+
+        <record id="amazon_get_fulfillment_form_view" model="ir.ui.view">
+            <field name="name"> Get Fulfillment Order</field>
+            <field name="model">amazon.outbound.order.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Get Fulfillment Order">
+                    <footer>
+                        <button name="get_fulfillment_order" string="Get Fulfillment Order" type="object" class="oe_highlight"/>
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+                    </footer>
+
+				</form>
+			</field>
+		</record>
+
+        <record id="amazon_cancel_fulfillment_form_view" model="ir.ui.view">
+            <field name="name">Cancel Order Fulfillment</field>
+            <field name="model">amazon.outbound.order.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Cancel Fulfillment Orders">
+                    <footer>
+                        <button name="cancel_fulfillment" string="Cancel Fulfillment" type="object" class="oe_highlight"/>
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+                    </footer>
+
+				</form>
+			</field>
+		</record>
+
+        <record id="amazon_create_fulfillment_form_view" model="ir.ui.view">
+            <field name="name">Create Order Fulfillment</field>
+            <field name="model">amazon.outbound.order.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Create Fulfillment Orders">
+                    <footer>
+                        <button name="create_fulfillment" string="Create Fulfillment" type="object" class="oe_highlight"/>
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+                    </footer>
+
+				</form>
+			</field>
+		</record>
+        <record id="amazon_update_fulfillment_form_view" model="ir.ui.view">
+            <field name="name">Create Update Fulfillment</field>
+            <field name="model">amazon.outbound.order.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Update Fulfillment Orders">
+                    <footer>
+                        <button name="update_fulfillment" string="Update Fulfillment" type="object" class="oe_highlight"/>
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+                    </footer>
+				</form>
+			</field>
+		</record>
+
+        <record id="amazon_outbound_order_wizard" model="ir.ui.view">
+            <field name="name">Create Outbound Orders</field>
+            <field name="model">amazon.outbound.order.wizard</field>
+           
+            <field name="arch" type="xml">
+                <form string="Create Outbound Orders">
+
+					<group>
+						<group>
+							<field name="instance_id" required="1" domain="[('fba_warehouse_id','!=',False)]"/>			
+							<field name="fulfillment_action" required="1"/>				
+						</group>
+						<group>
+							<field name="delivery_start_time"/>
+							<field name="delivery_end_time"/>
+							<field name="fba_warehouse_id" invisible="1"/>
+						</group>
+					</group>
+					<group>
+						<group>
+							<field name="shipment_service_level_category" required="1"/>
+							<field name="notify_by_email"/>
+						</group>
+						<group>
+							<field name="fulfillment_policy" required="1"/>
+							<field name="is_displayable_date_time_required"/>
+							<field name="displayable_date_time" attrs="{'required':[('is_displayable_date_time_required','=',True)],'invisible':[('is_displayable_date_time_required','=',False)]}" />						
+						</group>
+					</group>
+					<group string="Sales Orders">
+						<field name="sale_order_ids" nolabel="1"/>
+					</group>
+                    <footer>
+                        <button name="create_order" string="Create" type="object" class="oe_highlight"/>
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+                    </footer>
+               </form>
+            </field>
+        </record>
+
+	<record id="action_amazon_outbound_order_wizard" model="ir.actions.act_window">
+        <field name="name">Amazon Outbound Orders</field>
+		<field name="res_model">amazon.outbound.order.wizard</field>
+        <field name="view_type">form</field>
+       	<field name="view_mode">form</field>
+       	<field name="target">new</field>        	        	
+   	</record>
+
+    <menuitem id="amazon_outbound_menu_core" name="Outbound"
+     parent="amazon_fba_menu_core" sequence="10"/>
+
+     <menuitem id="menu_item_amazon_prepare_order_ept" name="Prepare Orders"
+      parent="amazon_outbound_menu_core" sequence="5"
+	  action="action_amazon_outbound_order_wizard"/>
+
+	<record id="action_form_view_amazon_outbound_order_wizard" model="ir.actions.act_window.view">
+           <field eval="2" name="sequence"/>
+           <field name="view_mode">form</field>
+		   <field name="view_id" ref="amazon_outbound_order_wizard"/>
+           <field name="act_window_id" ref="action_amazon_outbound_order_wizard"/>
+    </record>
+
+    <act_window name="Create Fulfillment" res_model="amazon.outbound.order.wizard"
+	src_model="sale.order" view_mode="form" view_type="form"
+	target="new" multi="True" 
+	id="action_order_create_fulfillment_ept"
+	view_id="amazon_create_fulfillment_form_view"/>
+
+    <act_window name="Update Fulfillment" res_model="amazon.outbound.order.wizard"
+	src_model="sale.order" view_mode="form" view_type="form"
+	target="new" multi="True" 
+	id="action_order_update_fulfillment_ept"
+	view_id="amazon_update_fulfillment_form_view"/>
+
+    <act_window name="Cancel Fulfillment" res_model="amazon.outbound.order.wizard"
+	src_model="sale.order" view_mode="form" view_type="form"
+	target="new" multi="True" 
+	id="action_order_cancel_fulfillment_ept"
+	view_id="amazon_cancel_fulfillment_form_view"/>
+
+    <act_window name="Get Fulfillment" res_model="amazon.outbound.order.wizard"
+	src_model="sale.order" view_mode="form" view_type="form"
+	target="new" multi="True" 
+	id="action_get_fulfillment_order_ept"
+	view_id="amazon_get_fulfillment_form_view"/>
+
+
+   <!--  <act_window name="Update Fulfillment Order Status" res_model="amazon.outbound.order.wizard"
+	src_model="amazon.instance.ept" view_mode="form" view_type="form"
+	target="new" multi="True" 
+	id="action_list_fulfillment_order_ept"
+	view_id="amazon_list_fulfillment_form_view"/>
+
+    <act_window name="Get Fulfillment Orders" res_model="amazon.outbound.order.wizard"
+	src_model="amazon.instance.ept" view_mode="form" view_type="form"
+	target="new" multi="False" 
+	id="action_get_fulfillment_instance_wise_order_ept"
+	view_id="amazon_get_fulfillment_from_instance_form_view"/> -->
+
+	</data>
+</odoo>

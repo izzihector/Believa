@@ -1,0 +1,11 @@
+<odoo>
+	<data noupdate="1">
+		<record id="ir_attachment_import_product_template_ept" model="ir.attachment">
+		<field name="name">import_product_sample.csv</field>
+		<field name="datas_fname">import_product_sample.csv</field>
+		<field name="datas" type="base64" file="amazon_ept/data/import_product_sample.csv"></field>
+		<field name="res_model">file.selection.wizard</field>
+		<field name="public">True</field>
+		</record>
+	 </data>
+ </odoo>

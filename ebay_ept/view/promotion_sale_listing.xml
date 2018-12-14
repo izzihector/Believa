@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="view_ebay_promotion_sale_listing_ept" model="ir.ui.view">
+			<field name="name">ebay.promotion.sale.listing</field>
+			<field name="model">ebay.promotion.listing</field>
+			<field name="arch" type="xml">
+				<form string="Export Promotion Items">
+					<group>
+						<group>
+							<group>
+								<field name="all_auction_items" />
+								<field name="all_fixedprice_items" />
+							</group>
+							<group>
+								<field name="all_store_inventory_items" />
+								<field name="category_id" />
+								<field name="promotional_sale_id" invisible="1" />
+							</group>
+						</group>
+						<separator string="Items" />
+						<field name="item_ids" nolabel="1" colspan="4" />
+					</group>
+					<footer>
+						<button name="add_delete_promotion_listing_in_ebay"
+							invisible="context.get('action') == 'Delete'" string="Add Promotion Items"
+							type="object" class="oe_highlight" />
+						<button name="add_delete_promotion_listing_in_ebay"
+							invisible="context.get('action') == 'Add'" string="Delete Promotion Items"
+							type="object" class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+	</data>
+</odoo>

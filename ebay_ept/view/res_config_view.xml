@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+	<data>
+		
+		<!-- eBay Create Instance Section -->
+		<!-- Form View Section -->
+		<record id="view_res_config_ebay_instance" model="ir.ui.view">
+			<field name="name">Configure Instance</field>
+			<field name="model">res.config.ebay.instance</field>
+			<field name="arch" type="xml">
+				<form string="Configure Instance" class="oe_form_configuration">
+					<group>
+						<group>
+							<field name="name" required="1" />
+							<field name='warehouse_id' required="1" />
+						</group>
+						<group>
+							<field name="country_id" required="1" />
+							<field name="product_site_url" />
+						</group>
+						<group>
+							<field name='app_id' required="1" />
+							<field name='dev_id' required="1" />
+							<field name='cert_id' required="1" />
+						</group>
+						<group>
+							<field name="environment" required="1" />
+							<field name='server_url' required="1" />
+						</group>
+						<group>
+							<field name='fetch_token_boolean'/>
+							<field name='username' attrs="{'required':[('fetch_token_boolean','=',True)],'invisible':[('fetch_token_boolean','=',False)]}" />
+							<field name='password' password="True" attrs="{'required':[('fetch_token_boolean','=',True)],'invisible':[('fetch_token_boolean','=',False)]}" />
+							<field name='redirect_url_name' attrs="{'required':[('fetch_token_boolean','=',True)],'invisible':[('fetch_token_boolean','=',False)]}" />
+						</group>
+					</group>
+					<group string="Authentication Token" attrs="{'invisible':[('fetch_token_boolean','=',True)]}">
+						<field name="auth_token" nolabel="1" attrs="{'required':[('fetch_token_boolean','=',False)],'invisible':[('fetch_token_boolean','=',True)]}" />
+					</group>
+
+					<footer>
+						<button string="Create" type="object" name="test_ebay_connection" class="oe_highlight" />
+						<button string="Cancel" special="cancel" name="cancel" class="oe_link"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+		<!-- Action Section -->
+		<record id="res_config_action_ebay_instance" model="ir.actions.act_window">
+			<field name="name">eBay Instance</field>
+			<field name="res_model">res.config.ebay.instance</field>
+			<field name="view_mode">form</field>
+			<field name="view_type">form</field>
+			<field name="target">new</field>
+			<field name="view_id" ref="view_res_config_ebay_instance" />
+		</record>
+		
+		<!-- Fetch eBay Token Section -->
+		<!-- Form View Section -->
+		<record id="view_fetch_token_from_ebay" model="ir.ui.view">
+			<field name="name">Get Token</field>
+			<field name="model">fetch.ebay.token</field>
+			<field name="arch" type="xml">
+				<form string="Get Token " class="oe_form_configuration">
+					<field name="instance_id" invisible="1"></field>
+					<h3>Get Token Here :<button name="get_sessionid_from_ebay" icon="fa-arrow-right text-success" type="object" string="Click Here" class="oe_link"/><br/></h3>
+					<h3>Please Click "Continue" when you have finished with the eBay sign-in.</h3><br/><br/>
+					<h3 Style="color:red">Note: Click Continue Only after receving "Thank You" screen on eBay site.</h3>
+					<footer>
+						<button string="Continue" name="fetch_token_from_ebay" type="object" class="oe_highlight" />
+						or
+						<button string="Cancel" special="cancel" name="cancel" class="oe_link"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Action Section -->
+		<record id="fetch_token_from_ebay_wizard_action" model="ir.actions.act_window">
+			<field name="name">Get Token</field>
+			<field name="res_model">fetch.ebay.token</field>
+			<field name="view_mode">form</field>
+			<field name="view_type">form</field>
+			<field name="target">new</field>
+			<field name="view_id" ref="view_fetch_token_from_ebay" />
+		</record>
+
+		
+		<!-- eBay Configuration Setting -->
+		<!-- Form View Section -->
+		<record id="view_ebay_config_settings" model="ir.ui.view">
+			<field name="name">eBay Settings</field>
+			<field name="model">res.config.settings</field>
+			<field name="inherit_id" ref="base.res_config_settings_view_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//div[hasclass('settings')]" position="inside">
+					<!-- Start Section -->
+					<div class="app_settings_block" string="eBay Instances" data-string="eBay Instances" data-key="ebay_ept" >
+						<!-- eBay Instance -->
+						<div name="ebay_instance_config">
+	            			<h2 style="font-size:25px;background-color:#e9ecef;">eBay Instances</h2>
+	            			<div  class="row mt16 o_settings_container" >
+	                            <div class="col-12 o_setting_box">
+	                                <label for="ebay_instance_id" string="Select Instance" />
+									<field name="ebay_instance_id" widget="selection" attrs="{'required':[('ebay_instance_id','!=',False)]}" class="oe_inline" />
+									<button string="Create New eBay Instance" icon="fa-arrow-right text-success"
+										name="%(res_config_action_ebay_instance)d" type="action" class="oe_link" />
+	                             </div>
+	                          </div>
+                     	</div>
+                     	
+                     	<!-- eBay Fetch Token -->
+						<div name="ebay_fetch_token" attrs="{'invisible':[('fetch_token_boolean','=',False)]}">
+	                     	<h2>Fetch eBay Token</h2>
+		                    <div class="row mt16 o_settings_container">
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_left_pane">
+		                                <field name="fetch_token_boolean" invisible='1' />
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="id" string="Get Token" />
+		                                <div class="content-group">
+		                                    <div class="mt16">
+		                                        <button string="Get Token Here" icon="fa-arrow-right text-success" context="{'default_name':ebay_instance_id}"
+												name="%(fetch_token_from_ebay_wizard_action)d" type="action" class="oe_link" />
+		                                    </div>
+		                                </div>
+		                            </div>
+	                        	</div>
+	                        </div>
+	                    </div>   
+	                    
+	                    <!-- General Information -->
+						<div name="ebay_general_information" attrs="{'invisible':['|',('fetch_token_boolean','=',True),('ebay_instance_id','=',False)]}">
+	                     	<h2>General Information</h2>
+	                     	<div class="row mt16 o_settings_container">
+			                 	<div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_left_pane">
+		                                <field name="ebay_plus" />
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="ebay_plus" />
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="ebay_company_id" />
+		                                <field name="ebay_company_id" widget="selection"
+											attrs="{'required':[('ebay_instance_id','!=',False),('fetch_token_boolean','=',False)]}" class="oe_inline" />
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="ebay_warehouse_id" />
+		                                <field name="ebay_warehouse_id" widget="selection"
+											attrs="{'required':[('ebay_instance_id','!=',False),('fetch_token_boolean','=',False)]}" class="oe_inline" />
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="site_id" />
+		                                <field name="site_id" options="{'no_create': True}"	 attrs="{'required':[('ebay_instance_id','!=',False),('fetch_token_boolean','=',False)]}"
+											class="oe_inline" />
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="post_code" />
+		                                <field name="post_code" class="oe_inline" />
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="ebay_lang_id" />
+		                                <field name="ebay_lang_id" widget="selection"
+											attrs="{'required':[('ebay_instance_id','!=',False),('fetch_token_boolean','=',False)]}" class="oe_inline" />
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="ebay_partner_id" />
+		                                <field name="ebay_partner_id" class="oe_inline" />
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="ebay_global_channel_id" />
+		                                <field name="ebay_global_channel_id" class="oe_inline" />
+		                            </div>
+		                        </div>
+		                	</div>
+	                    </div>   
+	                    
+	                    <!-- Product Information -->
+						<div name="ebay_product_information" attrs="{'invisible':['|',('fetch_token_boolean','=',True),('ebay_instance_id','=',False)]}">
+	                     	<h2>Product Information</h2>
+	                     	<div class="row mt16 o_settings_container">
+		                     	<div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_left_pane">
+		                                <field name="price_tax_included"/>
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="price_tax_included"/>
+		                            </div>
+		                        </div>
+		                        
+		                     	<div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="shipment_charge_product_id" />
+		                                <field name="shipment_charge_product_id" class="oe_inline" attrs="{'required':[('ebay_instance_id','!=',False),('fetch_token_boolean','=',False)]}" />
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box" invisible="1">
+		                        	<div class="o_setting_left_pane">
+		                                <field name="use_dynamic_desc" />
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="use_dynamic_desc" />
+		                            </div>
+		                        </div>
+		                        
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="discount_charge_product_id" />
+		                                <field name="discount_charge_product_id" class="oe_inline" attrs="{'required':[('ebay_instance_id','!=',False),('fetch_token_boolean','=',False)]}"/>
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="ebay_default_product_category_id" invisible="1"/>
+										<field name="ebay_default_product_category_id" class="oe_inline" invisible="1"/>
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="ebay_product_url"/>
+										<field name="ebay_product_url" class="oe_inline"/>
+		                            </div>
+		                        </div>
+		                        
+		                        <br/>
+		                     	<div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="fiscal_position_id"/>
+										<field name="fiscal_position_id" class="oe_inline" />
+		                            </div>
+		                        </div>
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="ebay_tax_id"/>
+										<field name="ebay_tax_id" domain="[('type_tax_use','=','sale')]" class="oe_inline" />
+		                            </div>
+		                        </div>
+		                     	
+		                     	<br/>
+		                     	<div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_left_pane">
+		                                <field name="auto_sync_active_products"/>
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="auto_sync_active_products" />
+		                                <div class="content-group" attrs="{'invisible':[('auto_sync_active_products','=',False)]}">
+		                                    <div class="mt16">
+												<label for="sync_active_products_start_date" class="oe_inline" />
+												<field name="sync_active_products_start_date" class="oe_inline" />
+											</div>
+											<div class="mt16">
+												<label for="id" string="I want to auto sync. active products at every" />
+												<field name="sync_active_products_interval_number" class="oe_inline" attrs="{'required': [('auto_sync_active_products', '=', True)]}" />
+												<field name="sync_active_products_interval_type" class="oe_inline" attrs="{'required': [('auto_sync_active_products', '=', True)]}" />
+												<field name="sync_active_products_next_execution" class="oe_inline" attrs="{'required': [('auto_sync_active_products', '=', True)]}" />
+												<field name="sync_active_products_user_id" class="oe_inline" attrs="{'required': [('auto_sync_active_products', '=', True)]}" />
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                	</div>
+	                    </div>
+	                    
+	                    <!-- Payment Information -->
+						<div name="ebay_payment_information" attrs="{'invisible':['|',('fetch_token_boolean','=',True),('ebay_instance_id','=',False)]}">
+                     		<h2>Payment Information</h2>
+                     		<div class="row mt16 o_settings_container">
+	                     		<div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                            	<label for="pay_mthd" />
+										<field name="pay_mthd" attrs="{'required':[('ebay_instance_id','!=',False),('fetch_token_boolean','=',False)]}"
+											class="oe_inline" />
+										<div class="content-group">
+	                                    	<div class="mt16">
+	                                    		<button type="action" name="%(act_payment_method_form)d" string="Payment Options Configuration" icon="fa-arrow-right text-success" class="oe_link"/>
+	                                    	</div>
+	                                    </div>
+		                            </div>
+		                        </div>
+		                       
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="ebay_pricelist_id" />
+										<field name="ebay_pricelist_id" attrs="{'required':[('ebay_instance_id','!=',False),('fetch_token_boolean','=',False)]}"
+											class="oe_inline" />
+		                            </div>
+		                        </div>
+		                       
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="email_add" />
+										<field name="email_add" attrs="{'required':[('ebay_instance_id','!=',False),('fetch_token_boolean','=',False)]}"
+											class="oe_inline" />
+		                            </div>
+		                        </div>
+		                   </div>
+                     	</div>
+                     	
+                     	<!-- Order Information -->
+                     	<div name="ebay_order_information" attrs="{'invisible':['|',('fetch_token_boolean','=',True),('ebay_instance_id','=',False)]}">
+                     		<h2>Order Information</h2>
+                     		<div class="row mt16 o_settings_container">
+	                     		<div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="ebay_order_prefix" />
+										<field name="ebay_order_prefix" class="oe_inline" />
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="ebay_team_id" />
+										<field name="ebay_team_id" options="{'no_create': True}" class="oe_inline" />
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_left_pane">
+		                                <field name="create_new_product" />
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="create_new_product" />
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box" attrs="{'invisible': [('create_new_product', '!=', False)]}">
+		                            <div class="o_setting_left_pane">
+		                                <field name="create_quotation_without_product" />
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="create_quotation_without_product" />
+		                            </div>
+		                        </div>
+		                        
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                        	<!-- Manage Multi-Tracking Number -->
+		                            <div class="o_setting_left_pane">
+		                                <field name="manage_multi_tracking_number_in_delivery_order" />
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="manage_multi_tracking_number_in_delivery_order" />
+		                            </div>
+		                        </div>
+		                    	
+		                    	<div class="col-12 col-lg-6 o_setting_box">
+		                    		<!-- Auto Update Payment -->
+		                            <div class="o_setting_left_pane">
+		                                <field name="auto_update_payment" />
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="auto_update_payment" />
+		                            </div>
+		                        </div>
+		                        
+		                        <br/>
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                        	<!-- Auto Import Order -->
+		                            <div class="o_setting_left_pane">
+		                                <field name="order_auto_import"/>
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="order_auto_import" />
+		                                <div class="content-group" attrs="{'invisible': [('order_auto_import', '=', False)]}">
+		                                    <div class="mt16">
+												<label for="id" string="Import Shipped Orders?" />
+												<field name="is_import_shipped_order" class="oe_inline" />
+											</div>
+											<div class="mt16">
+												<label for="id" string="I want to import order at every " />
+												<field name="order_import_interval_number"
+													attrs="{'required': [('order_auto_import', '=', True)]}" class="oe_inline" />
+												<field name="order_import_interval_type"
+													attrs="{'required': [('order_auto_import', '=', True)]}" class="oe_inline" />
+												<field name="order_import_next_execution"
+													attrs="{'required': [('order_auto_import', '=', True)]}" class="oe_inline" />
+												<field name="order_import_user_id"
+													attrs="{'required': [('order_auto_import', '=', True)]}" class="oe_inline" />
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+		                        	<!-- Auto Send Invoice Via Mail -->
+		                            <div class="o_setting_left_pane">
+		                                <field name="auto_send_invoice_via_email"/>
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="auto_send_invoice_via_email" />
+		                                <div class="content-group" attrs="{'invisible':[('auto_send_invoice_via_email','=',False)]}">
+		                                    <div class="mt16">
+												<label for="send_invoice_template_id" class="oe_inline" />
+												<field name="send_invoice_template_id" class="oe_inline" />
+											</div>
+											<div class="mt16">
+												<label for="id" string="I want to auto send invoice via email at every" />
+												<field name="send_invoice_via_email_interval_number" class="oe_inline" attrs="{'required': [('auto_send_invoice_via_email', '=', True)]}" />
+												<field name="send_invoice_via_email_interval_type" class="oe_inline" attrs="{'required': [('auto_send_invoice_via_email', '=', True)]}" />
+												<field name="send_invoice_via_email_next_execution" class="oe_inline" attrs="{'required': [('auto_send_invoice_via_email', '=', True)]}" />
+												<field name="send_invoice_user_id" class="oe_inline" attrs="{'required': [('auto_send_invoice_via_email', '=', True)]}" />
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+			                        <!-- Auto Update Order Status -->	
+		                            <div class="o_setting_left_pane">
+		                                <field name="order_auto_update" help="If Ticked, Order shipment will be automatically updated by system to Shopify." />
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="order_auto_update" />
+		                                <div class="content-group" attrs="{'invisible': [('order_auto_update', '=', False)]}">
+											<div class="mt16">
+												<label for="id" string="I want to Auto Update Order at every " />
+												<field name="order_update_interval_number"
+													attrs="{'required': [('order_auto_update', '=', True)]}" class="oe_inline" />
+												<field name="order_update_interval_type"
+													attrs="{'required': [('order_auto_update', '=', True)]}" class="oe_inline" />
+												<field name="order_update_next_execution"
+													attrs="{'required': [('order_auto_update', '=', True)]}" class="oe_inline" />
+												<field name="order_status_update_user_id"
+													attrs="{'required': [('order_auto_update', '=', True)]}" class="oe_inline" />
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                        
+		                        <br/>
+		                        <div class="col-12 col-lg-6 o_setting_box">
+			                        <!-- Auto Import Feedback -->	
+		                            <div class="o_setting_left_pane">
+		                                <field name="is_auto_get_feedback"/>
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="is_auto_get_feedback" />
+		                                <div class="content-group" attrs="{'invisible': [('is_auto_get_feedback', '=', False)]}">
+											<div class="mt16">
+												<label for="id" string="I want to Get FeedBacks at every " />
+												<field name="get_feedback_interval_number"
+													attrs="{'required': [('is_auto_get_feedback', '=', True)]}" class="oe_inline" />
+												<field name="get_feedback_interval_type"
+													attrs="{'required': [('is_auto_get_feedback', '=', True)]}" class="oe_inline" />
+												<field name="get_feedback_next_execution"
+													attrs="{'required': [('is_auto_get_feedback', '=', True)]}" class="oe_inline" />
+												<field name="get_feedback_user_id"
+													attrs="{'required': [('is_auto_get_feedback', '=', True)]}" class="oe_inline" />
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                	</div>
+                     	</div>
+                     	
+                     	<!-- Inventory Information -->
+                     	<div name="ebay_inventory_information" attrs="{'invisible':['|',('fetch_token_boolean','=',True),('ebay_instance_id','=',False)]}">
+                     		<h2>Inventory Information</h2>
+                     		<div class="row mt16 o_settings_container">
+	                     		<div class="col-12 col-lg-6 o_setting_box">
+		                            <div class="o_setting_right_pane">
+		                                <label for="ebay_stock_field" />
+										<field name="ebay_stock_field" widget="selection" domain="[('model_id.model','=','product.product'),('ttype','=','float')]"
+											attrs="{'required':[('ebay_instance_id','!=',False),('fetch_token_boolean','=',False)]}" class="oe_inline" />
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="col-12 col-lg-6 o_setting_box">
+			                        <!-- Auto Export Inventory -->	
+		                            <div class="o_setting_left_pane">
+		                                <field name="stock_auto_export"/>
+		                            </div>
+		                            <div class="o_setting_right_pane">
+		                                <label for="stock_auto_export" />
+		                                <div class="content-group" attrs="{'invisible': [('stock_auto_export', '=', False)]}">
+											<div class="mt16">
+												<label for="id" string="I want to Auto Update Inventory at every " />
+												<field name="update_stock_interval_number"
+													attrs="{'required': [('stock_auto_export', '=', True)]}" class="oe_inline" />
+												<field name="update_stock_interval_type"
+													attrs="{'required': [('stock_auto_export', '=', True)]}" class="oe_inline" />
+												<field name="update_stock_next_execution"
+													attrs="{'required': [('stock_auto_export', '=', True)]}" class="oe_inline" />
+												<field name="stock_update_user_id"
+													attrs="{'required': [('stock_auto_export', '=', True)]}" class="oe_inline" />
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                	</div>
+                     	</div>         	
+					</div>
+					<!-- ./End Section -->
+				</xpath>
+			</field>
+		</record>
+
+		<!-- Action Section -->
+		<record id="action_ebay_config" model="ir.actions.act_window">
+			<field name="name">Settings</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">res.config.settings</field>
+			<field name="view_mode">form</field>
+			<field name="target">inline</field>
+			<field name="context">{'module' : 'ebay_ept'}</field>
+		</record>
+		
+		<!-- Child Menu Section -->
+		<menuitem 
+			id="menu_ebay_config" 
+			name="eBay Settings"
+			parent="ebay_ept.ebay_instance_menu_item_core_settings"
+			sequence="1" 
+			action="action_ebay_config" 
+			groups="ebay_ept.group_ebay_ept,base.group_system" />
+			
+	</data>
+</odoo>

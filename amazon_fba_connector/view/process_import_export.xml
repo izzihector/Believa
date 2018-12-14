@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="view_amazon_fba_process_import_order_ept" model="ir.ui.view">
+			<field name="name">Process Import FBA Order</field>
+			<field name="model">amazon.process.import.export</field>
+			<field name="inherit_id" ref="amazon_ept.view_amazon_process_import_export_ept" />
+			<field name="arch" type="xml">
+				<xpath expr="//group/group[1]" position="after">
+					<group string='Import Operations (FBA)'>
+						<field name="import_fba_pending_sale_order"/>
+						<field name="check_order_status"/>	
+              		<!--    <field name="import_fba_shipment_report"/>   
+                            <label string="" attrs="{'invisible':[('import_fba_shipment_report', '=', False)]}" />
+								<div><field name="start_date" attrs="{'invisible':[('import_fba_shipment_report', '=', False)]}" class="oe_inline"/></div>
+                       		<label string="" attrs="{'invisible':[('import_fba_shipment_report', '=', False)]}" />
+                       			<div> <field name="end_date" attrs="{'invisible':[('import_fba_shipment_report', '=', False)]}" class="oe_inline"/></div> 	
+					                        
+                           <field name="import_soft_shipment_report" class="oe_inline"/>    
+                        	<label string="" attrs="{'invisible':[('import_soft_shipment_report', '=', False)]}" />                   
+		                        <div> <field name="date_start" attrs="{'invisible':[('import_soft_shipment_report', '=', False)],'required':[('import_soft_shipment_report','=',True)]}" class="oe_inline"/></div>
+		                    <label string="" attrs="{'invisible':[('import_soft_shipment_report', '=', False)]}" />
+			                    <div> <field name="date_end" attrs="{'invisible':[('import_soft_shipment_report', '=', False)],'required':[('import_soft_shipment_report','=',True)]}" class="oe_inline"/></div> -->
+					</group>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

@@ -1,0 +1,6 @@
+id,name,sequence,action_id:id,url,display_inline_image,display_outline_image,use_inbound_shipment_plan,use_inbound_shipment,display_record_count
+inbound_shipment_plan_operation,Inbound Shipment Plan,12,amazon_fba_connector.action_inbound_shipment_plan,/amazon_fba_connector/static/src/img/kanban/sale.png,0,1,1,0,0
+inbound_shipments_operation,Inbound Shipments,13,amazon_fba_connector.action_amazon_inbound_shipment_ept,/amazon_fba_connector/static/src/img/kanban/products.png,0,1,0,1,0
+prepare_orders_operation,Prepare Orders,15,amazon_fba_connector.action_amazon_outbound_order_wizard,/amazon_fba_connector/static/src/img/kanban/refund.png,0,1,0,0,0
+import_fba_stock_operation,Import Stock (FBA),18,amazon_fba_connector.action_fba_inventory_improt_wizard_ept,/amazon_fba_connector/static/src/img/kanban/stock_fba.png,0,1,0,0,0
+amazon_inventory_operation,FBA Inventory,12,amazon_fba_connector.action_amazon_fba_inventory_ept,/amazon_fba_connector/static/src/img/kanban/inventory.png,0,1,0,0,1

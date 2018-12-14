@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<record id="view_inventory_form" model="ir.ui.view">
+        <field name="name">file.selection.wizard</field>
+        <field name="model">file.selection.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Choose File To Import Stock">
+           		<group>
+           			<p>
+		            	Select Seller, and choose file for import products.
+         			</p>
+           		</group>
+           		<group>
+           			<field name="seller_id" options="{'no_create':True,'no_create_edit': True}"></field>
+            		<field name="choose_file" widget="binary"></field>
+	            	<field name="delimiter"></field>	            	
+            	</group>
+            	<group>
+            		<button string="Download Sample Attachment" name="download_sample_attachment" type="object" class="btn-default"></button>
+            	</group>
+            	<footer>
+                	<button name="import_csv_file" string="Import Product" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+    	</field>
+    </record>
+    
+     <record id="file_selection_wizard_action" model="ir.actions.act_window">
+            <field name="name">Choose File</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">file.selection.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+  	</record>
+</openerp>

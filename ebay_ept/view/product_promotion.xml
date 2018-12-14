@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="tree_view_ebay_promotion_sale_ept" model="ir.ui.view">
+			<field name="name">tree.view.ebay.promotion.sale</field>
+			<field name="model">ebay.promotion.ept</field>
+			<field name="arch" type="xml">
+				<tree string="eBay Promotions">
+					<field name="promotion_name" />
+					<field name="discount_type" />
+					<field name="promotion_start_date" />
+					<field name="promotion_type" />
+					<field name="discount_value" />
+					<field name="promotion_end_date" />
+					<field name="promotion_sale_id" />
+					<field name="status" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="form_view_ebay_promotion_sale_ept" model="ir.ui.view">
+			<field name="name">form.view.ebay.promotion.sale</field>
+			<field name="model">ebay.promotion.ept</field>
+			<field name="arch" type="xml">
+				<form string="eBay Promotions">
+					<header>
+						<button name="create_update_delete_promotion_on_ebay"
+							string="Create Promotion On eBay" attrs="{'invisible':[('promotion_sale_id','!=',0)]}"
+							context="{'action':'add'}" type="object" class="oe_highlight" />
+						<button name="create_update_delete_promotion_on_ebay"
+							string="Update Promotion On eBay" attrs="{'invisible':[('promotion_sale_id','=',0)]}"
+							context="{'action':'update'}" type="object" class="oe_highlight" />
+						<button name="create_update_delete_promotion_on_ebay"
+							string="Delete Promotion From eBay" attrs="{'invisible':[('promotion_sale_id','=',0)]}"
+							context="{'action':'delete'}" type="object" class="oe_highlight" />
+
+						<button name="add_delete_item_from_promotion" string="Add Item On Promotion"
+							attrs="{'invisible':[('promotion_sale_id','=',0)]}" context="{'action':'add'}"
+							type="object" class="oe_highlight" />
+						<button name="add_delete_item_from_promotion" string="Delete Item From Promotion"
+							attrs="{'invisible':[('promotion_sale_id','=',0)]}" context="{'action':'delete'}"
+							type="object" class="oe_highlight" />
+					</header>
+					<sheet>
+					<div class="oe_title" style="width: 390px;">
+						<label class="oe_edit_only" for="promotion_name" string="Promotion Name" />
+						<h1>
+							<field name="promotion_name" class="oe_inline" required="1"/>
+						</h1>
+					</div>
+					<group>
+						<group>
+							<group>
+								<field name="instance_id"/>
+								<field name="promotion_sale_id" />								
+								<field name="status" />							
+							</group>
+							<group>
+								<field name="discount_type" required="1" />
+								<field name="discount_value" required="1"/>
+								<field name="promotion_type" required="1"/>
+								<field name="created_in_ebay" invisible="1" />
+							</group>
+							<group>
+								<field name="promotion_start_date" required="1"/>
+								<field name="promotion_end_date" required="1"/>
+								<field name="promotion_item_ids" widget="many2many_tags" domain="[('state','=','Active')]"/>					
+							</group>
+						</group>
+					</group>
+				</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_ebay_promotion_ept" model="ir.actions.act_window">
+			<field name="name">eBay Promotions</field>
+			<field name="res_model">ebay.promotion.ept</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="tree_view_ebay_promotion_sale_ept" />
+		</record>
+
+		<menuitem id="menu_ebay_promotion_ept" name="Promotions"
+			parent="ebay_ept.menu_item_parent_ebay_products_ept" sequence="10"
+			action="action_ebay_promotion_ept" />
+	</data>
+</odoo>

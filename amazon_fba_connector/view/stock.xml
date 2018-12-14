@@ -1,0 +1,163 @@
+<?xml version="1.0" ?>
+<odoo>
+	<data>
+        <record id="view_move_search_ept" model="ir.ui.view">
+            <field name="name">stock.move.search</field>
+            <field name="model">stock.move</field>
+			<field name="inherit_id" ref="stock.view_move_search"/>
+            <field name="arch" type="xml">
+				<field name="product_id" position="after">
+					<field name="return_reason_id"/>
+				</field>
+				<filter name="by_product" position="after">
+	                <filter string="Return Reason" name="return_reason_id" icon="terp-accessories-archiver" domain="[]"  context="{'group_by':'return_reason_id'}"/>				
+				</filter>
+            </field>
+        </record>
+        <record id="view_move_form_ept" model="ir.ui.view">
+            <field name="name">stock.move.form</field>
+            <field name="model">stock.move</field>
+			<field name="inherit_id" ref="stock.view_move_form"/>
+			<field eval="16" name="priority"/>
+            <field name="arch" type="xml">
+				<field name="date" position="after">
+            		<field name="return_reason_id"/>
+            	</field>
+			</field>
+		</record>
+        <record id="view_picking_internal_search" model="ir.ui.view">
+            <field name="name">stock.picking.internal.search</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="amazon_ept.view_picking_internal_search"/>
+            <field name="arch" type="xml">
+				<filter name="waiting" position="after">
+                    <filter icon="terp-check" name="MFN" string="MFN" domain="[('fulfillment_by','=', 'MFN')]"/>				
+                    <filter icon="terp-check" name="AFN" string="AFN" domain="[('fulfillment_by','=', 'AFN')]"/>				
+				</filter>
+            	<xpath expr="//filter[@name='picking_type']" position="after">
+            		<filter name="fulfillment_by" string="Fulfillment By" domain="[]" context="{'group_by':'fulfillment_by'}"/>
+            	</xpath>
+            </field>
+        </record>
+
+		<record id="view_picking_inbound_shipment_form" model="ir.ui.view">
+			<field name="name">picking.inbound.shipment.form</field>
+			<field name="model">stock.picking</field>
+			<field name="type">form</field>
+			<field name="inherit_id" ref="stock.view_picking_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//header/button[@name='action_cancel']" position="after">
+					<button name="update_shipment_quantity"
+						attrs="{'invisible': ['|','|',('state','not in',['assigned','partially_available']),
+												  ('odoo_shipment_id','=',False),
+												  ('is_fba_wh_picking','=',True)]}"
+						string="Update Shipment Quantity" type="object" class="oe_highlight" />
+				</xpath>
+				<notebook position="inside">
+					<page string="Amazon Info" attrs="{'invisible':[('amazon_shipment_id','=',False)]}">
+						<field name="is_fba_wh_picking" invisible="1" />
+						<field name="odoo_shipment_id" invisible="1" />
+						<field name="inbound_ship_data_created" invisible="1" />
+						<group>
+							<group>
+								<field name="ship_plan_id" invisible="1" />
+								<field name="amazon_shipment_id" readonly="1"/>
+								<field name="fulfill_center" attrs="{'invisible': [('ship_plan_id','=',False)]}" />
+							</group>
+							<group>
+								<field name="are_cases_required" attrs="{'invisible': [('ship_plan_id','=',False)]}" />
+								<field name="shipment_status" />
+							</group>
+							<group>
+								<field name="amazon_shipment_date" readonly="1"/>
+								<field name="amazon_purchase_date" readonly="1"/>
+								<field name="estimated_arrival_date" readonly="1"/>
+							</group>
+						</group>
+					</page>
+				</notebook>
+			</field>
+		</record>
+
+		<record id="action_picking_tree_fba" model="ir.actions.act_window">
+			<field name="name">Inbound Shipment</field>
+			<field name="res_model">stock.picking</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,calendar</field>
+			<field name="domain">[('ship_plan_id','!=',False)]</field>
+			<field name="search_view_id" ref="stock.view_picking_internal_search" />
+			<field name="help" type="html">
+				<p>
+					Inbound Shipments Pickings are prepared automatically by Inbound Shipment.
+				</p>
+			</field>
+		</record>
+
+		<menuitem id="amazon_inbound_shipment_pickings_menu" name="Shipment Pickings"
+			parent="amazon_inbound_menu_core" sequence="5" action="action_picking_tree_fba" />
+		
+		<record id="action_return_fba_picking_order_ept" model="ir.actions.act_window">
+            <field name="name">Return Orders</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="amazon_ept.stock_tree_view_amazon_ept_new" />
+            <field name="domain">[('is_amazon_fba_return_delivery_order','=','True')]</field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+            <field name="help" type="html">
+              <div class="oe_empty_amazon_picking">
+                  <br/><br/><br/>
+                  <p>
+                    There is no any Return Delivery Order created for any of Amazon FBA Sale Orders. 
+                    If your Amazon Instance's Invoice Policy is set to "Before Delivery", then after Invoice being totally paid, Delivery order for Amazon will be created automatically and it will be visible over here.
+                    From here, you can't manually create delivery order for Amazon. It must be created via Sale Order.
+                  </p>
+                 
+              </div>
+          </field>	
+        </record>
+        
+        <!-- Sales: Child Menu Returns -->
+    	<menuitem id="amazon_sales_child_return_menu" 
+    		name="Returns" parent="amazon_ept.menu_item_parent_amazon_sales_ept" sequence="2" />
+        
+        <!-- Returns: Child Menu Return Orders (FBA) -->
+        <menuitem id="amazon_return_order_picking_menu" name="Return Orders (FBA)"
+			parent="amazon_sales_child_return_menu" sequence="1" action="action_return_fba_picking_order_ept" />
+			
+		<record id="action_fba_instance_return_picking_ept" model="ir.actions.act_window">
+            <field name="name">(FBA)Return Orders</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="amazon_ept.stock_tree_view_amazon_ept_new" />
+            <field name="domain">[('is_amazon_fba_return_delivery_order','=','True'),('amazon_instance_id','=',active_id)]</field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+       	</record>			
+			
+		<record id="action_amazon_fba_inventory_ept" model="ir.actions.act_window">
+			<field name="name">Amazon FBA Inventory</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">stock.inventory</field>
+			<field name="view_type">form</field>
+			<field name="domain">[('amazon_instance_id','!=',False)]</field>
+			<field name="view_id" ref="stock.view_inventory_tree" />
+			<field name="search_view_id" ref="stock.view_inventory_filter" />
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click to start an inventory.
+				</p>
+				<p>
+					Periodical Inventories are used to count the number of products
+					available per location. You can use it once a year when you do
+					the general inventory or whenever you need it, to adapt the
+					current inventory level of a product.
+				</p>
+			</field>
+		</record>
+		
+	</data>
+</odoo>  

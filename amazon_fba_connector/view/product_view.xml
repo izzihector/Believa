@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<data>
+		
+		<!-- Inherited Form View Section -->
+		<record id="inherited_amazon_product_form_view" model="ir.ui.view">
+			<field name="name">Amazon Product Form View</field>
+			<field name="model">amazon.product.ept</field>
+			<field name="inherit_id" ref="amazon_ept.amazon_product_form_view_ept" />
+			<field name="arch" type="xml">
+				<field name="fulfillment_by" position="after">
+					<field name="quantity_in_case" invisible="1" />
+					<field name="prep_instruction_ids" readonly="1" widget="many2many_tags" invisible="1" />
+					<field name="barcode_instruction" readonly="1" invisible="1" />					
+				</field>
+			</field>
+		</record>
+	
+	</data>
+</odoo>

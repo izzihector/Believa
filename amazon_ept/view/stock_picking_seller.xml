@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+	
+	 <record model="ir.ui.view" id="view_form_picking_stock_ept">
+            <field name="name">view.form.picking.stock.ept</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <data>
+                	<xpath expr="//sheet/notebook/page[@name='extra']/group/group/field[@name='picking_type_code']" position="after">
+                		<field name='seller_id' widget="selection" readonly="1"/>                		
+                	</xpath>
+                </data>
+            </field>	
+        </record>
+      </data>
+</openerp>     

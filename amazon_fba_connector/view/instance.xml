@@ -1,0 +1,119 @@
+<?xml version="1.0" ?>
+<odoo>
+	<data>
+		
+		<record id="view_amazon_instance_kanban_inherit" model="ir.ui.view">
+           <field name="name">Amazon Instance FBA Kanban</field>
+           <field name="model">amazon.instance.ept</field>
+           <field name="inherit_id" ref="amazon_ept.view_amazon_instance_kanban"/>
+           <field name="arch" type="xml">
+           		<field name="order_count" position="after">
+           			<field name="fba_sale_order_count"/>
+           			<field name="fba_quotation_count"/>
+           			<field name="fba_order_count"/>
+           			<field name="count_draft_inbound_shipment_plan"/>
+           			<field name="count_approved_inbound_shipment_plan"/>
+           			<field name="count_working_inbound_shipment"/>
+           			<field name="count_shipped_inbound_shipment"/>
+           			<field name="count_cancelled_inbound_shipment"/>
+           			<field name="count_closed_inbound_shipment"/>
+           			<field name="fba_return_delivery_order_count"/>           			
+           		</field>   
+           		<xpath expr="//div[@id='settlement_report']" position="after">
+           		<br></br>
+                    <div id="shipping_report">
+                       <button class="btn btn-primary w-100" name="%(amazon_fba_connector.action_wizard_amazon_list_instance_shipping_report_ept)d" type="action">
+                           <span>Shipping Report</span>
+                       </button>
+                    </div>
+           		</xpath>
+           		        		
+           		<xpath expr="//div[@id='sale_order_fbm']" position="after">
+           			 <div class="mt8 mb8">
+						<b><span>FBA</span></b>
+					 </div>
+					 <div id="quotation_fba">
+	                 	<a name="%(amazon_fba_connector.action_amazon_instance_fba_quotation_only)d" type="action" title = "(FBA) Quotations"><t t-esc="record.fba_quotation_count.raw_value"/> Quotations</a>
+					 </div>
+					 <div id="sale_order_fba">
+	                 	<a name="%(amazon_fba_connector.action_amazon_instance_fba_sales_order_only)d" type="action" title = "(FBA) Sales Orders"><t t-esc="record.fba_order_count.raw_value"/> Sales Orders</a>
+					 </div>
+					 
+				</xpath>
+				<xpath expr="//div[@id='picking_done']" position="after">
+					<div id="return_orders_fba">
+	                	<a name="%(amazon_fba_connector.action_fba_instance_return_picking_ept)d" type="action" title = "(FBA) Return Orders"><t t-esc="record.fba_return_delivery_order_count.raw_value"/> (FBA) Return Orders</a>
+	                </div>
+				</xpath>
+				<xpath expr="//div[@id='filter_product']" position="attributes">
+					<attribute name="class">col-xs-4 o_kanban_card_manage_section o_kanban_manage_new</attribute>
+					<attribute name="style">padding-right:0;</attribute>
+				</xpath>
+				<xpath expr="//div[@id='filter_delivery']" position="attributes">
+					<attribute name="class">col-xs-4 o_kanban_card_manage_section o_kanban_manage_new</attribute>
+					<attribute name="style">padding-right:0;padding-left:0;</attribute>
+				</xpath>
+				<xpath expr="//div[@id='filter_invoice']" position="attributes">
+					<attribute name="class">col-xs-2 o_kanban_card_manage_section o_kanban_manage_new</attribute>
+					<attribute name="style">padding-right:0;padding-left:0;</attribute>
+				</xpath>
+				<xpath expr="//div[@id='filter_invoice']" position="after">
+                   	<div id="filter_fba_inbound_shipment_plan" style="padding-left:0;"  class="col-xs-2 o_kanban_card_manage_section o_kanban_manage_new">
+                   		<div style="margin-bottom:3px;margin-top:-4px;">
+							<b>Inbound Shipment</b>
+						</div>				                    	
+                    	<a id="working_inbound_shipment" name="%(amazon_fba_connector.action_amazon_instance_working_inbound_shipment_ept)d" type="action" title="Working Inbound Shipments"><t t-esc="record.count_working_inbound_shipment.raw_value"/> Working</a>
+                    	<a id="shipped_inbound_shipment" name="%(amazon_fba_connector.action_amazon_instance_shipped_inbound_shipment_ept)d" type="action" title="Shipped Inbound Shipments"><t t-esc="record.count_shipped_inbound_shipment.raw_value"/> Shipped</a>
+                    	<a id="cancelled_inbound_shipment" name="%(amazon_fba_connector.action_amazon_instance_cancelled_inbound_shipment_ept)d" type="action" title="Cancelled Inbound Shipments"><t t-esc="record.count_cancelled_inbound_shipment.raw_value"/> Cancelled</a>
+                    	<a id="closed_inbound_shipment" name="%(amazon_fba_connector.action_amazon_instance_closed_inbound_shipment_ept)d" type="action" title="Closed Inbound Shipments"><t t-esc="record.count_closed_inbound_shipment.raw_value"/> Closed</a>
+                   	</div>           			
+           		</xpath>
+           </field>
+        </record>		
+	
+		<record id="amazon_instance_fba_tree_view_inherit_ept" model="ir.ui.view">
+			<field name="name">Amazon Instance FBA</field>
+			<field name="model">amazon.instance.ept</field>
+			<field name="type">tree</field>
+			<field name="inherit_id" ref="amazon_ept.amazon_instance_tree_view_ept" />
+			<field name="arch" type="xml">
+				<field name="warehouse_id" position="after">
+					<field name="fba_warehouse_id" />
+				</field>
+			</field>
+		</record>
+				
+		<record id="amazon_instance_fba_form_view_ept" model="ir.ui.view">
+			<field name="name">Amazon Instance FBA</field>
+			<field name="model">amazon.instance.ept</field>
+			<field name="type">form</field>
+			<field name="inherit_id" ref="amazon_ept.amazon_instance_form_view_ept" />
+			<field name="arch" type="xml">
+				<field name="warehouse_id" position="replace">
+					<field name="warehouse_id" domain="[('id','!=',fba_warehouse_id)]"
+						readonly="1" />
+				</field>
+				<field name="settlement_report_journal_id" position="after">
+					<field name="split_order" readonly="1"/>
+					<field name="check_status_days" readonly="1" />
+				</field>
+				<field name="marketplace_id" position="after">
+					<field name="fba_warehouse_id" domain="[('id','!=',warehouse_id)]"
+						readonly="1" />
+<!-- 					<field name="fba_auto_workflow_id" readonly="1"/> -->
+				</field>
+				<notebook position="inside">
+					<page string='Return Order Configuration' invisible="1">
+						<field name="order_return_config_ids" nolabel="1">
+							<tree editable="top">
+								<!-- Commented by Dhruvi as condition is added to amazon seller ept -->
+								<!-- <field name="condition" /> -->
+								<field name="location_id" />
+							</tree>
+						</field>
+					</page>
+				</notebook>					
+			</field>
+		</record>
+	</data>
+</odoo>

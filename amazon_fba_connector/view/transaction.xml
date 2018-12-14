@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<odoo>
+	<data>
+		<record id="amazon_transaction_type_fba_tree_ept" model="ir.ui.view">
+			<field name="name">Amazon Transaction Type FBA Tree</field>
+			<field name="model">amazon.transaction.type</field>
+			<field name="type">tree</field>
+			<field name='inherit_id' ref="amazon_ept.amazon_transaction_type_tree_ept"/>
+			<field name="arch" type="xml">
+				<field name='amazon_code' position="after">
+					<field name='is_reimbursement' invisible="1"/>
+				</field>
+			</field>
+		</record>
+		<record id="amazon_transaction_type_fba_form_ept" model="ir.ui.view">
+			<field name="name">Amazon Transaction Type FBA Form</field>
+			<field name="model">amazon.transaction.type</field>
+			<field name="type">form</field>
+			<field name='inherit_id' ref="amazon_ept.amazon_transaction_type_form_ept"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form/group" position="replace">
+					<group>
+						<group>
+							<field name='name' required="1"/>
+					        <field name="is_reimbursement" />
+						</group>
+						<group>
+							<field name='amazon_code' required="1" />
+						</group>
+					</group>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>		

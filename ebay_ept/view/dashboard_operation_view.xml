@@ -1,0 +1,284 @@
+<?xml version="1.0" ?>
+
+<odoo>
+	<data>
+	
+		<!-- Kanban View Section -->
+		<record id="ebay_operations_kanban_ept" model="ir.ui.view">
+			<field name="name">ebay.operations.kanban.ept</field>
+			<field name="model">ebay.operations.ept</field>
+			<field name="arch" type="xml">
+				<kanban class="oe_background_grey o_kanban_dashboard o_ebay_dashboard_kanban_ept" create="0">
+					<field name="name" />
+					<field name="instance_id" />
+					<field name="color" />
+					<field name="sequence" />
+					<field name="today_total_sale"/>
+					<field name="week_total_sale"/>
+					<field name="half_month_total_sale" />
+					<field name="month_total_sale"/>
+					<templates>
+	                    <t t-name="kanban-box">
+	                        <div t-attf-class="#{kanban_color(record.color.raw_value)}">
+	                            <div class="o_kanban_card_header">
+	                                <div class="o_kanban_card_header_title">
+	                                    <div class="o_primary"><field name="name"/></div>
+	                                </div>
+	                                <div class="o_kanban_manage_button_section">
+	                                    <a class="o_kanban_manage_toggle_button" href="#">More <i class="fa fa-caret-down"/></a>
+	                                </div>
+	                            </div>
+	                            <div class="container o_kanban_card_content">
+	                                <div class="row">
+	                                	 <!-- Dashboard Button -->
+	                                	 <div class="col-6 o_kanban_primary_left">
+	                                    	<div class="row col-6">
+	                                        	<div id="ebay_perform_operation">
+			                                    	<button class="btn btn-primary" name="get_action_perform_oprations" type="object">
+			                                            <span>eBay Operations</span>
+			                                        </button>
+			                                     </div><br></br>
+			                                     <div id="ebay_instance" style="padding-top:3px;">
+			                                        <button class="btn btn-primary" name="%(ebay_ept.action_ebay_instance_ept)d" type="action">
+			                                            <span>eBay Instances</span>
+			                                        </button>
+			                                     </div><br></br>
+			                                     <div id="ebay_settings" style="padding-top:3px;">
+			                                        <button class="btn btn-primary" name="%(ebay_ept.action_ebay_config)d" type="action">
+			                                            <span>eBay Settings</span>
+			                                        </button>
+			                                     </div>
+	                                        </div>
+	                                    </div>
+	                                    
+	                                	<!-- Shortcut Link -->
+	                                    <div class="col-6 o_kanban_primary_right">
+	                                        <div class="row">
+	                                        	<div class="col-6">
+		                                        	<a name="get_action_ebay_sales_orders" type="object" class="oe_sparkline_bar_link">
+		                                            	Sales Orders
+		                                            </a>
+	                                        	</div>
+	                                        </div>
+	                                        <div class="row">
+	                                        	<div class="col-6">
+		                                        	<a name="get_action_picking_view_ept" type="object" class="oe_sparkline_bar_link">
+		                                            	Delivery Orders
+		                                            </a>
+	                                        	</div>
+	                                        </div>
+	                                        <div class="row">
+	                                        	<div class="col-6">
+		                                        	<a name="get_action_picking_view_ept" type="object" class="oe_sparkline_bar_link">
+		                                            	Invoices
+		                                            </a>
+	                                        	</div>
+	                                        </div>
+	                                    </div>
+										
+										<div class="clearfix" />
+									
+	                                    <!-- Analytic Section -->
+						                <div class="row" style="padding-top:15px !important; margin-right: -23px !important; margin-left: 0px !important; bottom: 0px; width: 100% ! important;">
+						                	<field name="currency_id" invisible="1"/>
+						                		<table class="table table-condensed" style="margin-bottom:0px">
+						                			<thead style="border-top: 3px solid #dee2e6;border-bottom: 3px solid #dee2e6;">
+														<tr>
+														  <th class="text-right" style="width:20%;text-align:center;"></th>
+														  <th class="text-right" style="width:20%;text-align:center;">Today</th>
+														  <th class="text-right" style="width:20%;text-align:center;">Last 7 Days</th>
+														  <th class="text-right" style="width:20%;text-align:center;">Last 15 Days</th>
+														  <th class="text-right" style="width:20%;text-align:center;">Last 30 Days</th>
+														</tr>
+													</thead>
+													<tbody>
+													  <tr>
+													    <td class="text-right" style="width:20%;text-align:center;border-bottom: 1px solid #ddd;"><strong>Total Sales</strong></td>
+													  	<t t-if="record.today_total_sale.raw_value &lt;= 0.0">
+													  		<td class="text-right" style="color:red;width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="today_total_sale" widget="monetary" options="{'currency_field': 'currency_id'}"/></td>
+													  	</t>
+													  	<t t-if="record.today_total_sale.raw_value &gt; 0.0">
+													  		<td class="text-right" style="width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="today_total_sale" widget="monetary" options="{'currency_field': 'currency_id'}"/></td>
+													  	</t>
+													  	<t t-if="record.week_total_sale.raw_value &lt;= 0.0">
+													  		<td class="text-right" style="color:red;width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="week_total_sale" widget="monetary" options="{'currency_field': 'currency_id'}"/></td>
+													  	</t>
+													  	<t t-if="record.week_total_sale.raw_value &gt; 0.0">
+													  		<td class="text-right" style="width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="week_total_sale" widget="monetary" options="{'currency_field': 'currency_id'}"/></td>
+													  	</t>
+													  	<t t-if="record.half_month_total_sale.raw_value &lt;= 0.0">
+													  		<td class="text-right" style="color:red;width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="half_month_total_sale" widget="monetary" options="{'currency_field': 'currency_id'}"/></td>
+													  	</t>
+													  	<t t-if="record.half_month_total_sale.raw_value &gt; 0.0">
+													  		<td class="text-right" style="width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="half_month_total_sale" widget="monetary" options="{'currency_field': 'currency_id'}"/></td>
+													  	</t>
+													  	<t t-if="record.month_total_sale.raw_value &lt;= 0.0">
+													  		<td class="text-right" style="color:red;width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="month_total_sale" widget="monetary" options="{'currency_field': 'currency_id'}"/></td>
+													  	</t>
+													  	<t t-if="record.month_total_sale.raw_value &gt; 0.0">
+													  		<td class="text-right" style="width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="month_total_sale" widget="monetary" options="{'currency_field': 'currency_id'}"/></td>
+													  	</t>													  														  														  														    
+													  </tr>
+													  <tr>
+													    <td class="text-right" style="width:20%;text-align:center;border-bottom: 1px solid #ddd;"><strong>Total Units</strong></td>
+													    <t t-if="record.today_total_sale_units.raw_value &lt;= 0.0">
+													    	<td class="text-right" style="color:red;width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="today_total_sale_units" /></td>
+													    </t>
+													    <t t-if="record.today_total_sale_units.raw_value &gt; 0.0">
+													    	<td class="text-right" style="width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="today_total_sale_units" /></td>
+													    </t>
+													    <t t-if="record.week_total_sale_units.raw_value &lt;= 0.0">
+													    	<td class="text-right" style="color:red;width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="week_total_sale_units"/></td>
+													    </t>
+													    <t t-if="record.week_total_sale_units.raw_value &gt; 0.0">
+													    	<td class="text-right" style="width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="week_total_sale_units"/></td>
+													    </t>
+													    <t t-if="record.half_month_total_sale_units.raw_value &lt;= 0.0">
+													    	<td class="text-right" style="color:red;width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="half_month_total_sale_units"/></td>
+													    </t>
+													    <t t-if="record.half_month_total_sale_units.raw_value &gt; 0.0">
+													    	<td class="text-right" style="width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="half_month_total_sale_units"/></td>
+													    </t>
+													    <t t-if="record.month_total_sale_units.raw_value &lt;= 0.0">
+													    	<td class="text-right" style="color:red;width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="month_total_sale_units"/></td>
+													    </t>
+													    <t t-if="record.month_total_sale_units.raw_value &gt; 0.0">
+													    	<td class="text-right" style="width:20%;text-align:center;border-bottom: 1px solid #ddd;"><field name="month_total_sale_units"/></td>
+													    </t>													    													    												    													    
+													  </tr>
+													 </tbody>
+						                		</table>
+						                	</div>
+	                                	</div>
+	                            </div>
+	                            <div class="container o_kanban_card_manage_pane dropdown-menu" role="menu">
+	                                <div class="row">
+	                                    <!-- Sales -->
+	                                    <div class="col-4 o_kanban_card_manage_section o_kanban_manage_view">
+	                                    	<div class="o_kanban_card_manage_title">
+			                                    <span role="separator"><b>Sales</b></span>
+			                                </div>
+	                                        <div>
+	                                            <a name="get_action_ebay_sale_quotation" type="object">Quotations</a>
+	                                        </div>
+	                                        <div>
+	                                            <a name="get_action_ebay_sales_orders" type="object">Sale Orders</a>
+	                                        </div>
+	                                        <div>
+	                                            <a name="get_action_invoice_ebay_invoices" type="object">Invoices</a>
+	                                        </div>   
+	                                   </div>
+	                                   
+	                                    <!-- Catalog -->
+	                                    <div class="col-4 o_kanban_card_manage_section o_kanban_manage_new">
+		                                    <div class="o_kanban_card_manage_title">
+				                            	<span role="separator"><b>Catalog</b></span>
+			                                </div>
+	                                        <div>
+	                                            <a name="get_action_ebay_product_template_ept" type="object" >Products</a>
+	                                        </div>
+	                                        <div>
+	                                            <a name="get_action_ebay_product_variant_ept" type="object" >Product Variants</a>
+	                                        </div> 
+	                                        <div>
+	                                            <a name="get_action_category_master" type="object" >Categories</a>
+	                                        </div> 
+	                                        <div>
+	                                            <a name="get_action_store_category_master" type="object">Store Categories</a>
+	                                        </div> 
+	                                        <div>
+	                                            <a name="get_action_attribute_master" type="object">Attributes</a>
+	                                        </div>                                                                                                                                                            
+	                                    </div>
+	                                    
+	                                    <!-- Configuration -->
+	                                    <div class="col-4 o_kanban_card_manage_section o_kanban_manage_new">
+	                                  		<div class="o_kanban_card_manage_title">
+				                            	<span role="separator"><b>Configuration</b></span>
+			                                </div>
+	                                        <div>
+	                                            <a name="get_action_ebay_cron_jobs" type="object">eBay Crons</a>
+	                                        </div>
+	                                        <div>
+	                                            <a name="get_action_ebayerp_template" type="object" >eBay Listing Templates</a>
+	                                        </div>	                                        
+	                                        <div>
+	                                            <a name="get_action_payment_options" type="object">Payment Options</a>
+	                                        </div>                                                                                                                                              
+	                                    </div>
+	                                </div>
+	                               	<div class="row">
+	                                   <!-- eBay & Odoo Operations -->
+	                                   <div class="col-4 o_kanban_card_manage_section o_kanban_manage_view">
+	                                    	<div class="o_kanban_card_manage_title">
+			                                    <span role="separator"><b>eBay Operations</b></span>
+			                                </div>
+			                                <div>
+	                                            <a name="get_action_ebay_active_listing" type="object" >Active Listings</a>
+	                                        </div> 
+	                                        <div>
+	                                            <a name="get_action_ebay_job_logs" type="object">Process Job Logs</a>
+	                                        </div>
+	                                   </div>
+	                                   
+	                                   <!-- Reporting -->
+	                                   <div class="col-4 o_kanban_card_manage_section o_kanban_manage_view">
+	                                    	<div class="o_kanban_card_manage_title">
+			                                    <span role="separator"><b>Reporting</b></span>
+			                                </div>
+	                                        <div>
+	                                            <a name="get_action_ebay_sale_analysis" type="object" >Sales Analysis</a>
+	                                        </div>
+	                                   </div>
+	                                   
+	                                   <div class="col-4 o_kanban_card_manage_section o_kanban_manage_view">
+	                                   </div>                                    
+	                                </div>
+	                                
+	                                <!-- Color Picker and eBay Settings -->
+	                                <div t-if="widget.editable" class="o_kanban_card_manage_settings row">
+	                                    <div class="col-8">
+	                                        <ul class="oe_kanban_colorpicker" data-field="color"/>
+	                                    </div>
+	                                    <div class="col-4 text-right">
+			                                <a t-if="widget.editable" name="%(ebay_ept.action_ebay_config)d" type="action">Settings</a>
+			                            </div>
+	                                </div>
+	                                
+	                            </div>
+	                        </div>
+	                    </t>				
+					</templates>
+				</kanban>
+			</field>
+		</record>                            					
+
+		<!-- Action Section -->
+		<record id="ebay_operations_action_ept" model="ir.actions.act_window">
+			<field name="name">eBay Dashboard</field>
+			<field name="res_model">ebay.operations.ept</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">kanban</field>
+			<field name="view_id" ref="ebay_operations_kanban_ept" />
+			<field name="help" type="html">
+             	<p class="o_view_nocontent_neutral_face">
+            		eBay Dashboard
+          		</p>
+               	<p>
+               		Your eBay dashboard is empty. Create <i>eBay Instance</i> first, then eBay dashboard will create automatically.
+               		<a type="action" name="%(ebay_ept.action_ebay_config)d" tabindex="-1">Create eBay Instance.</a>
+               	</p>
+            </field>
+		</record>
+
+		<!-- Menu Section -->
+		<menuitem id="menu_main_ebay_dashboard" name="Dashboard"
+			parent="ebay_ept.ebay_instance_menu_item"
+			action="ebay_operations_action_ept" sequence="0" />
+		
+		<!-- <menuitem id="menu_item_ebay_dashboard" name="Navigate eBay"
+			parent="ebay_ept.menu_main_ebay_dashboard" sequence="1"
+			action="ebay_operations_action_ept" /> -->
+
+	</data>
+</odoo>

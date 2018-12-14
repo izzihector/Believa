@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+	
+	    <record id="view_order_product_search" model="ir.ui.view">
+	        <field name="name">sale.report.search</field>
+	        <field name="model">amazon.sale.report</field>
+	        <field name="inherit_id" ref="amazon_ept.view_order_product_search"/>
+	        <field name="arch" type="xml">
+			<filter name="Sales" position="after">
+				<filter name="AFN" string="AFN" domain="[('amz_fulfillment_by','=','AFN')]"/>
+				<filter name="MFN" string="MFN" domain="[('amz_fulfillment_by','=','MFN')]"/>
+			</filter>	        
+			<filter name="Customer" position="after">
+				<filter string="Fulfillment By" name="fulfillment_by" context="{'group_by':'amz_fulfillment_by'}"/>
+			</filter>
+	        </field>
+		</record>
+	</data>
+</openerp>

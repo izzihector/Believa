@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<record id="amazon_sale_order_outbound_tree_view_ept" model="ir.ui.view">
+			<field name="name">Amazon Sale Order Tree View</field>
+			<field name="model">sale.order</field>
+			<field name="arch" type="xml">
+				<tree string="Amazon Sale Order Tree View" create='false'
+					colors="grey:state=='cancel';blue:state in ('waiting_date','manual');red:state in ('invoice_except','shipping_except')">
+					<field name="name" />
+					<field name="date_order"></field>
+					<field name="partner_id"></field>
+					<field name="partner_shipping_id" />
+					<field name="amount_untaxed" sum="Total amount Untaxed" />
+					<field name="amount_total" sum="Total Tax Included" />
+					<field name="amz_fulfillment_action" />
+					<field name="amz_fulfillment_policy" />
+					<field name="amz_fulfullment_order_status" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+		<record id="view_afc_amazon_sale_order_form_ept" model="ir.ui.view">
+			<field name="name">amazon.sale.order.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="amazon_ept.amazon_sales_order_form_view_ept" />
+			<field name="arch" type="xml">
+				<button name="action_quotation_send" position="before">
+					<field name="warehouse_id" invisible="1" />
+				</button>
+				<xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
+					<field name="amz_fulfillment_center_id"  />
+				</xpath>
+				<!-- <xpath expr="//field[@name='ept_order_line']" position="attributes">
+					<attribute name="options">{"reload_on_button": 1}</attribute>
+				</xpath> -->
+				
+			</field>
+		</record>
+		<record id="sale_order_outbound_ext_ept" model="ir.ui.view">
+			<field name="name">Sale Order Outbound EPT</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+				<button name="action_confirm" position="after">
+					<button name="create_outbound_shipment" string="Create Outbound Shipment" type="object" attrs="{'invisible':[('order_has_fba_warehouse','!=',True),('state' != 'draft'),('amz_is_outbound_order','!=',True)]}"/>
+				</button>
+				<field name="warehouse_id" position="after">
+					<field name="amz_is_outbound_order" invisible="1"/>
+					<field name="order_has_fba_warehouse" invisible="1"/>				
+				</field>	
+				
+				 <!-- added by Dhruvi to display shipment report id in sale order -->
+            <xpath expr="//sheet/notebook/page[@name='other_information']/group/group[@name='sales_person']" position="inside">
+            	<field name="amz_shipment_report_id"></field>
+            </xpath>
+            			
+			</field>
+		</record>
+        <record id="amazon_sales_order_outbound_form_view_ept" model="ir.ui.view">
+            <field name="name">amazon.sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="amazon_ept.amazon_sales_order_form_view_ept"/>
+            <field name="arch" type="xml">            
+            <xpath expr="//page[@name='Amazon Info']" position="inside" attrs="{'invisible':[('amz_instance_id','!=',True)]}"> <!-- attrs="{'invisible':[('amz_is_outbound_order','=',False)]}" -->
+            	<group attrs="{'invisible':[('amz_is_outbound_order','=',False)]}">
+					<group>
+						<field name="amz_fulfillment_action"
+							attrs="{'readonly': [('state', '!=','draft')],'required':[('amz_is_outbound_order','=',True)]}" />
+						<field name="amz_fulfillment_policy"
+							attrs="{'required':[('amz_is_outbound_order','=',True)],'readonly': [('state', '!=','draft')]}" />
+						<field name="amz_fulfullment_order_status" string="Fulfillment Order Status" readonly="1" />
+						<field name="exported_in_amazon" readonly="1" />
+						<field name="amz_is_outbound_order" invisible="1"/>
+					</group>
+					<group>
+						<field name="amz_displayable_date_time"
+							attrs="{'required':[('amz_is_outbound_order','=',True)],'readonly': [('state', '!=','draft')]}" />
+						<field name="amz_shipment_service_level_category"
+							attrs="{'required':[('amz_is_outbound_order','=',True)],'readonly': [('state', '!=','draft')]}" />
+						<field name="notify_by_email" attrs="{'readonly': [('state', '!=','draft')]}" />
+					</group>
+					<group>
+						<field name="amz_delivery_start_time" />
+						<field name="amz_delivery_end_time" />
+					</group>
+				</group>
+            </xpath>
+            
+            </field>
+       	 </record>
+              <!--  <form string="Sales Order">
+                <header>
+                    <button name="%(sale.action_view_sale_advance_payment_inv)d" string="Create Invoice"
+                        type="action" class="btn-primary"
+                        attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}"/>
+                    <button name="%(sale.action_view_sale_advance_payment_inv)d" string="Create Invoice"
+                        type="action" context="{'default_advance_payment_method': 'percentage'}"
+                        attrs="{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', '!=', 'sale')]}"/>
+                    <button name="action_quotation_send" string="Send by Email" type="object" states="draft" class="btn-primary"/>
+                    <button name="action_quotation_send" string="Send by Email" type="object" states="sent,sale"/>
+                    <button name="print_quotation" string="Print" type="object" states="draft" class="btn-primary"/>
+                    <button name="print_quotation" string="Print" type="object" states="sent,sale"/>
+                    <button name="action_confirm" states="sent" string="Confirm Sale" class="btn-primary" type="object" context="{'show_sale': True}"/>
+                    <button name="action_confirm" states="draft" string="Confirm Sale" type="object" context="{'show_sale': True}"/>
+                    <button name="action_cancel" states="draft,sent,sale" type="object" string="Cancel"/>
+                    <button name="cancel_in_amazon" string="Cancel In Amazon" type="object" attrs="{'invisible':['|','|',('amz_fulfillment_by','!=','MFN'),('state','not in',['cancel']),('is_amazon_canceled','=',True)]}" class="oe_highlight"/>					
+                    <button name="action_draft" states="cancel" type="object" string="Set to Quotation"/>
+                    <button name="action_done" type="object" string="Set to Done" states="sale"
+                        help="If a sale order is done, you cannot modify it manually anymore. However, you will still be able to invoice or deliver. This is used to freeze the sale order."/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sent,sale,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+	                       <field name="picking_ids" invisible="1"/>
+	                       <button type="object"
+	                           name="action_view_delivery"
+	                           class="oe_stat_button"
+	                           icon="fa-truck"
+	                           attrs="{'invisible': [('delivery_count', '=', 0)]}" groups="base.group_user">
+	                           <field name="delivery_count" widget="statinfo" string="Delivery"/>
+	                       </button>
+
+                        <button name="action_view_invoice"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o"
+                            attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" domain="[('customer','=',True)]" context="{'search_default_customer':1, 'show_address': 1}" options='{"always_reload": True}'/>
+                            <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" context="{'default_type':'invoice'}"/>
+                            <field name="partner_shipping_id" groups="sale.group_delivery_invoice_address" context="{'default_type':'delivery'}"/>
+                            <field name="analytic_account_id" context="{'default_partner_id':partner_invoice_id, 'default_name':name}" groups="analytic.group_analytic_accounting"/>
+                        </group>
+                        <group>
+							<field name="instance_id" required="1"/>
+							<field name="fulfillment_instance_id" required="1"/>
+							<field name="warehouse_id" readonly="1"/>
+                            <field name="date_order" invisible="1"/>
+                            <field name="amazon_reference"/>
+                            <field name="amz_fulfillment_by" invisible="1"/>                            
+                            <field name="pricelist_id" groups="product.group_sale_pricelist"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="validity_date"/>
+                            <field name="payment_term_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order Lines">
+                            <field name="ept_order_line" mode="tree,kanban"
+                                attrs="{'readonly': [('state', 'in', ('done','cancel'))]}">
+                                <form string="Sales Order Lines">
+                                    <group>
+                                        <group attrs="{'readonly':('qty_invoiced', '&gt;', 0)}"> attrs="{'readonly': ['|', ('qty_invoiced', '&gt;', 0), ('procurement_ids', '!=', [])]}"
+                                            <field name="product_id"
+                                                context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"
+                                                attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"
+                                               />
+                                            <field name="invoice_status" invisible="1"/>
+                                            <field name="qty_to_invoice" invisible="1"/>
+                                            <field name="qty_delivered_updateable" invisible="1"/>
+                                            <field name="procurement_ids" invisible="1"/>
+                                            <field name="price_subtotal" invisible="1"/>
+                                            <label for="product_uom_qty" string="Ordered Quantity"/>
+                                            <div>
+                                                <field
+                                                    context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'uom_qty_change':True, 'company_id': parent.company_id}"
+                                                    name="product_uom_qty" class="oe_inline"/>
+                                                <field name="product_uom" groups="product.group_uom" class="oe_inline oe_no_button"
+                                                    attrs="{'readonly': [('state', 'in', ('sale','done', 'cancel'))]}"/>
+                                            </div>
+                                            <label for="qty_delivered" string="Delivered Quantity"/>
+                                            <div>
+                                                <field name="qty_delivered" 
+                                                    attrs="{'readonly': [('qty_delivered_updateable', '=', False)]}"/>
+                                            </div>
+                                            <label for="qty_invoiced" string="Invoiced Quantity" />
+                                            <div>
+                                                <field name="qty_invoiced"/>
+                                            </div>
+                                            <field name="price_unit"/>
+                                            <label for="discount" groups="sale.group_discount_per_so_line"/>
+                                            <div name="discount" groups="sale.group_discount_per_so_line">
+                                                <field name="discount" class="oe_inline"/> %%
+                                            </div>
+                                        </group>
+                                        <group>
+                                            <field name="tax_id" widget="many2many_tags" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]"
+                                                attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                                            <label for="customer_lead"/>
+                                            <div>
+                                                <field name="customer_lead" class="oe_inline"/> days
+                                            </div>
+                                        </group>
+                                    </group>
+                                    <label for="name"/>
+                                    <field name="name"/>
+                                    <div groups="base.group_no_one">
+                                        <label for="invoice_lines"/>
+                                        <field name="invoice_lines"/>
+                                    </div>
+                                    <field name="state" invisible="1"/>
+                                </form>
+                                <tree string="Sales Order Lines" editable="bottom" decoration-info="invoice_status=='to invoice'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id"
+                                        attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"
+                                        context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"
+                                       />
+                                    <field name="name"/>
+                                    <field name="product_uom_qty"
+                                        string="Ordered Qty"
+                                        context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"
+                                    />
+                                    <field name="qty_delivered" invisible="not context.get('show_sale')"
+                                        attrs="{'readonly': [('qty_delivered_updateable', '=', False)]}"/>
+                                    <field name="qty_invoiced"
+                                        invisible="not context.get('show_sale')"/>
+                                    <field name="qty_to_invoice" invisible="1"/>
+                                    <field name="product_uom"
+                                        attrs="{'readonly': [('state', 'in', ('sale','done', 'cancel'))]}"
+                                        context="{'company_id': parent.company_id}"
+                                        groups="product.group_uom" options='{"no_open": True}'/>
+                                    <field name="price_unit"
+                                        attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                                    <field name="tax_id" widget="many2many_tags" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]"
+                                        attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                                    <field name="discount" groups="sale.group_discount_per_so_line"/>
+                                    <field name="price_subtotal" widget="monetary"/>
+                                    <field name="qty_delivered_updateable" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="invoice_status" invisible="1"/>
+                                    <field name="customer_lead" invisible="1"/>
+                                </tree>
+                                <kanban class="o_kanban_mobile">
+                                    <field name="product_id"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="product_uom" groups="product.group_uom"/>
+                                    <field name="price_subtotal"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <strong><span><t t-esc="record.product_id.value"/></span></strong>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-8 text-muted">
+                                                        <span><t t-esc="record.product_uom_qty.value"/> <t t-esc="record.product_uom.value"/></span>
+                                                    </div>
+                                                    <div class="col-xs-4 text-muted">
+                                                        <span class="pull-right text-right"><t t-esc="record.price_subtotal.value"/></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                <field name="amount_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_tax" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                    <label for="amount_total" />
+                                    <button name="button_dummy"
+                                        states="draft,sent" string="(update)" type="object" class="oe_edit_only oe_link"/>
+                                </div>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                            <field name="note" class="oe_inline" placeholder="Setup default terms and conditions in your company settings."/>
+                            <div class="oe_clear"/>
+                        </page>
+                        <page string="Other Information">
+                            <group>
+                                <group string="Sales Information" name="sales_person">
+                                    <field name="user_id" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'account.group_account_invoice', 'base.group_sale_salesman_all_leads']}"/>
+                                    <field name="team_id" options="{'no_create': True}"/>
+                                    <field name="client_order_ref"/>
+                                    <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+									<field name="auto_workflow_process_id"/> 
+									<field name="is_amazon_canceled" readonly="1"/>
+                                </group>
+                                <group name="sale_pay" string="Invoicing">
+                                    <field name="fiscal_position_id" options="{'no_create': True}"/>
+									<field name="shipment_service_level_category" readonly="1"/>
+                                    <field name="invoice_status"
+                                        attrs="{'invisible': [('state', 'not in', ('sale','done'))]}"/>
+                                </group>
+                                <group string="Reporting" name="technical" groups="base.group_no_one">
+                                    <field groups="base.group_no_one" name="origin"/>
+                                </group>
+                            </group>
+                        </page>
+							<page string="Fulfillment Configuration">
+								<group>
+									<group>
+										<field name="amz_fulfillment_action"
+											attrs="{'readonly': [('state', '!=','draft')],'required':[('amz_is_outbound_order','=',True)]}" />
+										<field name="amz_fulfillment_policy"
+											attrs="{'required':[('amz_is_outbound_order','=',True)],'readonly': [('state', '!=','draft')]}" />
+										<field name="amz_fulfullment_order_status" readonly="1" />
+										<field name="exported_in_amazon" readonly="1" />
+										<field name="amz_is_outbound_order" invisible="1"/>
+
+									</group>
+									<group>
+										<field name="amz_displayable_date_time"
+											attrs="{'required':[('amz_is_outbound_order','=',True)],'readonly': [('state', '!=','draft')]}" />
+										<field name="amz_shipment_service_level_category"
+											attrs="{'required':[('amz_is_outbound_order','=',True)],'readonly': [('state', '!=','draft')]}" />
+										<field name="notify_by_email" attrs="{'readonly': [('state', '!=','draft')]}" />
+									</group>
+									<group>
+										<field name="amz_delivery_start_time" />
+										<field name="amz_delivery_end_time" />
+									</group>
+								</group>
+							</page>
+
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>-->
+           
+		<record id="amazon_ept.action_amazon_sales_order_ept" model="ir.actions.act_window">
+			<field name="domain">[('state','not in',['draft','sent','cancel']),('amz_fulfillment_by','=','MFN'),('amz_instance_id','!=',False),('amz_is_outbound_order','=',False)]</field>
+		</record>
+		<record id="action_amazon_sales_order_outbound_ept" model="ir.actions.act_window">
+			<field name="name">Amazon Sales Order</field>
+			<field name="res_model">sale.order</field>
+			<field name="view_type">form</field>
+			<field name="domain">[('amz_is_outbound_order','=',True)]</field>
+			<field name="view_id" ref="amazon_sale_order_outbound_tree_view_ept" />
+		</record>
+		<record id="action_view_sales_outbound_order_tree" model="ir.actions.act_window.view">
+			<field eval="1" name="sequence" />
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="amazon_sale_order_outbound_tree_view_ept" />
+			<field name="act_window_id" ref="action_amazon_sales_order_outbound_ept" />
+		</record>
+
+		<record id="action_view_sales_order_outbound_form" model="ir.actions.act_window.view">
+			<field eval="2" name="sequence" />
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="amazon_sales_order_outbound_form_view_ept" />
+			<field name="act_window_id" ref="action_amazon_sales_order_outbound_ept" />
+		</record>
+
+		<menuitem id="amazon_outbound_order_menu" name="Outbound Orders"
+			parent="amazon_outbound_menu_core" sequence="15"
+			action="action_amazon_sales_order_outbound_ept" />
+
+		<record id="amazon_fba_sale_order_tree_view_ept" model="ir.ui.view">
+			<field name="name">Amazon FBA Sale Order Tree View</field>
+			<field name="model">sale.order</field>
+			<field name="arch" type="xml">
+				<tree string="Amazon FBA Sale Order Tree View" create="false"
+					colors="grey:state=='cancel';blue:state in ('waiting_date','manual');red:state in ('invoice_except','shipping_except')">
+					<field name="name" />
+					<field name="date_order"></field>
+					<field name="partner_id"></field>
+					<field name="partner_shipping_id" />
+					<field name="amount_untaxed" sum="Total amount Untaxed" />
+					<field name="amount_total" sum="Total Tax Included" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+		<record id="action_amazon_instance_fba_quotation_only" model="ir.actions.act_window">
+			<field name="name">Amazon FBA Sales Order</field>
+			<field name="res_model">sale.order</field>
+			<field name="view_type">form</field>
+			<field name="domain">[('amz_instance_id','=',active_id),('amz_fulfillment_by','=','AFN'),('state','=','draft')]</field>
+			<field name="view_id" ref="amazon_ept.amazon_sale_order_tree_view_ept1" />
+		</record>
+		<record id="action_amazon_instance_fba_sales_order_only" model="ir.actions.act_window">
+			<field name="name">Amazon FBA Sales Order</field>
+			<field name="res_model">sale.order</field>
+			<field name="view_type">form</field>
+			<field name="domain">[('amz_instance_id','=',active_id),('amz_fulfillment_by','=','AFN'),('state','not in',['draft','cancel'])]</field>
+			<field name="view_id" ref="amazon_ept.amazon_sale_order_tree_view_ept1" />
+		</record>
+		<record id="action_amazon_fba_sales_order_ept" model="ir.actions.act_window">
+			<field name="name">Amazon FBA Sales Order</field>
+			<field name="res_model">sale.order</field>
+			<field name="view_type">form</field>
+			<field name="domain">[('amz_instance_id','!=',False),('amz_fulfillment_by','=','AFN')]</field>
+			<field name="view_id" ref="amazon_ept.amazon_sale_order_tree_view_ept1" />
+			<field name="help" type="html">
+				<div class="oe_empty_amazon_sale_order">
+					<br />
+					<br />
+					<br />
+					<p>
+						<b>There is no any Sale Order synchronised from any of your Amazon
+							Instance yet.</b>
+					</p>
+					<p>
+						You can't create Sale Order manually and push it to Amazon. Through
+						only import Sale Order from
+						any of your Amazon Instance, you can see your Orders here.Import Sale
+						Order can be performed by 2 ways.
+					</p>
+					<p>
+						<b>1.</b>
+						Via automatic jobs to import Sale Orders at frequent amount of
+						time.
+						<br />
+						Go to menu Settings >> Technical >> Automation >> Schedule Actions
+						and activate automatic Job for Import Order from Amazon.
+						However from Amazon settings you can set your preferred timings for auto
+						import Sale Order from Amazon.
+					</p>
+					<p>
+						<b>2.</b>
+						Manually Import Orders at any time
+						<br />
+						Go to menu Amazon >> Processes >> Amazon Operations and select
+						your instances and option "Sale order(Only Pending Orders)".
+						Clicking on "OK" button will import all
+						<b>Pending</b>
+						orders from Amazon to Odoo.
+					</p>
+				</div>
+			</field>
+		</record>
+
+		<record id="action_view_fba_sales_order_tree" model="ir.actions.act_window.view">
+			<field eval="1" name="sequence" />
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="amazon_fba_sale_order_tree_view_ept" />
+			<field name="act_window_id" ref="action_amazon_fba_sales_order_ept" />
+		</record>
+
+		<record id="action_view_fba_sales_order_form" model="ir.actions.act_window.view">
+			<field eval="2" name="sequence" />
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="amazon_ept.amazon_sales_order_form_view_ept" />
+			<field name="act_window_id" ref="action_amazon_fba_sales_order_ept" />
+		</record>
+
+		<!-- Orders: Child Menu Sales Orders (FBA) -->
+		<menuitem id="menu_item_amazon_fba_sales_order_ept" name="Sales Orders (FBA)"
+			parent="amazon_ept.amazon_sales_child_orders_menu" sequence="2"
+			action="action_amazon_fba_sales_order_ept" />
+
+	</data>
+</openerp>

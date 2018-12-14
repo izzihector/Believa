@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<odoo>
+	<data>
+		<record id="amazon_fba_seller_form_ept" model="ir.ui.view">
+			<field name="name">Amazon FBA Seller Credential</field>
+			<field name="model">amazon.seller.ept</field>
+			<field name='inherit_id'
+				ref="amazon_ept.amazon_seller_credential_form_ept" />
+			<field name="arch" type="xml">
+				<group name="transaction" position="after">
+					<group string="Reimbursement Details">		
+						<group>
+							<field name="reimbursement_customer_id" attrs="{'required':[('transaction_line_ids','!=',False)]}"/>	
+							<field name="sale_journal_id" attrs="{'required':[('transaction_line_ids','!=',False)]}"/>
+						</group>				
+						<group>
+							<field name="reimbursement_product_id" domain="[('type','=','service')]" attrs="{'required':[('transaction_line_ids','!=',False)]}"/>
+						</group>
+					</group>
+				</group>
+				<xpath expr="//notebook/page[@name='other_info']/group[@name='sync_info']/group[1]" position="inside">
+					<field name="shipping_report_last_sync_on" />
+				</xpath>
+				<xpath expr="//notebook/page[@name='other_info']/group[@name='sync_info']/group[2]" position="inside">
+					<field name="fba_order_last_sync_on" />
+					<field name="fba_pending_order_last_sync_on" />
+					<field name="fba_shipment_report_days"/>
+					
+					<field name="return_report_last_sync_on" />				
+				</xpath>
+				<field name="create_new_product" position="after">
+					<field name="is_another_soft_create_fba_shipment"/>
+				</field>
+			
+				<!-- added by Dhruvi -->
+				<xpath expr="//form/sheet/group/group[1]/field[@name='global_channel_id']" position="after">
+					<field name="fba_auto_workflow_id" readonly="1"/>
+					<field name="create_inventory"></field>
+				</xpath>
+
+			</field>
+		</record>
+	</data>
+</odoo>		

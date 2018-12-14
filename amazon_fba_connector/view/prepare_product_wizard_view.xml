@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+        <record id="view_prepare_selective_products_ept" model="ir.ui.view">
+            <field name="name">Prepare Product For Export</field>
+            <field name="model">amazon.product.wizard</field>
+            <field name="inherit_id" ref="amazon_ept.view_prepare_selective_products_ept"></field>
+            <field name="arch" type="xml">
+            <field name="instance_id" position="after">
+	            	<field name="fulfillment_by" required="1"/>            	
+			</field>
+			</field>
+		</record>
+
+        <record id="view_prepare_product_ept" model="ir.ui.view">
+            <field name="name">Prepare Product For Export</field>
+            <field name="model">amazon.product.wizard</field>
+            <field name="inherit_id" ref="amazon_ept.view_prepare_product_ept"></field>
+            <field name="arch" type="xml">
+            <form position="inside">
+	            	<group>
+		            	<field name="fulfillment_by" required="1"/>            	
+	            	</group>
+	        </form>
+			</field>
+		</record>
+		
+		<!-- From View Section -->
+		<record id="get_product_prip_instructions_form_view" model="ir.ui.view">
+            <field name="name">Get Product Prep Instructions</field>
+            <field name="model">amazon.product.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Get Product Prep-Instructions">
+                    <footer>
+                        <button name="get_product_prep_instructions" string="Get Prep Instructions" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_highlight" special="cancel" />
+                    </footer>
+               </form>
+            </field>
+        </record>
+		
+		<!-- Action Section -->
+		<!-- <act_window name="Get Prep-Instructions" res_model="amazon.product.wizard"
+			src_model="amazon.product.ept" view_mode="form" view_type="form"
+			target="new" multi="False" key2="client_action_multi"
+			id="get_product_prip_instructions_action"
+			view_id="get_product_prip_instructions_form_view"
+			context="{'key':'get_product_prep_instructions',}"/> -->
+		
+	</data>
+</odoo>

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<data>
+	
+		<record id="view_ebay_process_import_export_ept" model="ir.ui.view">
+			<field name="name">Process Import/Export</field>
+			<field name="model">ebay.process.import.export</field>
+			<field name="priority">11</field>
+			<field name="arch" type="xml">
+				<form string="Import/Export">
+					<sheet>
+						<group>
+							<field name='instance_ids' widget="many2many_tags" domain="[('state','=','confirmed')]"
+								options="{'no_create':True,'no_create_edit': True}" required="1" />
+						</group>
+						<notebook>
+							<page string="eBay => ERP">
+								<group>
+									<group string="Seller Operations">
+										<field name="is_ebay_details" />
+										<field name="get_use_preferences" />										
+									</group>
+									<group string="Catalog Operations">
+										<label for="id" string="Sync/Import Products" />
+										<div>
+											<field name="is_import_product" string="Sync Products" />
+											<br/>
+											<label for="is_create_auto_odoo_product" string="Auto Create Product?" attrs="{'invisible':[('is_import_product','=',False)]}" />
+											<div attrs="{'invisible':[('is_import_product','=',False)]}">
+												<field name="is_create_auto_odoo_product" class="oe_inline"/>
+											</div>
+											<br/>
+											<label for="from_date" string="Date"
+												attrs="{'invisible':[('is_import_product','=',False)]}" />
+											<div attrs="{'invisible':[('is_import_product','=',False)]}">
+												<field name="from_date"
+													attrs="{'required':[('is_import_product','=',True)]}"
+													class="oe_inline" />
+												to
+												<field name="to_date"
+													attrs="{'required':[('is_import_product','=',True)]}"
+													class="oe_inline" />
+											</div>
+										</div>
+										
+										<label for="id" string="Import Categories" />
+										<div>
+											<field name="is_import_category" class="oe_inline" />
+											<div attrs="{'invisible':[('is_import_category','=',False)]}">
+												<label for="id" string="Level Limit"/><br/>
+												<field name="level_limit" class="oe_inline" />
+												
+												<label for="id" string="Only Leaf Categories" />
+												<field name="only_leaf_categories" class="oe_inline" /><br/>
+												
+												<label for="id" string="Get-Item Condition" />
+												<field name="is_import_get_item_condition" class="oe_inline" />
+											</div>
+										</div>
+										
+										<label for="id" string="Import Store Categories" />
+										<div>
+											<field name="is_import_store_category" nolabel="1"/>
+											<div attrs="{'invisible':[('is_import_store_category','=',False)]}">
+												<label for="id" string="Store Level Limit" /><br/>
+												<field name="store_level_limit" class="oe_inline" />
+												
+												<label for="id" string="Store Only Leaf Categories" />
+												<field name="store_only_leaf_categories" class="oe_inline" />
+											</div>
+										</div>
+										
+										<!-- <label for="id" string="Import Store Categories" />
+										<div>
+											<field name="is_import_store_category" class="oe_inline" />
+											<div attrs="{'invisible':[('is_import_store_category','=',False)]}">
+												<group>
+													<field name="store_level_limit" class="oe_inline" />
+													<field name="store_only_leaf_categories" class="oe_inline" />
+												</group>
+											</div>
+										</div> -->
+										
+										<field name="is_get_feedback"/>
+									</group>
+								</group>
+								
+								<group>
+									<group string="Order Operations">							
+										<!-- Import Sale Order -->
+										<field name="import_sales_orders" />
+										
+										<!-- Import Shipped Order -->
+										<label for="id" string="Imprort Shipped Order" />
+										<div>
+											<field name="is_import_shipped_order" string="Import Shipped Order" />
+											<br/>
+											<label for="shipped_order_from_date" string="From Date" attrs="{'invisible':[('is_import_shipped_order','=',False)]}" />
+											<div attrs="{'invisible':[('is_import_shipped_order','=',False)]}">
+												<field name="shipped_order_from_date" attrs="{'required':[('is_import_shipped_order','=',True)]}" class="oe_inline" />
+												to
+												<field name="shipped_order_to_date" attrs="{'required':[('is_import_shipped_order','=',True)]}" class="oe_inline" />
+											</div>
+										</div>						
+									</group>
+									<group> </group>
+								</group>
+							</page>
+							
+							<page string="ERP => eBay">
+								<group>
+									<group string="Catalog Operations">
+										<field name="is_export_images" invisible="1" />
+										<field name="is_update_stock" />
+										<field name="is_update_price" />
+										
+										<!-- Export Product -->
+										<label for="is_export_product"/>
+										<div>
+											<field name="is_export_product" class="oe_inline"/>
+											<div attrs="{'invisible' : [('is_export_product','=',False)]}">	
+												<label for="template_id" attrs="{'invisible' : [('is_export_product','=',False)]}"/><br/>
+												<field name="template_id"
+													attrs="{'required':[('is_export_product','=',True)], 'invisible' : [('is_export_product','=',False)]}" class="oe_inline"/>
+													
+												<label for="publish_in_ebay" attrs="{'invisible' : [('is_export_product','=',False)]}"/>
+												<field name="publish_in_ebay"
+													attrs="{'invisible' : [('is_export_product','=',False)]}" class="oe_inline"/><br/>
+													
+												<label for="schedule_time" attrs="{'invisible' : ['|',('is_export_product','=',False),('publish_in_ebay','=',True)]}"/><br/>
+												<field name="schedule_time"
+													attrs="{'readonly':[('publish_in_ebay','=',True)],'required':[('publish_in_ebay','=',False),('is_export_product','=',True)],'invisible' : ['|',('is_export_product','=',False),('publish_in_ebay','=',True)]}" class="oe_inline"/>
+											</div>
+										</div>
+										
+										<!-- Relist Products -->
+										<label for="is_relist_product"/>
+										<div>
+										<field name="is_relist_product" class="oe_inline"/>
+											<div attrs="{'invisible' : [('is_relist_product','=',False)]}">
+												<label for="relist_template_id" attrs="{'invisible' : [('is_relist_product','=',False)]}"/><br/>
+												<field name="relist_template_id"
+												attrs="{'required':[('is_relist_product','=',True)], 'invisible' : [('is_relist_product','=',False)]}" class="oe_inline"/>
+											</div>
+										</div>
+									</group>
+									<group string="Order Operations">
+										<field name="is_update_order_status" />
+									</group>
+								</group>
+							</page>
+						</notebook>
+						<footer>
+							<button string="Execute" class="oe_highlight" type="object"
+								name="execute" />
+							<button string="Cancel" class="oe_highlight" special="cancel" />
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_ebay_process_import_export_from_more_ept"
+			model="ir.ui.view">
+			<field name="name">Process Import/Export</field>
+			<field name="model">ebay.process.import.export</field>
+			<field name="priority">100</field>
+			<field name="arch" type="xml">
+				<form string="Import/Export">
+					<group >
+						<field name="instance_ids" widget="many2many_tags" domain="[('state','=','confirmed')]"
+							options="{'no_create':True,'no_create_edit': True}"  required="1"/>
+					</group>
+					<footer>
+						<button string="Get Item-Conditions" class="oe_highlight"
+							type="object" name="get_item_conditions"
+							invisible="context.get('process','') != 'import_item_conditions'" />
+						<button string="Get Attributes" class="oe_highlight" type="object"
+							name="get_attributes" invisible="context.get('process','') != 'get_attributes'" />
+						<button string="Prepare" class="oe_highlight" type="object"
+							name="prepare_product_for_export" invisible="context.get('process','') != 'prepare_product_for_export'" />
+
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_ebay_process_item_conditions_from_more_ept"
+			model="ir.ui.view">
+			<field name="name">Process Import/Export</field>
+			<field name="model">ebay.process.import.export</field>
+			<field name="priority">100</field>
+			<field name="arch" type="xml">
+				<form string="Import/Export">
+					<group >
+						<field name="max_name_levels" invisible="context.get('process','') != 'get_attributes'" class="oe_inline" />
+						<field name="max_value_per_name" invisible="context.get('process','') != 'get_attributes'" class="oe_inline" />
+					</group>				
+					<footer>
+						<button string="Get Item-Conditions" class="oe_highlight"
+							type="object" name="get_item_conditions"
+							invisible="context.get('process','') != 'import_item_conditions'" />
+						<button string="Get Attributes" class="oe_highlight" type="object"
+							name="get_attributes" invisible="context.get('process','') != 'get_attributes'" />
+						<button string="Prepare" class="oe_highlight" type="object"
+							name="prepare_product_for_export" invisible="context.get('process','') != 'prepare_product_for_export'" />
+
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<act_window name="Prepare Product For Export In eBay"
+			res_model="ebay.process.import.export" src_model="product.template"
+			view_mode="form" view_type="form" target="new" multi="True"
+			key2="client_action_multi" id="action_wizard_ebay_prepate_product_for_export"
+			view_id="view_ebay_process_import_export_from_more_ept" context="{'process':'prepare_product_for_export'}" />
+
+
+		<act_window name="Get Item-Conditions" res_model="ebay.process.import.export"
+			src_model="ebay.category.master.ept" view_mode="form" view_type="form"
+			target="new" multi="True" key2="client_action_multi"
+			id="action_wizard_ebay_import_item_conditions" view_id="view_ebay_process_item_conditions_from_more_ept"
+			context="{'process':'import_item_conditions'}" />
+
+		<act_window name="Get Attributes" res_model="ebay.process.import.export"
+			src_model="ebay.category.master.ept" view_mode="form" view_type="form"
+			target="new" multi="True" key2="client_action_multi"
+			id="action_wizard_ebay_import_get_attributes" view_id="view_ebay_process_item_conditions_from_more_ept"
+			context="{'process':'get_attributes'}" />
+
+		<record id="action_wizard_ebay_import_processes_in_ebay_ept" model="ir.actions.act_window">
+			<field name="name">eBay Operations</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">ebay.process.import.export</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<!-- Menu Section -->
+		<!-- <menuitem id="menu_ebay_processes_ept" parent="ebay_ept.ebay_instance_menu_item"
+			name="Processes" sequence="13" /> -->
+
+		<menuitem id="menu_ebay_import_export_process_ept" 
+			name="eBay Operations"
+			parent="ebay_ept.menu_ebayerp_proc"
+			action="action_wizard_ebay_import_processes_in_ebay_ept" sequence="1" />
+
+	</data>
+</odoo>

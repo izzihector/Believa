@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    		<record id="amazon_file_process_transaction_form_ept" model="ir.ui.view">
+				<field name="name">Amazon Transaction File</field>
+				<field name="model">amazon.transaction.log</field>
+				<field name="type">form</field>
+				<field name="inherit_id" ref="amazon_ept.amazon_transaction_log_form_view_ept"/>
+	            <field name="arch" type="xml">
+					<field name="amazon_order_reference" position="after">
+						<field name="is_model" invisible="1"/>				
+					</field>
+					<xpath expr="//form/sheet" position='before'>
+						<header>
+								<button name="process_report" string="Process Report"
+									attrs="{'invisible':[('is_model','!=',True)]}"
+									class="oe_highlight"
+									help="Click Here To Process Report"
+									type="object" />
+						</header>
+					</xpath>
+				</field>
+			</record>
+    </data>
+</openerp>

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<data>
+	
+		<record model="ir.ui.view" id="ebayerp_view_temp_form">
+			<field name="name">ebayerp.view.temp.form</field>
+			<field name="model">ebay.template.ept</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="eBay Template">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" />
+							</h1>
+						</div>
+
+						<notebook>
+							<page string="Product Listing">
+								<group>
+									<group>
+										<field name="instance_id"  options="{'no_create': True}" />
+										<field name="related_dynamic_desc" invisible="1" />
+										<field name="payment_option_ids" widget="many2many_tags" options="{'no_create': True}"
+											domain="[('instance_id','=',instance_id)]" />
+										<field name="desc_template_id" attrs="{'invisible':[('related_dynamic_desc','=',False)]}"/>
+									</group>
+									<group>
+										<field name="hand_time" />
+									</group>
+								</group>
+								<group string="Payment Instructions">
+									<field name="payment_instructions" nolabel="1" />
+								</group>
+							</page>
+							<page string="Buyer Requirements">
+								<group>
+									<group string="Buyer Requirements">
+										<field name="is_paypal_account" />
+										<field name="is_primary_shipping_address" />
+									</group>
+									<group string="MaximumUnpaidItemStrikesInfo">
+										<field name="unpaid_strike_id" />
+										<field name="unpaid_strike_duration_id" />
+									</group>
+									<group string="MaximumBuyerPolicyViolations">
+										<field name="policy_violation_id" />
+										<field name="policy_violation_duration_id" />
+									</group>
+									<group string="MaximumItemRequirements">
+										<field name="item_count_id" />
+										<field name="item_feedback_score_id" />
+									</group>
+									<group string="MinimumFeedbackScore">
+										<field name="min_feed_score_id" />
+									</group>
+								</group>
+							</page>
+							<page string="Return Policy">
+								<group string="Return policy details">
+									<group>
+										<field name="return_policy"/>
+										<field name="return_days_id"
+											attrs="{'invisible':[('return_policy','!=','ReturnsAccepted')],'required':[('return_policy','=','ReturnsAccepted')]}" />
+										<field name="refund_option_id"
+											attrs="{'invisible':[('return_policy','!=','ReturnsAccepted')],'required':[('return_policy','=','ReturnsAccepted')]}" />
+									</group>
+									<group>
+										<field name="refund_shipping_cost_id"
+											attrs="{'invisible':[('return_policy','!=','ReturnsAccepted')],'required':[('return_policy','=','ReturnsAccepted')]}" />
+										<field name="restock_fee_id"
+											attrs="{'invisible':[('return_policy','!=','ReturnsAccepted')],'required':[('return_policy','=','ReturnsAccepted')]}" />
+										<field name="extended_holiday_returns"
+											attrs="{'invisible':[('return_policy','!=','ReturnsAccepted')]}" />
+									</group>
+								</group>
+								<group string="Description"
+									attrs="{'invisible':[('return_policy','!=','ReturnsAccepted')]}">
+									<field name="return_policy_description" nolabel="1" />
+								</group>
+							</page>
+
+							<!--Shipping View Domestic -->
+							<page string="Shipping Configuration">
+								<notebook>
+									<page string="Shipping Service">
+										<group string="ShippingType">
+											<field name="ship_type" />
+										</group>
+										<!-- <group string="PackagingHandlingCosts" attrs="{'invisible':[('ship_type','!=','Calculated')]}">
+											<group>
+												<field name="handling_cost" attrs="{'required':[('ship_type','=','Calculated')]}" />
+												<field name="pack_type" attrs="{'required':[('ship_type','=','Calculated')]}" />
+												<field name="irreg_pack" attrs="{'required':[('ship_type','=','Calculated')]}" />
+											</group>
+											<group>
+												<field name="min_weight" attrs="{'required':[('ship_type','=','Calculated')]}" />
+												<field name="max_weight" attrs="{'required':[('ship_type','=','Calculated')]}" />
+											</group>
+										</group> -->
+										<group attrs="{'invisible':[('ship_type','in',['Free','NotSpecified'])],'required':[('ship_type','in',['Calculated','Flat'])]}" string="Shipping Service">
+											<field name="domestic_shipping_ids" nolabel="1">
+												<form string="Shipping Service">
+													<group>
+														<group>
+															<field name="is_free_shipping" />
+															<field name="service_id"
+																domain="['|',('ship_type1','=',parent.ship_type),('ship_type2','=',parent.ship_type),('inter_ship','=',False)]" />
+															<field name="priority" />
+														</group>
+														<group>
+															<field name="ship_type" invisible="1" />
+															<field name="cost"
+																attrs="{'readonly':[('is_free_shipping','=',True)],'invisible':[('ship_type','=','Calculated')],'required':[('ship_type','=','Flat')]}" />
+															<field name="additional_cost"
+																attrs="{'readonly':[('is_free_shipping','=',True)],'invisible':[('ship_type','=','Calculated')],'required':[('is_free_shipping','=',False),('ship_type','=','Flat')]}" />
+														</group>
+													</group>
+												</form>
+												<tree string="Shipping Service">
+													<field name="service_id" />
+													<field name="priority" />
+													<field name="cost" />
+													<field name="additional_cost" />
+												</tree>
+											</field>
+										</group>
+									</page>
+									<page string="International Shipping">
+										<group>
+											<field name="int_ship_type" />
+										</group>
+										<!-- <group string="PackagingHandlingCosts" attrs="{'invisible':[('int_ship_type','!=','Calculated')]}">
+											<group>
+												<field name="inter_handling_cost" attrs="{'required':[('int_ship_type','=','Calculated')]}" />
+												<field name="inter_pack_type" attrs="{'required':[('int_ship_type','=','Calculated')]}" />
+												<field name="inter_irreg_pack" attrs="{'required':[('int_ship_type','=','Calculated')]}" />
+											</group>
+											<group>
+												<field name="inter_min_weight" attrs="{'required':[('int_ship_type','=','Calculated')]}" />
+												<field name="inter_max_weight" attrs="{'required':[('int_ship_type','=','Calculated')]}" />
+											</group>
+										</group> -->
+										<group string="International Shipping"
+											attrs="{'invisible':[('int_ship_type','=',False)]}">
+											<field name="inter_shipping_ids" nolabel="1">
+												<form string="Shipping Service">
+													<group>
+														<group>
+															<field name="custom_loc" required="True" />
+															<field name="service_id" required="True"
+																domain="['|',('ship_type1','=',parent.int_ship_type),('ship_type2','=',parent.int_ship_type),('inter_ship','=',True)]" />
+															<field name="priority" />
+														</group>
+														<group>
+															<field name="int_ship_type" invisible="1" />
+															<field name="cost"
+																attrs="{'invisible':[('int_ship_type','=','Calculated')],'required':[('int_ship_type','=','Flat')]}" />
+															<field name="additional_cost"
+																attrs="{'invisible':[('int_ship_type','=','Calculated')],'required':[('int_ship_type','=','Flat')]}" />
+														</group>
+													</group>
+													<group string="ShipToLocations" attrs="{'invisible':[('custom_loc','!=','customloc')]}" >
+														<field name="loc_ids" nolabel="1">
+															<tree editable="bottom">
+																<field name="name" />
+																<field name="ship_code" />
+																<field name="detail_version" />
+															</tree> 
+														</field>
+													</group>
+
+												</form>
+												<tree string="Shipping Service">
+													<field name="custom_loc" />
+													<field name="service_id" />
+													<field name="priority" />
+													<field name="cost" />
+													<field name="additional_cost" />
+												</tree>
+											</field>
+										</group>
+									</page>
+									<page string="Shipping Package Details">
+										<group>
+											<group>
+												<field name="inter_pack_type" />
+												<field name="inter_irreg_pack"/>
+											</group>
+											<group>
+												<field name="inter_max_weight" string="WeightMajor (lbs)" attrs="{'required':[('inter_pack_type','!=',False)]}" />
+												<field name="inter_min_weight" string="WeightMinor (oz)" attrs="{'required':[('inter_pack_type','!=',False)]}" />
+											</group>
+										</group>
+									</page>
+									<page string="Locations">
+										<group>
+											<field name="additional_locations" />
+										</group>
+										<group string="ShipToLocations" attrs="{'invisible':[('additional_locations','=',False)]}">
+											<!-- <field nolabel="1" name="loc_ids" attrs="{'invisible':[('additional_locations','=','Worldwide')]}" /> -->
+											<field name="loc_ids" attrs="{'invisible':[('additional_locations','=','Worldwide')]}" nolabel="1" widget="many2many">
+											   <tree editable="bottom">
+											      <field name="name" />
+											      <field name="ship_code" />
+											      <field name="detail_version" />
+											   </tree>
+											</field>
+										</group>
+										<group string="ExcludeShipToLocations">
+											<!-- <field nolabel="1" name="exclude_ship_location_ids"/> -->
+											<field name="exclude_ship_location_ids" nolabel="1" widget="many2many">
+											   <tree editable="bottom">
+											      <field name="name" />
+											      <field name="loc_code" />
+											      <field name="region" />
+											   </tree>
+											</field>
+										</group>
+									</page>
+								</notebook>
+							</page>
+							<page string="Listing Configuration">
+								<group string="Item Details">
+									<group>
+										<field name="listing_type" />
+									</group>
+									<group>
+										<field name="duration_id" domain="[('type','=',listing_type)]"
+											widget="selection" required="1" />
+									</group>
+								</group>
+								<group string="Pricelist Details">
+									<group>
+										<field name="start_price_id" required="1" />
+									</group>
+									<group>
+										<field name="reserve_price_id"
+											attrs="{'required':[('listing_type','=','Chinese')],'invisible':['|',('listing_type','=','FixedPriceItem')]}" />
+										<field name="buy_it_nw_price_id"
+											attrs="{'required':[('listing_type','=','Chinese')],'invisible':['|',('listing_type','=','FixedPriceItem')]}" />
+									</group>
+								</group>
+								<group>
+								</group>
+							</page>
+							<page string="eBay Seller Policy">
+								<p class="oe_grey">
+									<strong>Note: This eBay Seller policy already configured in
+										eBay Seller account and User can get Seller policy from
+										"GetUserPreferences" operation.</strong>
+								</p>
+								<group>
+									<group>
+										<field name="ebay_seller_payment_policy_id" options="{'no_create': True}"
+											domain="[('instance_id','=',instance_id),('policy_type', '=', 'PAYMENT')]" />
+										<field name="ebay_seller_shipping_policy_id" options="{'no_create': True}"
+											domain="[('instance_id','=',instance_id),('policy_type', '=', 'SHIPPING')]" />
+									</group>
+									<group>
+										<field name="ebay_seller_return_policy_id" options="{'no_create': True}"
+											domain="[('instance_id','=',instance_id),('policy_type', '=', 'RETURN_POLICY')]" />
+									</group>
+								</group>
+							</page>
+							<page string="Vat Details">
+								<p class="oe_grey">
+									<strong>Note: Applicable only to business sellers residing in
+										Germany, Austria, or Switzerland who are listing in a B2B
+										VAT-enabled category on the eBay Germany (DE), Austria (AT),
+										or Switzerland (CH) sites.</strong>
+								</p>
+								<group>
+									<group>
+										<field name="business_seller" />
+									</group>
+									<group>
+										<field name="restricted_to_business" />
+									</group>
+								</group>
+								<p class="oe_grey">
+									<strong>Note: Sales tax details. US and US Motors (site 0)
+										sites only.</strong>
+								</p>
+								<group string="Sales Tax">
+									<group>
+										<field name="state_id" />
+									</group>
+									<group>
+										<field name="shipping_included_in_tax" />
+									</group>
+								</group>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="ebayerp_tree">
+			<field name="name">ebayerp.tree</field>
+			<field name="model">ebay.template.ept</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="eBay Template">
+					<field name="name" />
+					<field name="instance_id" />
+					<field name="hand_time" />
+					<field name="policy_violation_id" />
+					<field name="policy_violation_duration_id" />
+					<field name="return_policy" />
+					<field name="return_days_id" />
+					<field name="refund_option_id" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="ebayerp_temp_search_view_ept" model="ir.ui.view">
+			<field name="name">eBay Template Search View</field>
+			<field name="model">ebay.template.ept</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="eBay Template Search View">
+					<field name="name" />
+					<group expand="0" string="Group By...">
+						<filter string="Instance" name="instance_id" icon="terp-personal" context="{'group_by':'instance_id'}" />
+						<filter string="Handling Tme" name="hand_time" icon="terp-personal"
+							context="{'group_by':'hand_time'}" />
+						<filter string="Return Policy" name="return_policy" icon="terp-personal"
+							context="{'group_by':'return_policy'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+
+		<record id="action_ebayerp_template" model="ir.actions.act_window">
+			<field name="name">eBay Template</field>
+			<field name="res_model">ebay.template.ept</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="o_view_nocontent_neutral_face">
+					eBay Listing Template
+				</p>
+			</field>
+		</record>
+		
+		<!-- Menu Section -->
+		<menuitem id="menu_ebayerp_core_templates" name="eBay Listing Templates"
+			parent="ebay_ept.ebay_instance_menu_item_core_settings" action="action_ebayerp_template" sequence="3" />
+	</data>
+</odoo>        

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<data>
+	
+		<!-- Inherited Search View Section -->
+        <record id="account_invoice_search_view" model="ir.ui.view">
+            <field name="name">account.invoice.search</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+            	<filter name="draft" position="after">
+                    <filter name="update_invoice_in_ebay" string="Unpaid invoices in eBay" domain="[('state','=','paid'),('visible_payment_option','=',True),('payment_updated_in_ebay','=',False),('type','=','out_invoice')]"/>            	
+            	</filter>
+			</field>
+		</record>
+		
+		<!-- Tree View Section -->
+		<record id="account_invoice_tree_view" model="ir.ui.view">
+            <field name="name">account.invoice.tree</field>
+            <field name="model">account.invoice</field>
+            <field name="arch" type="xml">
+                <tree create="0" decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Invoice">
+                    <field name="partner_id" groups="base.group_user" string="Customer"/>
+                    <field name="date_invoice"/>
+                    <field name="number"/>
+                    <field name="commercial_partner_id" invisible="1"/>
+                    <field name="reference" invisible="1"/>
+                    <field name="name" invisible="1"/>
+                    <field name="journal_id" invisible="1"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="user_id"/>
+                    <field name="date_due"/>
+                    <field name="origin"/>
+                    <field name="amount_untaxed" string="Tax Excluded" sum="Total"/>
+                    <field name="amount_tax" sum="Total"/>
+                    <field name="amount_total_signed" string="Total" sum="Total"/>
+                    <field name="residual_signed" string="Amount Due" sum="Amount Due"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="company_currency_id" invisible="1"/>
+                    <field name="state"/>
+                    <field name="type" invisible="context.get('type',True)"/>
+                </tree>
+            </field>
+        </record>
+		
+		<!-- Inherited Form View Section -->
+		<record id="inherited_account_invoice_form_view" model="ir.ui.view">
+			<field name="name">inherited.account.invoice.form</field>
+			<field name="model">account.invoice</field>
+			<field name="type">form</field>
+			<field name="inherit_id" ref="account.invoice_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//header/button[4]" position="after">
+					<button name="update_payment_in_ebay" string="Update Payment In eBay"
+						type="object" class="oe_highlight"
+						attrs="{'invisible':['|','|','|','|',('visible_payment_option','=',False),('state','!=','paid'),('type','!=','out_invoice'),('payment_updated_in_ebay','=',True),('ebay_instance_id','=',False)]}" />
+				</xpath>
+				<xpath expr="//page[2]/group[1]/group[1]/field[@name='name']" position="after">
+					<field name="ebay_instance_id" readonly="1" />
+					<field name="payment_updated_in_ebay" />
+					<field name="payment_partially_updated_in_ebay" invisible="1" />
+					<field name="is_refund_in_ebay" invisible="1" />
+					<field name="visible_payment_option" invisible="1" />
+				</xpath>
+			</field>
+		</record>
+		
+		
+		<!-- Action section -->
+		<record id="action_invoice_ebay_invoices" model="ir.actions.act_window">
+			<field name="name">Invoices</field>
+			<field name="res_model">account.invoice</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,calendar,graph</field>
+			<field name="domain">[('type','=','out_invoice'),('ebay_instance_id','!=',False)]</field>
+			<field name="context">{'default_type':'out_invoice','type':'out_invoice', 'journal_type': 'sale'}</field>
+			<field name="view_id" ref="account_invoice_tree_view" />
+			<field name="search_view_id" ref="account_invoice_search_view" />
+			<field name="help" type="html">
+				<p class="o_view_nocontent_neutral_face">
+            		eBay Customer Invoice
+          		</p>
+				<p>
+					There is no any invoice created for any of your eBay Sale
+					Orders. <br/>
+					If your eBay Instance's Invoice Policy is set to "Before
+					Delivery", then invoice will be created immediately after
+					validation of Order.If your eBay Instance's Invoice Policy is set
+					to "After Delivery", then once your shipping order completed, you
+					can make Invoice from Delivery Order. You can't create eBay
+					Invoice manually from here. However, you can make manually invoice
+					from eBay Sale Order.
+				</p>
+			</field>
+		</record>
+		
+		<record id="action_invoice_ebay_invoices_tree" model="ir.actions.act_window.view">
+			<field name="sequence" eval="1" />
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="account_invoice_tree_view" />
+			<field name="act_window_id" ref="action_invoice_ebay_invoices" />
+		</record>
+		
+		<record id="action_invoice_ebay_invoices2" model="ir.actions.act_window.view">
+			<field name="sequence" eval="2" />
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="inherited_account_invoice_form_view" />
+			<field name="act_window_id" ref="action_invoice_ebay_invoices" />
+		</record>
+		
+		<record id="action_refund_ebay_invoices" model="ir.actions.act_window">
+			<field name="name">Refunds</field>
+			<field name="res_model">account.invoice</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,calendar,graph</field>
+			<field name="domain">[('type','=','out_refund'),('ebay_instance_id','!=',False)]</field>
+			<field name="view_id" eval="account_invoice_tree_view" />
+			<field name="search_view_id" ref="account_invoice_search_view" />
+			<field name="help" type="html">
+				<p class="o_view_nocontent_neutral_face">
+					eBay Customer Refund Invoice
+				</p>				
+				<p>
+					There is no any Refund created for any of your eBay Sale
+					Orders.<br/>
+					If you Cancel Delivery Order then you can see Cancel In eBay
+					Button, On click of that button system will open wizard.
+					In which you can configure cancel order details and refund details.
+					On Canceling Order in eBay system will create refund.
+				</p>
+
+			</field>
+		</record>
+
+		<record id="action_invoice_ebay_invoices_open" model="ir.actions.act_window">
+			<field name="name">Invoices</field>
+			<field name="res_model">account.invoice</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,calendar,graph</field>
+			<field name="domain">[('type','=','out_invoice'),('ebay_instance_id','!=',False),('state','=','open')]</field>
+			<field name="context">{'default_type':'out_invoice','type':'out_invoice', 'journal_type': 'sale'}</field>
+			<field name="view_id" eval="account_invoice_tree_view" />
+			<field name="search_view_id" ref="account_invoice_search_view" />
+		</record>
+
+		<record id="action_invoice_ebay_invoices_paid" model="ir.actions.act_window">
+			<field name="name">Invoices</field>
+			<field name="res_model">account.invoice</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,calendar,graph</field>
+			<field name="domain">[('type','=','out_invoice'),('ebay_instance_id','!=',False),('state','=','paid')]</field>
+			<field name="context">{'default_type':'out_invoice','type':'out_invoice', 'journal_type': 'sale'}</field>
+			<field name="view_id" eval="account_invoice_tree_view" />
+			<field name="search_view_id" ref="account_invoice_search_view" />
+		</record>
+
+		<!-- Menu Section -->
+		<menuitem id="ebay_sale_orders_child_invoices_menu" 
+			name="Invoices"
+			parent="ebay_ept.menu_ebayerp_sales_orders" 
+			sequence="3" />
+
+		<menuitem id="menu_item_ebay_invoice_ept" 
+			name="Invoices"
+			parent="ebay_sale_orders_child_invoices_menu" 
+			action="action_invoice_ebay_invoices"
+			sequence="1" />
+
+		<menuitem id="ebay_sale_orders_child_refunds_menu" 
+			name="Refunds"
+			parent="ebay_ept.menu_ebayerp_sales_orders" 
+			sequence="4" />
+			
+		<menuitem id="menu_item_ebay_refund_ept" 
+			name="Refunds"
+			parent="ebay_sale_orders_child_refunds_menu" 
+			action="action_refund_ebay_invoices"
+			sequence="1" />
+
+	</data>
+</odoo>

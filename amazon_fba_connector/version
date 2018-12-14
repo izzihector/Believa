@@ -1,0 +1,12 @@
+
+version:-11.0.3(Date:-2018-02-14)
+fix shipment report issue related to stock odoo base issue
+fix shipment report odoo base issue 
+auto workflow date conformation changes
+
+version:-11.0.1(Date:-2017-12-26)
+Switch product correction
+Correction in licencing
+
+version:-11.0.2(Date:-2017-12-26)
+fix issue of shipment report picking transfer quant issues

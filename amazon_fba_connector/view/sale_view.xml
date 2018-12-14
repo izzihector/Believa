@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="0">
+		<record id="view_afc_amazon_sale_order_form_ept" model="ir.ui.view">
+			<field name="name">amazon.sale.order.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="amazon_ept.amazon_sales_order_form_view_ept" />
+			<field name="arch" type="xml">
+				<button name="action_quotation_send" position="before">
+					<field name="warehouse_id" invisible="1" />
+				</button>
+				<!-- <xpath expr="//field[@name='ept_order_line']/tree/field[@name='price_subtotal']" position="after">
+					<field name="fulfillment_center_id"  />
+				</xpath> -->
+			
+			</field>
+		</record>
+		<record id="sale_order_outbound_ext_ept" model="ir.ui.view">
+			<field name="name">Sale Order Outbound EPT</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+				<button name="action_button_confirm" position="after">
+					<button name="create_outbound_shipment" string="Create Outbound Shipment" type="object" attrs="{'invisible':[('outbound_shipment_can_be_created','!=',True)]}"/>
+				</button>
+				<field name="date_order" position="after">
+					<field name="amz_outbound_shipment_can_be_created" invisible="1"/>
+				</field>
+			</field>
+		</record>
+	</data>
+</odoo>
