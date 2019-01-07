@@ -1,0 +1,10 @@
+"id","name","sequence","action_id:id","url","display_inline_image","display_outline_image","use_quotations","use_products","use_invoices","use_delivery_orders","use_ebay_commerce_workflow","use_log"
+"sale_order_ebay_operation","Sales Orders",1,"ebay_ept.action_ebay_sales_orders","/ebay_ept/static/src/img/kanban/sale.png",0,1,1,0,0,0,0,0
+"products_ebay_operation","Products",2,"ebay_ept.action_ebay_product_template_ept","/ebay_ept/static/src/img/kanban/products.png",0,1,0,1,0,0,0,0
+"delivery_orders_ebay_operation","Delivery Orders",3,"ebay_ept.action_picking_view_ept","/ebay_ept/static/src/img/kanban/delivery.png",0,1,0,0,0,1,0,0
+"invoices_ebay_operation","Invoices",4,"ebay_ept.action_invoice_ebay_invoices","/ebay_ept/static/src/img/kanban/invoice.png",0,1,0,0,1,0,0,0
+"import_export_ebay_operation","Perform Operation",5,"ebay_ept.action_wizard_ebay_import_processes_in_ebay_ept","/ebay_ept/static/src/img/kanban/perform_operations.png",0,1,0,0,0,0,0,0
+"ebay_categories_operation","Categories",6,"ebay_ept.action_category_master","/ebay_ept/static/src/img/kanban/categories.png",0,1,0,0,0,0,0,0
+"ebay_cron_jobs_operation","Ebay Cron",7,"base.ir_cron_act","/ebay_ept/static/src/img/kanban/auto_jobs.png",0,1,0,0,0,0,0,0
+"sales_analysis_ebay_operation","Sales Analysis",8,"ebay_ept.action_order_report_all","/ebay_ept/static/src/img/kanban/sales_report.png",0,1,0,0,0,0,0,0
+"invoice_workflow_ebay_operation","Invoice Workflow Settings",9,"ebay_ept.act_ebay_sale_workflow_process_form","/ebay_ept/static/src/img/kanban/setting.png",0,1,0,0,0,0,1,0

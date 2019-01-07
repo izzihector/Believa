@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<odoo>
+	<data>
+		<record id="amazon_settlement_report_form_view_ept" model="ir.ui.view">
+			<field name="name">Amazon Settlement Report Form</field>
+			<field name="model">settlement.report.ept</field>
+			<field name="inherit_id" ref="amazon_ept.amazon_settlement_report_form_view_ept"/>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<xpath expr="//sheet/div[hasclass('oe_title')]" position="after">
+					<div class="oe_right oe_button_box" style="width: 400px;"
+						name="buttons">
+						<button class="oe_inline oe_stat_button" name="list_of_reimbursement_invoices" style="width: 400px;"
+							type="object"  icon="fa-pencil-square-o" attrs="{'invisible': [('state', 'not in',['processed','partially_processed','closed'])]}">
+							<field string="Reimbursement
+							Invoices" name="invoice_count" widget="statinfo" />
+						</button>
+					</div>				
+				</xpath>				
+			</field>
+		</record>	
+	</data>
+</odoo>
+	

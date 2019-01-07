@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<data>
+		
+		<!-- Menu Section -->
+		<menuitem id="menu_ebayerp_buyer_requirements" name="Buyer Requirements"
+			sequence="11"
+			parent="ebay_ept.ebay_instance_menu_item_core_settings" />
+
+		<menuitem id="menu_ebayerp_max_item_requirements" name="ItemRequirements"
+			parent="menu_ebayerp_buyer_requirements" sequence="1" />
+
+		<record id="view_ebay_tree_item_count" model="ir.ui.view">
+			<field name="name">Max Item Count</field>
+			<field name="model">ebay.max.item.counts</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Max Item Count" create="false">
+					<field name="name" />
+				</tree>
+			</field>
+		</record>
+		<record id="view_ebay_form_item_count" model="ir.ui.view">
+			<field name="name">Max Item Count</field>
+			<field name="model">ebay.max.item.counts</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Max Item Count" create="false">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="site_ids" readonly="1" widget="many2many_tags" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="action_item_count" model="ir.actions.act_window">
+			<field name="name">Item Count</field>
+			<field name="res_model">ebay.max.item.counts</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="action_item_count" id="menu_item_count"
+			parent="menu_ebayerp_max_item_requirements" sequence="10" />
+
+
+		<record id="view_ebay_tree_item_feed_score" model="ir.ui.view">
+			<field name="name">Item Feed Score</field>
+			<field name="model">item.feedback.score</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Item Feed Score" create="false">
+					<field name="name" />
+				</tree>
+			</field>
+		</record>
+		<record id="view_ebay_form_item_count" model="ir.ui.view">
+			<field name="name">Item Feed Score</field>
+			<field name="model">item.feedback.score</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Item Feed Score" create="false">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="site_ids" readonly="1" widget="many2many_tags" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="action_item_feed_score" model="ir.actions.act_window">
+			<field name="name">Item Feed Score</field>
+			<field name="res_model">item.feedback.score</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="action_item_feed_score" id="menu_item_feed_score"
+			parent="menu_ebayerp_max_item_requirements" sequence="10" />
+
+		<menuitem id="menu_ebayerp_max_unpaid_item_strike_info" name="UnpaidItemStrikesInfo"
+			parent="menu_ebayerp_buyer_requirements" sequence="1" />
+
+		<record id="view_ebay_tree_item_strike_count" model="ir.ui.view">
+			<field name="name">Max Item Strike Count</field>
+			<field name="model">ebay.unpaid.item.strike.count</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Max Item Strike Count" create="false">
+					<field name="name" />
+				</tree>
+			</field>
+		</record>
+		<record id="view_ebay_form_item_strike_count" model="ir.ui.view">
+			<field name="name">Max Item Strike Count</field>
+			<field name="model">ebay.unpaid.item.strike.count</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Max Item Strike Count" create="false">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="site_ids" readonly="1" widget="many2many_tags" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="action_item_strike_count" model="ir.actions.act_window">
+			<field name="name">Strike Count</field>
+			<field name="res_model">ebay.unpaid.item.strike.count</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="action_item_strike_count" id="menu_item_strike_count"
+			parent="menu_ebayerp_max_unpaid_item_strike_info" sequence="10" />
+
+		<record id="view_ebay_tree_item_strike_duration" model="ir.ui.view">
+			<field name="name">Max Item Strike Duration</field>
+			<field name="model">ebay.unpaid.item.strike.duration</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Max Item Strike Duration" create="false">
+					<field name="name" />
+					<field name="description" />
+				</tree>
+			</field>
+		</record>
+		<record id="view_ebay_form_item_strike_duration" model="ir.ui.view">
+			<field name="name">Max Item Strike Duration</field>
+			<field name="model">ebay.unpaid.item.strike.duration</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Max Item Strike Duration" create="false">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="description" />
+							</group>
+							<group>
+								<field name="site_ids" readonly="1" widget="many2many_tags" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="action_item_strike_duration" model="ir.actions.act_window">
+			<field name="name">Strike Duration</field>
+			<field name="res_model">ebay.unpaid.item.strike.duration</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<!-- Menu Section -->
+		<menuitem action="action_item_strike_duration" id="menu_item_strike_duration"
+			parent="menu_ebayerp_max_unpaid_item_strike_info" sequence="10" />
+
+		<menuitem id="menu_ebayerp_max_policy_violations" name="BuyerPolicyViolations"
+			parent="menu_ebayerp_buyer_requirements" sequence="1" />
+
+		<record id="view_ebay_tree_policy_violations_durations" model="ir.ui.view">
+			<field name="name">Violations Durations</field>
+			<field name="model">ebay.policy.violations.durations</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Max Item Strike Count" create="false">
+					<field name="name" />
+					<field name="description" />
+				</tree>
+			</field>
+		</record>
+		<record id="view_ebay_form_policy_violations_durations" model="ir.ui.view">
+			<field name="name">Violations Durations</field>
+			<field name="model">ebay.policy.violations.durations</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Max Item Strike Count" create="false">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="description" />
+							</group>
+							<group>
+								<field name="site_ids" readonly="1" widget="many2many_tags" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="action_item_policy_violation_durations" model="ir.actions.act_window">
+			<field name="name">Durations</field>
+			<field name="res_model">ebay.policy.violations.durations</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+	
+		<!-- Menu Section -->
+		<menuitem action="action_item_policy_violation_durations" id="menu_item_policy_violation_durations"
+			parent="menu_ebayerp_max_policy_violations" sequence="10" />
+
+		<record id="view_ebay_tree_policy_violations" model="ir.ui.view">
+			<field name="name">Policy Violations</field>
+			<field name="model">ebay.policy.violations</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Max Item Strike Count" create="false">
+					<field name="name" />
+				</tree>
+			</field>
+		</record>
+		<record id="view_ebay_form_policy_violations" model="ir.ui.view">
+			<field name="name">Policy Violations</field>
+			<field name="model">ebay.policy.violations</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Max Item Strike Count" create="false">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="site_ids" readonly="1" widget="many2many_tags" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="action_item_policy_violation" model="ir.actions.act_window">
+			<field name="name">Policy Violations</field>
+			<field name="res_model">ebay.policy.violations</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<!-- Menu Section -->
+		<menuitem action="action_item_policy_violation" id="menu_item_policy_violation"
+			parent="menu_ebayerp_max_policy_violations" sequence="10" />
+
+		<record id="view_ebay_tree_feedback_score" model="ir.ui.view">
+			<field name="name">FeedBack Score</field>
+			<field name="model">ebay.feedback.score</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Feed Back Score" create="false">
+					<field name="name" />
+				</tree>
+			</field>
+		</record>
+		<record id="view_ebay_form_feedback_score" model="ir.ui.view">
+			<field name="name">Feedback Score</field>
+			<field name="model">ebay.feedback.score</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Feed Back Score" create="false">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="site_ids" readonly="1" widget="many2many_tags" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="action_feed_back_score" model="ir.actions.act_window">
+			<field name="name">Feedback Score</field>
+			<field name="res_model">ebay.feedback.score</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<!-- Menu Section -->
+		<menuitem action="action_feed_back_score" id="menu_feed_back_score"
+			parent="menu_ebayerp_buyer_requirements" sequence="10" />
+
+
+	</data>
+</odoo>

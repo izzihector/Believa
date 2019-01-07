@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="view_amazon_fba_config_settings" model="ir.ui.view">
+			<field name="name">Amazon FBA Settings</field>
+			<field name="model">res.config.settings</field>
+			<field name="inherit_id" ref="amazon_ept.view_amazon_config_settings" />
+			<field name="arch" type="xml">
+			
+            <xpath expr="//div[@name='fbm_orders']"
+					position="after">
+				<div name="fba_pending_orders" attrs="{'invisible': [('seller_id', '=', False)]}">
+                   <h2>FBA Pending Orders</h2>     
+                      <div  class="row mt16 o_settings_container" >
+                           <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="auto_import_fba_pending_order" help="If Ticked, Amazon FBA Orders automatically Imported by system from Amazon." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="auto_import_fba_pending_order"/>
+                               <div class="text-muted">
+                                  
+                               </div>
+						  	 </div>
+						  	  <div>
+	                              <field name="pending_order_import_interval_number"
+								attrs="{'required': [('auto_import_fba_pending_order', '=', True),('seller_id','!=',False)],
+								'invisible': [('auto_import_fba_pending_order', '=', False)]}"
+								class="oe_inline" />
+								<field name="pending_order_import_interval_type"
+									attrs="{'required': [('auto_import_fba_pending_order', '=', True),('seller_id','!=',False)],
+									'invisible': [('auto_import_fba_pending_order', '=', False)]}"
+									class="oe_inline" />
+								<field name="pending_order_next_execution"
+									attrs="{'required': [('auto_import_fba_pending_order', '=', True),('seller_id','!=',False)],
+									'invisible': [('auto_import_fba_pending_order', '=', False)]}"
+									class="oe_inline" />	
+								<field name="pending_order_import_user_id"
+									attrs="{'required': [('auto_import_fba_pending_order', '=', True),('seller_id','!=',False)],
+									'invisible': [('auto_import_fba_pending_order', '=', False)]}"
+									class="oe_inline" />	
+						  		</div>
+							</div>
+					  <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="auto_check_cancel_order" help="If Ticked, system will check draft FBA orders status in Amazon and if it is canceled in Amazon, then system will automatically canceled in Odoo." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="auto_check_cancel_order"/>
+                               <div class="text-muted">
+                                   
+                               </div>
+						  	 </div>
+						  	  <div>
+	                           <field name="cancel_order_interval_number"
+								attrs="{'required': [('auto_check_cancel_order', '=', True),('seller_id','!=',False)],
+								'invisible': ['|',('auto_check_cancel_order', '=', False),('seller_id', '=', False)]}"
+								class="oe_inline" />
+								<field name="cancel_order_interval_type"
+									attrs="{'required': [('auto_check_cancel_order', '=', True),('seller_id','!=',False)],
+									'invisible': ['|',('auto_check_cancel_order', '=', False),('seller_id', '=', False)]}"
+									class="oe_inline" />
+								<field name="cancel_order_next_execution"
+									attrs="{'required': [('auto_check_cancel_order', '=', True),('seller_id','!=',False)],
+									'invisible': ['|',('auto_check_cancel_order', '=', False),('seller_id', '=', False)]}"
+									class="oe_inline" />		
+								<field name="cancel_order_report_user_id"
+									attrs="{'required': [('auto_check_cancel_order', '=', True),('seller_id','!=',False)],
+									'invisible': ['|',('auto_check_cancel_order', '=', False),('seller_id', '=', False)]}"
+									class="oe_inline" />	
+						  		</div>
+							</div>
+							
+							
+					</div>
+				</div>
+			</xpath>
+			
+			<xpath expr="//div[@name='fba_pending_orders']"
+					position="after">
+				<div name="fba_orders" attrs="{'invisible': [('seller_id', '=', False)]}">
+                   <h2>FBA Orders</h2>     
+                      <div class="row mt16 o_settings_container">
+                           <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="auto_import_shipment_report" help="If Ticked, system will import shipment report automatically from Amazon FBA." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="auto_import_shipment_report" string="Request FBA Shipment Report?"/>
+                               <div class="text-muted">
+                                   
+                               </div>
+						  	 </div>
+						  	 <div>
+	                               <field name="ship_report_import_interval_number"
+								attrs="{'required': [('auto_import_shipment_report', '=', True),('seller_id','!=',False)],
+								'invisible': ['|',('auto_import_shipment_report', '=', False),('seller_id', '=', False)]}"
+								class="oe_inline" />
+							<field name="ship_report_import_interval_type"
+								attrs="{'required': [('auto_import_shipment_report', '=', True),('seller_id','!=',False)],
+								'invisible': ['|',('auto_import_shipment_report', '=', False),('seller_id', '=', False)]}"
+								class="oe_inline" />
+							<field name="ship_report_import_next_execution"
+								attrs="{'required': [('auto_import_shipment_report', '=', True),('seller_id','!=',False)],
+								'invisible': ['|',('auto_import_shipment_report', '=', False),('seller_id', '=', False)]}"
+								class="oe_inline" />	
+							<field name="ship_report_import_user_id"
+								attrs="{'required': [('auto_import_shipment_report', '=', True),('seller_id','!=',False)],
+								'invisible': ['|',('auto_import_shipment_report', '=', False),('seller_id', '=', False)]}"
+								class="oe_inline" />	
+						  		</div>
+							</div>
+							
+						 <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="auto_process_shipment_report" help="If Ticked, system will process shipment report automatically those are integrated." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="auto_process_shipment_report" string="Download Process FBA Shipment Report?"/>
+                               <div class="text-muted">
+                                   
+                               </div>
+						  	 </div>
+						  	 <div>
+	                              <field name="ship_report_process_interval_number"
+								attrs="{'required': [('auto_process_shipment_report', '=', True),('seller_id','!=',False)],
+								'invisible': ['|',('auto_process_shipment_report', '=', False),('seller_id', '=', False)]}"
+								class="oe_inline" />
+								<field name="ship_report_process_interval_type"
+									attrs="{'required': [('auto_process_shipment_report', '=', True),('seller_id','!=',False)],
+									'invisible': ['|',('auto_process_shipment_report', '=', False),('seller_id', '=', False)]}"
+									class="oe_inline" />
+								<field name="ship_report_process_next_execution"
+									attrs="{'required': [('auto_process_shipment_report', '=', True),('seller_id','!=',False)],
+									'invisible': ['|',('auto_process_shipment_report', '=', False),('seller_id', '=', False)]}"
+									class="oe_inline" />	
+								<field name="ship_report_process_user_id"
+									attrs="{'required': [('auto_process_shipment_report', '=', True),('seller_id','!=',False)],
+									'invisible': ['|',('auto_process_shipment_report', '=', False),('seller_id', '=', False)]}"
+									class="oe_inline" />	
+						  		</div>
+							</div>							
+
+						 <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="is_another_soft_create_fba_shipment" class="oe_inline"/>
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="is_another_soft_create_fba_shipment"/>
+                               <div class="text-muted">
+                                   
+                               </div>
+						  	 </div>
+							</div>							
+							
+							
+					</div>
+                 </div>
+            </xpath>  
+            
+            <xpath expr="//div[@name='fba_orders']"
+					position="after">
+				<div name="fba_order_return" attrs="{'invisible': [('seller_id', '=', False)]}">
+					<h2>FBA Order Returns</h2>
+  						<div class="row mt16 o_settings_container">
+                           <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="auto_import_return_report" help="If Ticked, system will import customer return report automatically from Amazon FBA." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="auto_import_return_report" string="Request FBA Customer Return Report?"/>
+                               <div class="text-muted">
+                                   
+                               </div>
+						  	 </div>
+						  	 <div>
+								<field name="return_report_import_interval_number"
+								attrs="{'required': [('auto_import_return_report', '=', True),('seller_id','!=',False)],
+								'invisible': ['|',('auto_import_return_report', '=', False),('seller_id', '=', False)]}"
+								class="oe_inline" />
+								<field name="return_report_import_interval_type"
+									attrs="{'required': [('auto_import_return_report', '=', True),('seller_id','!=',False)],
+									'invisible': ['|',('auto_import_return_report', '=', False),('seller_id', '=', False)]}"
+									class="oe_inline" />
+								<field name="return_report_import_next_execution"
+									attrs="{'required': [('auto_import_return_report', '=', True),('seller_id','!=',False)],
+									'invisible': ['|',('auto_import_return_report', '=', False),('seller_id', '=', False)]}"
+									class="oe_inline" />	
+								<field name="return_report_import_user_id"
+									attrs="{'required': [('auto_import_return_report', '=', True),('seller_id','!=',False)],
+									'invisible': ['|',('auto_import_return_report', '=', False),('seller_id', '=', False)]}"
+									class="oe_inline" />
+							</div>
+						</div>
+							
+						 <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="auto_process_return_report" help="If Ticked, system will process customer return report automatically those are integrated." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="auto_process_return_report" string="Download and Process FBA Customer Returns?"/>
+                               <div class="text-muted">
+                                   
+                               </div>
+						  	 </div>
+						  	 <div>
+	                            <field name="return_process_report_interval_number"
+								attrs="{'required': [('auto_process_return_report', '=', True),('seller_id','!=',False)],
+								'invisible': ['|',('auto_process_return_report', '=', False),('seller_id', '=', False)]}"
+								class="oe_inline" />
+								<field name="return_process_report_interval_type"
+									attrs="{'required': [('auto_process_return_report', '=', True),('seller_id','!=',False)],
+									'invisible': ['|',('auto_process_return_report', '=', False),('seller_id', '=', False)]}"
+									class="oe_inline" />
+								<field name="return_process_report_next_execution"
+									attrs="{'required': [('auto_process_return_report', '=', True),('seller_id','!=',False)],
+									'invisible': ['|',('auto_process_return_report', '=', False),('seller_id', '=', False)]}"
+									class="oe_inline" />		
+								<field name="return_process_report_user_id"
+									attrs="{'required': [('auto_process_return_report', '=', True),('seller_id','!=',False)],
+									'invisible': ['|',('auto_process_return_report', '=', False),('seller_id', '=', False)]}"
+									class="oe_inline" />		
+						  		</div>
+							</div>							
+
+					</div>
+				</div>					
+			</xpath>
+			
+			<xpath expr="//div[@name='fba_order_return']"
+					position="after">
+				<div name="import_inbound_shipment" attrs="{'invisible': [('seller_id', '=', False)]}" >
+					<h2>Inbound Shipment</h2>
+						<div class="row mt16 o_settings_container">
+                           <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="auto_import_inboud_shipment_status" help="If Ticked, Inbound Shipments are automatically processed in System, if Shipemnt is processed/shipped in Amazon." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="auto_import_inboud_shipment_status"/>
+                               <div class="text-muted">
+                                   
+                               </div>
+						  	 </div>
+						  	 <div>
+								<field name="shipment_status_import_interval_number"
+								attrs="{'required': [('auto_import_inboud_shipment_status', '=', True),('seller_id','!=',False)],'invisible': [('auto_import_inboud_shipment_status', '=', False)]}"
+								class="oe_inline" />
+								<field name="shipment_status_import_interval_type"
+									attrs="{'required': [('auto_import_inboud_shipment_status', '=', True),('seller_id','!=',False)],'invisible': [('auto_import_inboud_shipment_status', '=', False)]}"
+									class="oe_inline" />
+								<field name="shipment_status_import_next_execution"
+									attrs="{'required': [('auto_import_inboud_shipment_status', '=', True),('seller_id','!=',False)],'invisible': [('auto_import_inboud_shipment_status', '=', False)]}"
+									class="oe_inline" />	
+								<field name="shipment_status_import_user_id"
+									attrs="{'required': [('auto_import_inboud_shipment_status', '=', True),('seller_id','!=',False)],'invisible': [('auto_import_inboud_shipment_status', '=', False)]}"
+									class="oe_inline" />
+							</div>
+						</div>
+							
+						 <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="auto_update_small_parcel_tracking" help="If Ticked, System will automatically update not partnered small Parcel shipment to Amazon." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="auto_update_small_parcel_tracking"/>
+                               <div class="text-muted">
+                                   
+                               </div>
+						  	 </div>
+						  	 <div>
+	                            <field name="small_parcel_interval_number"
+								attrs="{'required': [('auto_update_small_parcel_tracking', '=', True),('seller_id','!=',False)],
+								'invisible': [('auto_update_small_parcel_tracking', '=', False)]}"
+								class="oe_inline" />
+								<field name="small_parcel_interval_type"
+									attrs="{'required': [('auto_update_small_parcel_tracking', '=', True),('seller_id','!=',False)],
+									'invisible': [('auto_update_small_parcel_tracking', '=', False)]}"
+									class="oe_inline" />
+								<field name="small_parcel_next_execution"
+									attrs="{'required': [('auto_update_small_parcel_tracking', '=', True),('seller_id','!=',False)],
+									'invisible': [('auto_update_small_parcel_tracking', '=', False)]}"
+									class="oe_inline" />		
+								<field name="small_parcel_user_id"
+									attrs="{'required': [('auto_update_small_parcel_tracking', '=', True),('seller_id','!=',False)],
+									'invisible': [('auto_update_small_parcel_tracking', '=', False)]}"
+									class="oe_inline" />			
+						  		</div>
+							</div>							
+
+						 <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="auto_update_ltl_parcel_tracking" help="If Ticked, System will automatically update LTL Parcel shipment to Amazon." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="auto_update_ltl_parcel_tracking"/>
+                               <div class="text-muted">
+                                   
+                               </div>
+						  	 </div>
+						  	 <div>
+	                           <field name="ltl_parcel_interval_number"
+								attrs="{'required': [('auto_update_ltl_parcel_tracking', '=', True),('seller_id','!=',False)],
+								'invisible': [('auto_update_ltl_parcel_tracking', '=', False)]}"
+								class="oe_inline" />
+								<field name="ltl_parcel_interval_type"
+									attrs="{'required': [('auto_update_ltl_parcel_tracking', '=', True),('seller_id','!=',False)],
+									'invisible': [('auto_update_ltl_parcel_tracking', '=', False)]}"
+									class="oe_inline" />
+								<field name="ltl_parcel_next_execution"
+									attrs="{'required': [('auto_update_ltl_parcel_tracking', '=', True),('seller_id','!=',False)],
+									'invisible': [('auto_update_ltl_parcel_tracking', '=', False)]}"
+									class="oe_inline" />		
+								<field name="ltl_parcel_user_id"
+									attrs="{'required': [('auto_update_ltl_parcel_tracking', '=', True),('seller_id','!=',False)],
+									'invisible': [('auto_update_ltl_parcel_tracking', '=', False)]}"
+									class="oe_inline" />		
+						  		</div>
+							</div>	
+							
+						 
+						  
+						  <!-- new -->
+							<div class="col-xs-12 col-md-6 o_setting_box" invisible="1">
+								<div class="o_setting_left_pane">
+                                 <field name="process_reimbursed_lines_in_return_report" class="oe_inline" />
+	                             </div>
+	                             <div class="o_setting_right_pane">
+	                               <label for="process_reimbursed_lines_in_return_report"/>
+	                               <div class="text-muted">
+	                                   
+	                               </div>
+							  	 </div>
+						  	 
+	                             <div class="o_setting_right_pane">
+		                             
+		                            <div>
+		                                	<label for="reimbursed_warehouse_id" attrs="{'invisible': [('process_reimbursed_lines_in_return_report', '=', False)]}" class="oe_inline"/>
+											<field name="reimbursed_warehouse_id" attrs="{'required': [('process_reimbursed_lines_in_return_report', '!=', False)],'invisible': [('process_reimbursed_lines_in_return_report', '=', False)]}" class="oe_inline"/>
+		                            </div>
+							  	 </div>
+							  </div>						  
+					</div>
+				</div>
+			 </xpath>
+            
+		 	
+			
+			<!-- <xpath expr="//field[@name='warehouse_id']"
+				position="replace">
+				<field name="warehouse_id" widget="selection"
+					attrs="{'required':[('instance_id','!=',False)]}" class="oe_inline"
+					domain="[('company_id','=',company_for_amazon_id),('is_fba_warehouse','=',False)]" />
+			</xpath> -->
+			<xpath expr="//div[@name='workflow']"
+					position="inside">
+				<div class="col-xs-12 col-md-6 o_setting_box">
+					 <div class="o_setting_right_pane">
+	                     <label for="fba_auto_workflow_id" string="FBA Workflow"/>
+	                     <field name="fba_auto_workflow_id"
+	                        class="oe_inline"
+									attrs="{'required': [('seller_id', '!=', False)]}" />
+	                      <div class="text-muted">
+		                  	Automized order flow for Fullfillment by Amazon orders
+		                   </div>
+	                   </div>
+                 </div>
+			</xpath>
+			
+			<xpath expr="//div[@name='returns']"
+					position="inside">
+					
+					<div class="col-xs-12 col-md-6 o_setting_box">
+				  <div class="o_setting_left_pane">
+	                  <field name="is_default_odoo_sequence_in_sales_order_fba" class="oe_inline"/>
+	             </div>
+                 <div class="o_setting_right_pane">
+                     <label for="is_default_odoo_sequence_in_sales_order_fba"/>
+                     <div class="text-muted">
+                         Set Order Number based on default Sale Order Sequence
+                     </div>
+              	  </div>
+              	 </div>
+					
+					<div class="col-xs-12 col-md-6 o_setting_box">
+					 <div class="o_setting_right_pane">
+	                     <label for="def_fba_partner_id" />
+	                     <field name="def_fba_partner_id"
+	                        attrs="{'required':[('seller_id','!=',False)]}"
+									class="oe_inline" />
+						<div class="text-muted">
+		                 	Customer to be set in quotation for FBA pending orders
+		                </div>
+	                   </div>
+                 	</div>	
+                 	
+             </xpath>
+             
+                 	<!--  <div class="col-xs-12 col-md-6 o_setting_box">
+	                   	 <div class="o_setting_right_pane">
+								<label for="id" string="FBA Return Reason" class="col-xs-12 col-md-6"/>
+								 <div name="return_reason_ept">
+								    <button type="action"
+								            name="%(action_return_reason_ept)d"
+								            string="Configure Return Reason" class="oe_inline oe_link"/>
+								 </div>
+							</div>
+						</div>			 -->		
+			
+			
+			<xpath expr="//div[@name='fbm_orders_returns']" position="before">
+				<div name="fba_return_reason" attrs="{'invisible': [('seller_id', '=', False)]}">
+					<div class="row mt16 o_settings_container">
+	                   <div class="col-xs-12 col-md-6 o_setting_box">
+	                   	<!--  <div class="o_setting_right_pane"> -->
+								<label for="id" string="FBA Return Reason" class="col-xs-12 col-md-6"/>
+								 <div name="return_reason_ept">
+								    <button type="action"
+								            name="%(action_return_reason_ept)d"
+								            string="Configure Return Reason" class="oe_inline oe_link"/>
+								 </div>
+							<!-- </div> -->
+						</div>
+					</div>
+				</div>
+			</xpath>   
+			
+
+			<xpath expr="//div[@name='fbm_inv']"
+					position="inside">
+				
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="stock_auto_import_by_report" class="oe_inline"
+									help="If Ticked, Product Stock will be automatically Imported by system from Amazon FBA." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="stock_auto_import_by_report" string="Request FBA Live Stock Report?"/>
+                               <div class="text-muted">
+                                   Schedule and Request Live FBA Inventroy report from Amazon
+                               </div>
+						  	 </div>
+						  	 <div>
+									<field name="inventory_import_interval_number"
+										attrs="{'required': [('stock_auto_import_by_report', '=', True),('seller_id','!=',False)],'invisible': [('stock_auto_import_by_report', '=', False)]}" class="oe_inline" />
+									<field name="inventory_import_interval_type"
+										attrs="{'required': [('stock_auto_import_by_report', '=', True),('seller_id','!=',False)],'invisible': [('stock_auto_import_by_report', '=', False)]}" class="oe_inline" />
+									<field name="inventory_import_next_execution"
+										attrs="{'required': [('stock_auto_import_by_report', '=', True),('seller_id','!=',False)],'invisible': [('stock_auto_import_by_report', '=', False)]}" class="oe_inline" />
+									<field name="inventory_import_user_id"
+										attrs="{'required': [('stock_auto_import_by_report', '=', True),('seller_id','!=',False)],'invisible': [('stock_auto_import_by_report', '=', False)]}" class="oe_inline" />
+										
+								</div>
+						</div>
+							
+						 <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="validate_stock_inventory_for_report" class="oe_inline"
+									help="If Ticked, Product Stock will be automatically validated by system." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="validate_stock_inventory_for_report"/>
+                               <div class="text-muted">
+                                   Adjust stock in Odoo based on Live Inventory Report
+                               </div>
+						  	 </div>
+						</div>
+						
+						 <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="auto_process_fba_live_stock_report" class="oe_inline"
+									help="If Ticked, Stock will be automatically Imported by system from Amazon FBA." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="auto_process_fba_live_stock_report" string="Download Process FBA Live Stock Report?"/>
+                               <div class="text-muted">
+                                   Check and Downloads FBA Live Inventory report in Odoo
+                               </div>
+						  	 </div>
+						  	 <div>
+								<field name="process_fba_live_stock_interval_number"
+								attrs="{'required': [('auto_process_fba_live_stock_report', '=', True),('seller_id','!=',False)],'invisible': [('auto_process_fba_live_stock_report', '=', False)]}" class="oe_inline" />
+								<field name="process_fba_live_stock_interval_type"
+									attrs="{'required': [('auto_process_fba_live_stock_report', '=', True),('seller_id','!=',False)],'invisible': [('auto_process_fba_live_stock_report', '=', False)]}" class="oe_inline" />	
+								<field name="process_fba_live_stock_next_execution"
+									attrs="{'required': [('auto_process_fba_live_stock_report', '=', True),('seller_id','!=',False)],'invisible': [('auto_process_fba_live_stock_report', '=', False)]}" class="oe_inline" />
+								<field name="process_fba_live_stock_user_id"
+									attrs="{'required': [('auto_process_fba_live_stock_report', '=', True),('seller_id','!=',False)],'invisible': [('auto_process_fba_live_stock_report', '=', False)]}" class="oe_inline" />
+										
+								</div>
+						</div>							
+			</xpath>
+
+			
+			<xpath expr="//div[@name='misc']"
+					position="after">
+				<div name="multi-channel" attrs="{'invisible': [('seller_id', '=', False)]}">
+					<h2>Multi-Channel Fulfillment</h2> 
+					<div class="row mt16 o_settings_container">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="is_auto_create_outbound_order" class="oe_inline" help="This box is ticked to automatically create Outbound Order." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="is_auto_create_outbound_order"/>
+                               <div class="text-muted">
+                                   Set default values to be set while create Outbound Orders from scheduled cron
+                               </div>
+                               <div attrs="{'invisible':[('is_auto_create_outbound_order','=',False)]}">
+                               		
+	                               	<field name="auto_create_outbound_order_interval_number"
+												attrs="{'required': [('is_auto_create_outbound_order', '=', True),('seller_id','!=',False)],'invisible': [('is_auto_create_outbound_order', '=', False)]}" class="oe_inline" />
+									<field name="auto_create_outbound_order_interval_type"
+										attrs="{'required': [('is_auto_create_outbound_order', '=', True),('seller_id','!=',False)],'invisible': [('is_auto_create_outbound_order', '=', False)]}" class="oe_inline" />
+									<field name="auto_create_outbound_order_next_execution"
+										attrs="{'required': [('is_auto_create_outbound_order', '=', True),('seller_id','!=',False)],'invisible': [('is_auto_create_outbound_order', '=', False)]}" class="oe_inline" />
+									<field name="auto_create_outbound_order_user_id"
+										attrs="{'required': [('is_auto_create_outbound_order', '=', True),('seller_id','!=',False)],'invisible': [('is_auto_create_outbound_order', '=', False)]}" class="oe_inline" />
+                               </div>
+						  	 </div>
+						</div>
+						
+						<div class="col-xs-12 col-md-6 o_setting_box">
+					 		<div class="o_setting_right_pane">
+					 			<div attrs="{'invisible':[('is_auto_create_outbound_order','=',False)]}">
+				                     <label for="fulfillment_action"/>
+				                     <field name="fulfillment_action" attrs="{'required': [('is_auto_create_outbound_order', '=', True),('seller_id','!=',False)],'invisible': [('is_auto_create_outbound_order', '=', False)]}" class="oe_inline" />
+				                      <div class="text-muted">
+			                  		  </div>
+		                  		 </div>
+		                  		 
+		                  		 <div attrs="{'invisible':[('is_auto_create_outbound_order','=',False)]}">
+				                     <label for="shipment_service_level_category"/>
+				                     <field name="shipment_service_level_category" attrs="{'required': [('is_auto_create_outbound_order', '=', True),('seller_id','!=',False)],'invisible': [('is_auto_create_outbound_order', '=', False)]}" class="oe_inline" />
+				                      <div class="text-muted">
+			                  		  </div>
+		                  		 </div>
+		                  		 
+		                  		  <div attrs="{'invisible':[('is_auto_create_outbound_order','=',False)]}">
+				                     <label for="fulfillment_policy"/>
+				                     <field name="fulfillment_policy" attrs="{'required': [('is_auto_create_outbound_order', '=', True),('seller_id','!=',False)],'invisible': [('is_auto_create_outbound_order', '=', False)]}" class="oe_inline" />
+				                      <div class="text-muted">
+			                  		  </div>
+		                  		 </div>
+	                  		 </div>
+                 		</div>
+                 		
+                 		<div class="col-xs-12 col-md-6 o_setting_box" attrs="{'invisible':[('is_auto_create_outbound_order','=',False)]}">
+                             <div class="o_setting_left_pane">
+                                 <field name="notify_by_email" attrs="{'invisible': [('is_auto_create_outbound_order', '=', False)]}" class="oe_inline" />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="notify_by_email"/>
+                               <div class="text-muted">
+                                   
+                               </div>
+						  	 </div>
+						</div>
+						
+					</div>
+				</div>
+			</xpath>
+			
+			<xpath expr="//div[@name='extra']" position="inside">
+                      <div class="col-xs-12 col-md-6 o_setting_box">
+                          <div class="o_setting_left_pane">
+                              <field name="install_fba_reimbursement"/>
+                              <field name="buynow_fba_reimbursement" invisible="1"></field>
+                          </div>
+                          <div class="o_setting_right_pane">
+                              <label for="install_fba_reimbursement"/>
+                              <div class="text-muted">
+                                  Get Orders / Products for which Amazon doesn't reimbursed to you
+                              </div>
+                              <div class="content-group">
+                                  <a href="https://apps.odoo.com/apps/modules/11.0/amazon_reimbursement_ept/"
+                              icon="fa-arrow-right text-success"
+                              class="oe_link" attrs="{'invisible':[('buynow_fba_reimbursement','=',False)]}">Buy now</a>  
+                              </div>
+                          </div>
+                  		</div>
+                  		
+                  		<div class="col-xs-12 col-md-6 o_setting_box">
+                          <div class="o_setting_left_pane">
+                              <field name="import_inbound_shipment"/>
+                              <field name="buynow_import_inbound_shipment" invisible="1"></field>
+                          </div>
+                          <div class="o_setting_right_pane">
+                              <label for="import_inbound_shipment"/>
+                              <div class="text-muted">
+                                 Create Inbound Shipment Plan and Import or Create Inbound Shipment
+                              </div>
+                              <div class="content-group">
+                                  <a href="https://apps.odoo.com/apps/modules/11.0/amazon_reimbursement_ept/"
+                              icon="fa-arrow-right text-success"
+                              class="oe_link" attrs="{'invisible':[('buynow_import_inbound_shipment','=',False)]}">Buy now</a>  
+                              </div>
+                          </div>
+                  		</div>
+	                    
+	                   	<div class="col-xs-12 col-md-6 o_setting_box">
+	                          <div class="o_setting_left_pane">
+	                              <field name="manage_removal_order"/>
+	                              <field name="buynow_manage_removal_order" invisible="1"></field>
+	                          </div>
+	                          <div class="o_setting_right_pane">
+	                              <label for="manage_removal_order"/>
+	                              <div class="text-muted">
+	                                  Creates / Import Amazon Removal Order in Odoo
+	                              </div>
+	                              <div class="content-group">
+	                                  <a href="https://apps.odoo.com/apps/modules/11.0/amazon_removal_order_ept/"
+	                              icon="fa-arrow-right text-success"
+	                              class="oe_link" attrs="{'invisible':[('buynow_manage_removal_order','=',False)]}">Buy now</a>  
+	                              </div>
+	                          </div>
+                  		</div>
+                      <div class="col-xs-12 col-md-6 o_setting_box" title="Put your products in packs (e.g. parcels, boxes) and track them">
+                          <div class="o_setting_left_pane">
+                              <field name="track_fba_inventory"/>
+                              <field name="buynow_manage_track_fba_inventory" invisible="1"></field>
+                          </div>
+                          <div class="o_setting_right_pane">
+                              <label for="track_fba_inventory"/>
+                              <div class="text-muted">
+                                  Get and Process FBA Inventory Adjustment made by Amazon in Odoo
+                              </div>
+                               <div class="content-group">
+                                  <a href="https://apps.odoo.com/apps/modules/11.0/amazon_stock_adjustment_report_ept/"
+                              icon="fa-arrow-right text-success"
+                              class="oe_link" attrs="{'invisible':[('buynow_manage_track_fba_inventory','=',False)]}">Buy now</a>  
+                              </div>
+                          </div>
+                      </div>
+                    </xpath>                      				
+			
+			
+			</field>
+		</record>
+		
+		<record id="view_amazon_fba_instance_config_settings" model="ir.ui.view">
+			<field name="name">Amazon FBA Settings</field>
+			<field name="model">res.config.settings</field>
+			<field name="inherit_id" ref="amazon_ept.view_amazon_instance_config_settings" />
+			<field name="arch" type="xml">
+				<xpath expr="//div[@name='order']"
+					position="inside">
+				<div class="col-xs-12 col-md-6 o_setting_box">
+					 <div class="o_setting_right_pane">
+	                    <label for="def_fba_warehouse_id" string="FBA Warehouse"/>
+	                     <field name="def_fba_warehouse_id"
+	                          domain="[('company_id','=',company_for_amazon_id),('is_fba_warehouse','=',True)]"
+									attrs="{'required':[('instance_id','!=',False)]}"
+									class="oe_inline" options="{'no_create': True, 'no_create_edit':True}"/> 
+	                      <div class="text-muted">
+		                   	Process FBA Orders in this warehouse if fulfillment center not found
+		                   </div>
+	                   </div>
+                 </div>
+			</xpath> 
+			
+			<xpath expr="//field[@name='warehouse_id']"
+				position="replace">
+				<field name="warehouse_id" widget="selection"
+					attrs="{'required':[('instance_id','!=',False)]}" class="oe_inline"
+					domain="[('company_id','=',company_for_amazon_id),('is_fba_warehouse','=',False)]" />
+			</xpath>
+			
+			 <xpath expr="//div[@name='misc_instance']" position='after'>
+	             <div name="unsellable" attrs="{'invisible': [('instance_id', '=', False)]}">
+	             	<h2>Orders and Returns</h2>
+						<div  class="row mt16 o_settings_container" name="unsellable_location" attrs="{'invisible': [('instance_id', '=', False)]}">
+				             <div class="col-xs-12 col-md-6 o_setting_box" name="unsellable">
+							 	<div class="o_setting_right_pane">
+				                    <label for="unsellable_location_id" />
+ 				                    <field name="unsellable_location_id" class="oe_inline"
+				                     attrs="{'required':[('def_fba_warehouse_id','!=',False)]}" 
+				                     domain="['|',('company_id','=',company_for_amazon_id),('company_id','=',False),('usage','=','internal')]"/>	
+ 									<div class="text-muted">
+					                 	Track unsallble products from customer return through this location
+					                </div>	                        
+					            </div>
+					         </div>
+					      </div>	
+				</div>
+	         </xpath>
+	         
+	         <xpath expr="//div[@name='inventory_instance']" position="after">
+	         <div name="inbound_instance" attrs="{'invisible': [('instance_id', '=', False)]}">
+	           	<h2>Inbound Shipment</h2>
+					<div  class="row mt16 o_settings_container" attrs="{'invisible': [('instance_id', '=', False)]}">
+	         			<div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="allow_process_unshipped_products" class="oe_inline"
+									help="If Ticked then system will allow process unshipped products in Inbound shipment"/>
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="allow_process_unshipped_products"/>
+                               <div class="text-muted">
+                                   Auto process product which received by Amazon but not added in Inbound Shipment
+                               </div>
+						  	 </div>
+						  </div>
+						  
+						  <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="update_partially_inbound_shipment" class="oe_inline"
+									help="If Ticked then system will allow Update Partially Shipment in Inbound shipment"/>
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="update_partially_inbound_shipment"/>
+                               <div class="text-muted">
+                                   Process partially received products in Odoo in case Amazon processed Partially
+                               </div>
+						  	 </div>
+						  </div>
+						  
+						   <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="is_allow_prep_instruction" class="oe_inline" help="If ticked then allow to pass the prep-instructions details during create Inbount Shipment Plan in Amazon." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="is_allow_prep_instruction"/>
+                               <div class="text-muted">
+                                  
+                               </div>
+						  	 </div>
+						  </div>
+						  
+						  
+						   <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_right_pane">
+	                             <div>
+	                                <label for="check_status_days"/>
+	                                <field name="check_status_days" class="oe_inline" help="System will check status after closed inbound shipment." />
+								Days
+	                            </div>
+						  	 </div>
+						  </div>
+						 </div>
+				</div>
+	         </xpath>
+			
+			<xpath expr="//div[@name='inv']" position="inside">
+			            <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="stock_auto_import_by_report" class="oe_inline"
+									help="If Ticked, Product Stock will be automatically Imported by system from Amazon FBA." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="stock_auto_import_by_report" string="Request FBA Live Stock Report?"/>
+                               <div class="text-muted">
+                                   Schedule and Request Live FBA Inventroy report from Amazon
+                               </div>
+						  	 </div>
+						  	 <div>
+									<field name="inventory_import_interval_number"
+										attrs="{'required': [('stock_auto_import_by_report', '=', True),('instance_id','!=',False)],'invisible': [('stock_auto_import_by_report', '=', False)]}" class="oe_inline" />
+									<field name="inventory_import_interval_type"
+										attrs="{'required': [('stock_auto_import_by_report', '=', True),('instance_id','!=',False)],'invisible': [('stock_auto_import_by_report', '=', False)]}" class="oe_inline" />
+									<field name="inventory_import_next_execution"
+										attrs="{'required': [('stock_auto_import_by_report', '=', True),('instance_id','!=',False)],'invisible': [('stock_auto_import_by_report', '=', False)]}" class="oe_inline" />
+									<field name="inventory_import_user_id"
+										attrs="{'required': [('stock_auto_import_by_report', '=', True),('instance_id','!=',False)],'invisible': [('stock_auto_import_by_report', '=', False)]}" class="oe_inline" />
+										
+								</div>
+						</div>
+							
+						 <div class="col-xs-12 col-md-6 o_setting_box">
+                             <div class="o_setting_left_pane">
+                                 <field name="validate_stock_inventory_for_report" class="oe_inline"
+									help="If Ticked, Product Stock will be automatically validated by system." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="validate_stock_inventory_for_report"/>
+                               <div class="text-muted">
+                                   Adjust stock in Odoo based on Live Inventory Report
+                               </div>
+						  	 </div>
+						</div>
+						
+						 <div class="col-xs-12 col-md-6 o_setting_box" >
+						 	<div>
+                             <div class="o_setting_left_pane">
+                                 <field name="auto_process_fba_live_stock_report" class="oe_inline"
+									help="If Ticked, Stock will be automatically Imported by system from Amazon FBA." />
+                             </div>
+                             <div class="o_setting_right_pane">
+                               <label for="auto_process_fba_live_stock_report" string="Download Process FBA Live Stock Report?"/>
+                               <div class="text-muted">
+                                   Check and Downloads FBA Live Inventory report in Odoo
+                               </div>
+						  	 </div>
+						  	 <div>
+								<field name="process_fba_live_stock_interval_number"
+								attrs="{'required': [('auto_process_fba_live_stock_report', '=', True),('instance_id','!=',False)],'invisible': [('auto_process_fba_live_stock_report', '=', False)]}" class="oe_inline" />
+								<field name="process_fba_live_stock_interval_type"
+									attrs="{'required': [('auto_process_fba_live_stock_report', '=', True),('instance_id','!=',False)],'invisible': [('auto_process_fba_live_stock_report', '=', False)]}" class="oe_inline" />	
+								<field name="process_fba_live_stock_next_execution"
+									attrs="{'required': [('auto_process_fba_live_stock_report', '=', True),('instance_id','!=',False)],'invisible': [('auto_process_fba_live_stock_report', '=', False)]}" class="oe_inline" />
+								<field name="process_fba_live_stock_user_id"
+									attrs="{'required': [('auto_process_fba_live_stock_report', '=', True),('instance_id','!=',False)],'invisible': [('auto_process_fba_live_stock_report', '=', False)]}" class="oe_inline" />
+										
+								</div>
+							</div>
+							<div attrs="{'invisible': [('auto_process_fba_live_stock_report', '=', False)]}">
+								 <div class="o_setting_left_pane">
+                                 <field name="create_inventory" class="oe_inline"
+									help="If Ticked, it will create Inventory" />
+	                             </div>
+	                             <div class="o_setting_right_pane">
+	                               <label for="create_inventory" string="Create Inventory ?"/>
+	                               <div class="text-muted">
+	                                   
+	                               </div>
+						  		 </div>
+							</div>
+						</div>
+			</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>
+

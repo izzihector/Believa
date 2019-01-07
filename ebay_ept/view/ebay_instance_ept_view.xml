@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<data>
+	
+		<record id="ebay_instance_revoke_token_form_view_from_ebay"
+			model="ir.ui.view">
+			<field name="name">Revoke Token</field>
+			<field name="model">ebay.instance.revoke.token</field>
+			<field name="arch" type="xml">
+				<form string="Revoke Token">
+					<h1 style="color:Red;">Warning!!!</h1>
+					<br/>
+					<h3 style="text-align:left;">You are Voluntarily trying to revokes the Token before
+						its expiration time,this Process will officially cancel the
+						current eBay Token of selected Instance.</h3>
+					<br/>
+					<h3>Note: You will not able to use the same Token once you Revoke
+						it.You will need to generate the new Token.</h3>
+					<footer>
+						<button string="Continue" name="revoke_token_from_ebay"
+							type="object" class="oe_highlight" />
+						or
+						<button string="Cancel" special="cancel" name="cancel"
+							class="oe_link" />
+					</footer>
+				</form>
+			</field>
+		</record>
+		
+		<act_window name="Revoke Token" res_model="ebay.instance.revoke.token"
+			src_model="ebay.instance.ept" view_mode="form" view_type="form"
+			target="new" multi="True" key2="client_action_multi" id="action_revoke_ebay_token"
+			view_id="ebay_instance_revoke_token_form_view_from_ebay" />
+			
+		<record id="ebay_instance_fetch_revoked_token_from_ebay_form_view"
+			model="ir.ui.view">
+			<field name="name">Get Token</field>
+			<field name="model">ebay.instance.fetch.revoked.token</field>
+			<field name="arch" type="xml">
+				<form string="Get Token">
+					<h4>
+						Click Here for get a new Token :
+						<button string="Get Token" name="get_sessionid_for_revoked_fetch_token"
+							icon="fa-arrow-right text-success" type="object" class="oe_link"></button>
+					</h4>
+					<h4 style="color:red">Note:Click "Continue" after completing Sign-In process
+						on eBay.</h4>
+					<footer>
+						<button string="Continue" name="fetch_revoked_token_from_ebay"
+							type="object" class="oe_highlight" />
+						or
+						<button string="Cancel" special="cancel" name="cancel"
+							class="oe_link" />
+					</footer>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Following code will display Get Token button in form view only -->
+		<act_window name="Get Token" res_model="ebay.instance.fetch.revoked.token"
+			src_model="ebay.instance.ept" view_mode="form" view_type="form"
+			target="new" multi="False" id="action_get_revoked_ebay_token"
+			view_id="ebay_instance_fetch_revoked_token_from_ebay_form_view" />
+		
+		<record id="ebay_instance_tree_view_ept" model="ir.ui.view">
+			<field name="name">eBay Instance</field>
+			<field name="model">ebay.instance.ept</field>
+			<field name="arch" type="xml">
+				<tree colors="red:is_token_expiring_soon!=False" string="eBay Instance" create="false">
+					<field name="name" />
+					<field name="warehouse_id"></field>
+					<field name="is_token_expiring_soon" invisible="1"></field>
+				</tree>
+			</field>
+		</record>
+		
+		<record id="ebay_instance_form_view_ept" model="ir.ui.view">
+			<field name="name">eBay Instance</field>
+			<field name="model">ebay.instance.ept</field>
+			<field name="arch" type="xml">
+				<form string="eBay Instance" create="false">
+					<header>
+						<button name="check_connection" string="Check Connection"
+							class="oe_highlight" type="object" states="not_confirmed"/>
+						<button name="ebay_credential_update" string="eBay Credential"
+							class="oe_highlight" type="object" states="not_confirmed"/>
+						<button name="confirm" string="Confirm" type="object" states="not_confirmed" groups="ebay_ept.group_ebay_manager_ept"/>
+						<button name="fetch_ebay_token" string="Get Token Details" type="object" />
+						<button name="reset_to_confirm" string="Reset Confirmation" type="object" states="confirmed" groups="ebay_ept.group_ebay_manager_ept"/>
+						<field name="state" widget="statusbar"/>
+					</header>
+					<sheet>
+						<div class="oe_title">
+	                        <h1>
+	                            <field name="name" attrs="{'readonly':[('state','in','confirmed')]}" />
+	                        </h1>
+	                    </div>
+						<group>
+							<group>
+								<field name="global_channel_id" widget="selection" />
+								<field name="product_url" />
+							</group>
+							<group>
+								<field name="warehouse_id" readonly="1"/>
+								<field name="allow_out_of_stock_product" />
+							</group>
+						</group>
+						<notebook name="ebay_instance">
+							<page string="Other Information">
+								<group>
+									<group>
+										<field name="token_expirationtime" readonly="1" />
+									</group>
+									<group string="Last Sync. History">
+										<field name="last_ebay_order_import_date" />
+										<field name="last_inventory_export_date" />
+										<field name="last_update_order_export_date" />
+									</group>
+								</group>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_ebay_instance_ept" model="ir.actions.act_window">
+			<field name="name">eBay Instance</field>
+			<field name="res_model">ebay.instance.ept</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="ebay_instance_tree_view_ept" />
+		</record>
+		
+		<!-- Menu Section -->
+		<menuitem id="ebay_instance_menu_item" name="eBay"
+			groups="ebay_ept.group_ebay_ept" sequence="20" web_icon="ebay_ept,static/description/icon.png" />
+			
+		<menuitem id="ebay_instance_menu_item_core_settings" name="Configuration"
+			parent="ebay_ept.ebay_instance_menu_item" sequence="100" />
+
+		<menuitem id="ebay_instance_menu_item_instance" name="eBay Instances"
+			parent="ebay_ept.ebay_instance_menu_item_core_settings" sequence="2"
+			action="action_ebay_instance_ept" />
+			
+	</data>
+</odoo>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="view_ebay_update_payment_in_ebay" model="ir.ui.view">
+			<field name="name">Update Payment In eBay</field>
+			<field name="model">ebay.product.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Update Payment In eBay">
+					<footer>
+						<button name="update_payment_in_ebay" string="Update" type="object"
+							class="oe_highlight" />
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+		<act_window name="Update Payment In eBay" res_model="ebay.product.wizard"
+			src_model="account.invoice" view_mode="form" view_type="form"
+			target="new" multi="True" key2="client_action_multi" id="action_update_payment_ept"
+			view_id="view_ebay_update_payment_in_ebay" />
+
+
+		<record id="view_ebay_update_products_stock_ept" model="ir.ui.view">
+			<field name="name">Update Stock</field>
+			<field name="model">ebay.product.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Update Stock In eBay">
+					<footer>
+						<button name="update_stock_in_ebay" string="Update" type="object"
+							class="oe_highlight" />
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_ebay_update_products_price_ept" model="ir.ui.view">
+			<field name="name">Update Price</field>
+			<field name="model">ebay.product.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Update Price In eBay">
+					<footer>
+						<button name="update_price_in_ebay" string="Update" type="object"
+							class="oe_highlight" />
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_ebay_export_products_ept" model="ir.ui.view">
+			<field name="name">Export Products In eBay</field>
+			<field name="model">ebay.product.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Export Products In eBay">
+					<group>
+						<field name="template_id" required="1" />
+						<field name="publish_in_ebay" />
+						<field name="schedule_time"
+							attrs="{'readonly':[('publish_in_ebay','=',True)],'required':[('publish_in_ebay','=',False)]}" />
+					</group>
+					<group>
+						 <p class="oe_grey">
+	                        <strong>Warning</strong>: If Product Type is variation then listing type always Fixed Price Item.
+	                    </p>						
+					</group>
+					<footer>
+						<button name="export_product_in_ebay" string="Export Products In eBay" type="object" class="oe_highlight" />
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_ebay_update_products_ept" model="ir.ui.view">
+			<field name="name">Update Products In eBay</field>
+			<field name="model">ebay.product.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Update Products In eBay">
+					<group>
+						<field name="template_id" required="1" />
+						<field name="publish_in_ebay" />
+						<field name="schedule_time"
+							attrs="{'readonly':[('publish_in_ebay','=',True)],'required':[('publish_in_ebay','=',False)]}" />
+					</group>
+					<footer>
+						<button name="update_product_in_ebay" string="Update Products In eBay"
+							type="object" class="oe_highlight" />
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_ebay_relist_products_ept" model="ir.ui.view">
+			<field name="name">Relist Products In eBay</field>
+			<field name="model">ebay.product.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Update Products In eBay">
+					<group>
+						<field name="template_id" required="1" />
+					</group>
+					<footer>
+						<button name="relist_product_in_ebay" string="Relist Products In eBay"
+							type="object" class="oe_highlight" />
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_ebay_cancel_listing_products_ept" model="ir.ui.view">
+			<field name="name">Cancel Products Listing In eBay</field>
+			<field name="model">ebay.product.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Cancel Products Listing In eBay">
+					<group>
+						<field name="ending_reason" required="1" />
+					</group>
+					<footer>
+						<button name="cancel_product_listing_in_ebay" string="Cancel Products Listing In eBay"
+							type="object" class="oe_highlight" />
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<act_window name="Update Stock In eBay" res_model="ebay.product.wizard"
+			src_model="ebay.product.product.ept" view_mode="form" view_type="form"
+			target="new" multi="True" key2="client_action_multi" id="action_update_products_stock_ept"
+			view_id="view_ebay_update_products_stock_ept" />
+
+		<act_window name="Update Price In eBay" res_model="ebay.product.wizard"
+			src_model="ebay.product.product.ept" view_mode="form" view_type="form"
+			target="new" multi="True" key2="client_action_multi" id="action_update_products_price_ept"
+			view_id="view_ebay_update_products_price_ept" />
+
+		<act_window name="Export Products In eBay" res_model="ebay.product.wizard"
+			src_model="ebay.product.template.ept" view_mode="form" view_type="form"
+			target="new" multi="True" key2="client_action_multi" id="action_export_products_ept"
+			view_id="view_ebay_export_products_ept" />
+
+		<act_window name="Export Variations Products In eBay"
+			res_model="ebay.product.wizard" src_model="ebay.product.template.ept"
+			view_mode="form" view_type="form" target="new" multi="True"
+			key2="client_action_multi" id="action_cancel_listing_products_ept"
+			view_id="view_ebay_cancel_listing_products_ept" />
+
+		<act_window name="Update Products In eBay" res_model="ebay.product.wizard"
+			src_model="ebay.product.template.ept" view_mode="form" view_type="form"
+			target="new" multi="True" key2="client_action_multi" id="action_update_products_ept"
+			view_id="view_ebay_update_products_ept" />
+
+		<act_window name="Relist Products In eBay" res_model="ebay.product.wizard"
+			src_model="ebay.product.template.ept" view_mode="form" view_type="form"
+			target="new" multi="True" key2="client_action_multi" id="action_relist_products_ept"
+			view_id="view_ebay_relist_products_ept" />
+
+		<act_window name="Cancel Products Listing In eBay"
+			res_model="ebay.product.wizard" src_model="ebay.product.template.ept"
+			view_mode="form" view_type="form" target="new" multi="True"
+			key2="client_action_multi" id="action_cancel_listing_products_ept"
+			view_id="view_ebay_cancel_listing_products_ept" />
+
+	</data>
+</odoo>

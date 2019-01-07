@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<openerp>
+
+<menuitem id="menu_item_import_products_ept" name="Import Products" parent="menu_item_parent_amazon_products_ept" action="file_selection_wizard_action" sequence="15" />
+</openerp>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_account_invoice_filter_ept" model="ir.ui.view">
+            <field name="name">account.invoice.select</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+				<filter name="unpaid" position="after">
+                    <filter icon="terp-check" name="MFN" string="MFN" domain="[('fulfillment_by','=', 'MFN')]"/>				
+                    <filter icon="terp-check" name="AFN" string="AFN" domain="[('fulfillment_by','=', 'AFN')]"/>								
+				</filter>
+               	<filter name="group_by_partner_id" position="after">
+                	<filter name="fulfillment_by" string="Fulfillment By" context="{'group_by':'fulfillment_by'}"/>
+               	</filter>            	
+			</field>
+		</record>
+	</data>
+</odoo>

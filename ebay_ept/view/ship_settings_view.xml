@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<data>
+		
+		<!-- Menu Section -->
+		<menuitem id="menu_ebayerp_shipping_details" name="Shipping Details"
+			parent="ebay_ept.ebay_instance_menu_item_core_settings"
+			sequence="10" />
+
+		<record id="view_ebay_tree_shipping_service" model="ir.ui.view">
+			<field name="name">eBay Shipping Service</field>
+			<field name="model">ebay.shipping.service</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Shipping Service" delete="false" create="false">
+					<field name="name" />
+					<field name="ship_carrier" />
+					<field name="ship_service" />
+					<field name="ship_service_id" />
+					<field name="ship_time" />
+					<field name="inter_ship" />
+					<field name="ship_detail_version" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_ebay_form_shipping_service" model="ir.ui.view">
+			<field name="name">eBay Shipping Service</field>
+			<field name="model">ebay.shipping.service</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Shipping Services" create="false">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="ship_carrier" readonly="1" />
+								<field name="ship_time" readonly="1" />
+								<field name="inter_ship" readonly="1" />
+								<field name="ship_service" readonly="1" />
+							</group>
+							<group>
+								<field name="ship_type1" readonly="1" />
+								<field name="ship_type2" readonly="1" />
+								<field name="cost" />
+								<field name="additional" />
+							</group>
+							<group>
+								<field name="sur_chg_applicable" readonly="1" />
+								<field name="dimension_required" readonly="1" />
+								<field name="ship_service_id" readonly="1" />
+							</group>
+							<group>
+								<field name="ship_category" readonly="1" />
+								<field name="validate_for_sale_flow" readonly="1" />
+								<field name="ship_detail_version" readonly="1" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_ebay_shipping_service_search_ept">
+			<field name="name">eBay Shipping Service Search</field>
+			<field name="model">ebay.shipping.service</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="eBay Shipping Service">
+					<field name="name" />
+					<field name="ship_carrier" />
+					<field name="ship_service" />
+					<field name="ship_service_id" />
+					<field name="ship_detail_version" />
+					<filter name="filter_inter_ship" string="International shipping"
+						domain="[('inter_ship','=','True')]" />
+					<filter name="filter_validate_for_sale_flow" string="Validate for Saling Flow"
+						domain="[('validate_for_sale_flow','=','True')]" />
+					<group expand="0" string="Group By">
+						<filter string="Shipping Carrier" domain="[]" name="ship_carrier"
+							context="{'group_by':'ship_carrier'}" />
+						<filter string="Shipping Detail Version" name="ship_detail_version" domain="[]"
+							context="{'group_by':'ship_detail_version'}" />
+						<filter string="Shipping Category" name="ship_category" domain="[]"
+							context="{'group_by':'ship_category'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+
+		<record id="action_shipping_service" model="ir.actions.act_window">
+			<field name="name">Shipping Service</field>
+			<field name="res_model">ebay.shipping.service</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="action_shipping_service" id="menu_shipping_service"
+			parent="menu_ebayerp_shipping_details" sequence="1" />
+
+
+		<record id="ebay_exclude_tree_shipping_locations" model="ir.ui.view">
+			<field name="name">view.loc.master.tree</field>
+			<field name="model">ebay.exclude.shipping.locations</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Locations" delete="false" create='false'>
+					<field name="name" />
+					<field name="loc_code" />
+					<field name="region" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="ebay_exclude_form_shipping_locations" model="ir.ui.view">
+			<field name="name">view.loc.master.form</field>
+			<field name="model">ebay.exclude.shipping.locations</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Locations">
+					<group colspan="4" col="8">
+						<field name="name" />
+						<field name="loc_code" />
+						<field name="region" />
+					</group>
+
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="ebay_exclude_shipping_locations_search_ept">
+			<field name="name">view.loc.master.search</field>
+			<field name="model">ebay.exclude.shipping.locations</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Locations">
+					<field name="name" />
+					<field name="loc_code" />
+					<field name="region" />
+				</search>
+			</field>
+		</record>
+
+		<record id="action_exclude_locations" model="ir.actions.act_window">
+			<field name="name">Exclude Locations</field>
+			<field name="res_model">ebay.exclude.shipping.locations</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+		</record>
+
+		<menuitem action="action_exclude_locations" id="menu_location"
+			parent="menu_ebayerp_shipping_details" sequence="2" />
+
+		<record id="view_ship_locations_tree" model="ir.ui.view">
+			<field name="name">view.ship.master.tree</field>
+			<field name="model">ebay.shipping.locations</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Shipping Location" delete="false" create="false">
+					<field name="name" />
+					<field name="ship_code" />
+					<field name="detail_version" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_ship_locations_form" model="ir.ui.view">
+			<field name="name">view.ship.master.form</field>
+			<field name="model">ebay.shipping.locations</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Shipping Location">
+					<group colspan="4" col="8">
+						<field name="name" />
+						<field name="ship_code" />
+						<field name="detail_version" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_ship_locations_search">
+			<field name="name">view.ship.master.search</field>
+			<field name="model">ebay.shipping.locations</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Locations">
+					<field name="name" />
+					<field name="ship_code" />
+					<field name="detail_version" />
+				</search>
+			</field>
+		</record>
+
+		<record id="action_ship_locations" model="ir.actions.act_window">
+			<field name="name">Shipping Locations</field>
+			<field name="res_model">ebay.shipping.locations</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+		</record>
+
+		<menuitem action="action_ship_locations" id="menu_shipping"
+			parent="menu_ebayerp_shipping_details" sequence="3" />
+
+		<record id="view_site_details_tree" model="ir.ui.view">
+			<field name="name">Site Details</field>
+			<field name="model">ebay.site.details</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Sites Details" delete="false" create="false">
+					<field name="name" readonly="1" />
+					<field name="site_id" readonly="1" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_site_details_form" model="ir.ui.view">
+			<field name="name">Site Details</field>
+			<field name="model">ebay.site.details</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Site Details" create="false">
+					<group>
+						<field name="name" />
+						<field name="site_id" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_site_details_search">
+			<field name="name">category.master.ept</field>
+			<field name="model">ebay.site.details</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Site Details">
+					<field name="name" string="Site Name" />
+					<field name="site_id" string="Site ID" />
+				</search>
+			</field>
+		</record>
+
+		<record id="action_site_details" model="ir.actions.act_window">
+			<field name="name">Site Details</field>
+			<field name="res_model">ebay.site.details</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+		</record>
+
+		<!-- Menu Section -->
+		<menuitem action="action_site_details" 
+			id="menu_site_details"
+			name="Site Details"
+			parent="ebay_ept.ebay_instance_menu_item_core_settings" sequence="7" />
+
+		<record id="view_ebay_site_policy_ept" model="ir.ui.view">
+			<field name="name">Site Policy</field>
+			<field name="model">ebay.site.policy.ept</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Site Policy" create="false">
+					<field name="name" />
+					<field name="instance_id" />
+				</tree>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="view_site_policy_search_view">
+			<field name="name">Site Policy</field>
+			<field name="model">ebay.site.policy.ept</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Locations">
+					<field name="name" />
+					<field name="policy_id" />
+					<field name="policy_type" />
+					<group expand="0" string="Group By...">
+						<filter string="Instance" name="instance_id" icon="terp-personal" context="{'group_by':'instance_id'}" />
+						<filter string="Policy Type" name="policy_type" icon="terp-personal"
+							context="{'group_by':'policy_type'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+
+		<record id="view_ebay_form_site_policy_ept" model="ir.ui.view">
+			<field name="name">Site Policy</field>
+			<field name="model">ebay.site.policy.ept</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Site Policy" create="false">
+					<sheet>
+						<div class="oe_title" style="width: 390px;">
+							<h1>
+								<field name="name" class="oe_inline" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="policy_id" />
+								<field name="instance_id" />
+							</group>
+							<group>
+								<field name="policy_type" />
+							</group>
+						</group>
+						<group string="Description">
+							<field name="short_summary" nolabel="1" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_ebay_site_policy_ept" model="ir.actions.act_window">
+			<field name="name">Site Policy</field>
+			<field name="res_model">ebay.site.policy.ept</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<!-- Menu Section -->
+		<menuitem action="action_ebay_site_policy_ept" id="menu_site_policy_ept"
+			name="Site Policy"
+			parent="ebay_ept.ebay_instance_menu_item_core_settings" sequence="8" />
+
+	</data>
+</odoo>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+	<data noupdate="1">
+		<!-- eBay Log Sequence Section -->
+		<record id="seq_ebay_process_job" model="ir.sequence">
+			<field name="name">eBay Process Job Sequence</field>
+			<field name="code">ebay.log.book</field>
+			<field name="padding">1</field>
+			<field name="prefix">eBay_LOG</field>
+			<field name="company_id" eval="False" />
+		</record>
+	</data>
+
+	<data>
+		<!-- eBay Log Book Tree View -->
+		<record id="ebay_process_job_tree_view_ept" model="ir.ui.view">
+			<field name="name">eBay Process Job</field>
+			<field name="model">ebay.log.book</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="eBay Process Job" decoration-info="skip_process==False" decoration-danger="skip_process==True" create="false">
+					<field name="name" />
+					<field name="instance_id" />
+					<field name="operation_type" />
+					<field name="message" />
+					<field name="skip_process" />
+					<field name="create_date" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- eBay Log Book Form View -->
+		<record id="ebay_process_job_form_view_ept" model="ir.ui.view">
+			<field name="name">eBay Process Job</field>
+			<field name="model">ebay.log.book</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="eBay Process Job" create="false" edit="false">
+					<sheet>
+						<div class="oe_title">
+	                        <h1>
+	                            <field name="name" readonly="1"/>
+	                        </h1>
+	                    </div>
+						<group>
+							<group>	
+								<field name="instance_id" />
+							</group>
+							<group>
+								<field name="create_date" />
+								<field name="application" />
+								<field name="operation_type" />
+								<field name="skip_process" />
+							</group>
+						</group>
+						<group string="Log Message" colspan="4">
+							<field name="message" readonly="1" nolabel="1" />
+						</group>
+						<notebook name="ebay_instance">
+							<page string="Transaction Log Lines">
+								<group colspan="4">
+									<field name="transaction_log_ids" nolabel="1" readonly="1">
+										<tree>
+											<field name="operation_type" invisible="1" />
+											<field name="res_id" />
+											<field name="ebay_order_ref" />
+											<field name="log_type" />
+											<field name="message" />
+										</tree>
+									</field>
+								</group>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- eBay Log Book Search View -->
+		<record id="ebay_process_job_search_view_ept" model="ir.ui.view">
+			<field name="name">view.ebay.process.log.filter</field>
+			<field name="model">ebay.log.book</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="eBay Process Job">
+					<field name="name" />
+					<field name="application" />
+					<field name="operation_type" />
+					<filter name="filter_operation_export" string="Export" domain="[('operation_type','=','export')]" />
+					<filter name="filter_operation_import" string="Import" domain="[('operation_type','=','import')]" />
+					<group expand="0" string="Group By...">
+						<filter string="Instance" name="instance_id" icon="terp-personal" context="{'group_by':'instance_id'}" />
+						<filter string="Create Date" name="create_date" icon="terp-personal" context="{'group_by':'create_date'}" />
+						<filter string="Application" name="application" icon="terp-personal" context="{'group_by':'application'}" />
+						<filter string="Operation" name="operation_type" icon="terp-personal" context="{'group_by':'operation_type'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+		
+		<record id="action_ebay_process_job_ept" model="ir.actions.act_window">
+			<field name="name">eBay Process Job Log</field>
+			<field name="res_model">ebay.log.book</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="ebay_process_job_tree_view_ept" />
+			<field name="search_view_id" ref="ebay_process_job_search_view_ept" />
+		</record>
+
+
+		<record id="ebay_transaction_tree_view_ept" model="ir.ui.view">
+			<field name="name">eBay Transaction Log Job</field>
+			<field name="model">ebay.transaction.line</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree create="false">
+					<field name="operation_type" />
+					<field name="log_type" />
+					<field name="message" />
+				</tree>
+			</field>
+		</record>
+		<record id="ebay_transaction_log_form_view_ept" model="ir.ui.view">
+			<field name="name">eBay Transaction File Log</field>
+			<field name="model">ebay.transaction.line</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form create="false" edit="false">
+					<sheet>
+						<group readonly="1">
+							<group string="Job Info">
+								<field name="job_id" readonly="1" />
+								<field name="operation_type" readonly="1" />
+								<field name="create_date" readonly="1" />
+								<field name="log_type" invisible="1" />
+								<field name="not_found_value" attrs="{'invisible':[('log_type','!=','not_found')]}" readonly="1" />
+								<field name="action_type" readonly="1" />
+							</group>
+							<group string="Order Info">
+								<field name="res_id" />
+								<field name="ebay_order_ref" />
+							</group>
+						</group>
+						<group string="Message">
+							<field name="message" readonly="1" nolabel="1"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="ebay_file_process_transaction_search_view_ept"
+			model="ir.ui.view">
+			<field name="name">view.ebay.transaction.log.filter</field>
+			<field name="model">ebay.transaction.line</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="File Process Job">
+					<field name="model_id" />
+					<field name="operation_type" />
+					<filter name="filter_log_type_not_found" string="Not Found" domain="[('log_type','=','not_found')]" />
+					<filter name="filter_log_type_mismatch" string="Mismatch" domain="[('log_type','=','mismatch')]" />
+					<newline />
+					<filter name="filter_action_type_create" string="Create New" domain="[('action_type','=','create')]" />
+					<filter name="filter_action_type_skip_line" string="Skip Process" domain="[('action_type','=','skip_line')]" />
+					<filter name="filter_action_type_terminate_process" string="Terminate Process" domain="[('action_type','=','terminate_process_with_log')]" />
+					<newline />
+					<filter name="filter_operation_export" string="Export" domain="[('operation_type','=','export')]" />
+					<filter name="filter_operation_import" string="Import" domain="[('operation_type','=','import')]" />
+					<group expand="0" string="Group By...">
+						<filter string="Create Date" name="create_date" icon="terp-personal" context="{'group_by':'create_date'}" />
+						<filter string="Log Type" name="log_type" icon="terp-personal" context="{'group_by':'log_type'}" />
+						<filter string="Action Type" name="action_type" icon="terp-personal" context="{'group_by':'action_type'}" />
+						<filter string="Model ID" name="model_id" icon="terp-personal" context="{'group_by':'model_id'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+		<record id="action_ebay_mismatch_log_ept" model="ir.actions.act_window">
+			<field name="name">eBay Mismatch Details</field>
+			<field name="res_model">ebay.transaction.line</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('log_type','=','mismatch')]</field>
+			<field name="search_view_id" ref="ebay_file_process_transaction_search_view_ept" />
+		</record>
+
+		<!-- Menu Section -->
+		<menuitem id="ebay_operations_child_logs_menu" name="eBay Logs"
+			parent="ebay_ept.menu_ebayerp_proc" sequence="3" />
+
+		<menuitem id="ebay_process_job_log_ept1" name="Process Job Logs"
+			parent="ebay_operations_child_logs_menu" sequence="1"
+			action="action_ebay_process_job_ept" />
+
+		<!-- <menuitem id="ebay_file_process_mismatch_log_ept" name="Mismatch Details" -->
+		<!-- parent="ebay_process_job_log_ept" sequence="4" -->
+		<!-- action="action_ebay_mismatch_log_ept"/> -->
+
+	</data>
+</odoo>	  
+

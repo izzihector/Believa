@@ -1,0 +1,13 @@
+id,name,amazon_code,is_reimbursement
+FBA_per_Unit_Fulfillment_Fee,FBA per Unit Fulfillment Fee,FBAPerUnitFulfillmentFee,False
+FBA_Weight_based_Fee,FBA Weight based Fee,FBAWeightBasedFee,False
+FBA_Storage_Fee,FBA Storage Fee,Storage Fee,False
+Removal_Complete,Removal Complete,RemovalComplete,False
+Reversal_Reimbursement,Reversal Reimbursement,REVERSAL_REIMBURSEMENT,True
+Warehouse_Lost_Manual,Warehouse Lost Manual,WAREHOUSE_LOST_MANUAL,True
+Warehouse_Damage,Warehouse Damage,WAREHOUSE_DAMAGE,True
+Missing_from_Inbound_Reimbursement,Missing from Inbound Reimbursement,MISSING_FROM_INBOUND,True
+StorageRenewalBilling,StorageRenewalBilling,StorageRenewalBilling,False
+FBA_Transportation_Fee,FBA Transportation Fee,FBATransportationFee,False
+FBAPerOrderFulfillmentFee,FBAPerOrderFulfillmentFee,FBAPerOrderFulfillmentFee,False
+Warehouse_Damage_Exception,Warehouse Damage Exception,WAREHOUSE_DAMAGE_EXCEPTION,True

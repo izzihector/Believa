@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_configure_instance_installer" model="ir.ui.view">
+            <field name="name">ebay.installer.form</field>
+            <field name="model">ebay.instance.conf.installer</field>
+            <field name="arch" type="xml">
+            	<form string="Configure Instance">
+            		<sheet>
+						<group string="Seller Account Details">
+							<group>
+								<field name="name" required="1" />
+								<field name='warehouse_id' required="1" />
+							</group>
+							<group>
+								<field name="country_id" required="1" />
+							</group>
+							<group>
+								<field name='dev_id' required="1" />
+								<field name='app_id' required="1" />
+							</group>
+							<group>
+								<field name='cert_id' required="1" />
+								<field name="environment" required="1" />
+								<field name='server_url' required="1" />
+							</group>
+						</group>
+						<group string="Auth Token">
+							<field name="auth_token" nolabel="1" required="1" />
+						</group>
+	                    <footer>
+	                    	<button name="action_next" type="object" string="Continue" class="oe_highlight"/>
+	                    </footer>
+                    </sheet>
+           		</form>
+            </field>
+        </record>
+
+		<record id="view_general_configuration" model="ir.ui.view">
+			<field name="name">Configure necessary parameters for eBay Instance</field>
+			<field name="model">ebay.instance.general.conf.installer</field>
+			<field name="arch" type="xml">
+				<form string="Configure eBay" class="oe_form_configuration">
+					<sheet>
+						<separator string="eBay Instances" />
+						<group>
+							<label for="id" string="eBay Instances" />
+							<div>
+								<div>
+									<label for="instance_id" string="Select Instance" />
+									<field name="instance_id" widget="selection"
+										attrs="{'required':[('instance_id','!=',False)]}" class="oe_inline" />
+									<button string="Create More Instance" icon="fa-arrow-right text-success"
+										name="%(res_config_action_ebay_instance)d" type="action" class="oe_link" />
+								</div>
+							</div>
+						</group>
+						<field name="fetch_token_boolean" invisible='1'></field>
+						<group attrs="{'invisible':[('fetch_token_boolean','=',False)]}">
+							<label for="id" string="Get Token"/>
+							<div>
+								<div>
+									<button string="Get Token Here" icon="fa-arrow-right text-success" context="{'default_instance_id':instance_id}"
+										name="%(fetch_token_from_ebay_wizard_action)d" type="action" class="oe_link" />
+								</div>		 
+							</div>
+						</group>
+						<separator string="General Information"
+							attrs="{'invisible': ['|',('fetch_token_boolean','=',True),('instance_id', '=', False)]}" />
+						<group attrs="{'invisible': ['|',('fetch_token_boolean','=',True),('instance_id', '=', False)]}">
+							<label for="id" string="Options" />
+							<div name="general_config">
+								<div>
+									<label for="ebay_plus" />
+									<field name="ebay_plus" class="oe_inline" />
+								</div>
+								<div>
+									<label for="company_id" />
+									<field name="company_id" widget="selection"
+										attrs="{'required':[('instance_id','!=',False),('fetch_token_boolean','=',False)]}" class="oe_inline" />
+	
+								</div>
+								<div>
+									<label for="warehouse_id" />
+									<field name="warehouse_id" widget="selection"
+										attrs="{'required':[('instance_id','!=',False),('fetch_token_boolean','=',False)]}" class="oe_inline" />
+								</div>
+								<div>
+									<label for="site_id" />
+									<field name="site_id" attrs="{'required':[('instance_id','!=',False),('fetch_token_boolean','=',False)]}"
+										class="oe_inline" />
+								</div>
+								<div>
+									<label for="post_code" />
+									<field name="post_code" attrs="{'required':[('instance_id','!=',False),('fetch_token_boolean','=',False)]}"
+										class="oe_inline" />
+	
+								</div>
+								<div>
+									<label for="lang_id" />
+									<field name="lang_id" widget="selection"
+										attrs="{'required':[('instance_id','!=',False),('fetch_token_boolean','=',False)]}" class="oe_inline" />
+								</div>
+								<div>
+									<label for="partner_id" />
+									<field name="partner_id" class="oe_inline" /> <!-- attrs="{'required':[('instance_id','!=',False)]}" -->
+								</div>
+							</div>
+						</group>
+						<separator string="Product Information"
+							attrs="{'invisible': ['|',('fetch_token_boolean','=',True),('instance_id', '=', False)]}" />
+						<group attrs="{'invisible': ['|',('fetch_token_boolean','=',True),('instance_id', '=', False)]}">
+							<label for="id" string="Products" />
+							<div name="product_config">
+								<div>
+									<label for="shipment_charge_product_id" />
+									<field name="shipment_charge_product_id" class="oe_inline"
+										attrs="{'required':[('instance_id','!=',False),('fetch_token_boolean','=',False)]}" />
+								</div>
+								<div>
+									<label for="discount_charge_product_id" />
+									<field name="discount_charge_product_id" class="oe_inline" attrs="{'required':[('instance_id','!=',False),('fetch_token_boolean','=',False)]}"/>
+								</div>
+								<div>
+									<label for="price_tax_included" />
+									<field name="price_tax_included" class="oe_inline" />
+								</div>
+								<div>
+                                <label for="use_dynamic_desc" />
+                                	<field name="use_dynamic_desc" class="oe_inline"/>
+                            	</div>
+								<div>
+									<label for="ebay_default_product_category_id" invisible="1"/>
+									<field name="ebay_default_product_category_id" class="oe_inline" invisible="1"/>
+								</div>
+							</div>
+						</group>
+						<group attrs="{'invisible': ['|',('fetch_token_boolean','=',True),('instance_id', '=', False)]}">
+							<label for="id" string="Taxes" />
+							<div name="taxes_config">
+								<div>
+									<label for="fiscal_position_id" />
+									<field name="fiscal_position_id" class="oe_inline" />
+								</div>
+								<div>
+									<label for="tax_id" />
+									<field name="tax_id" domain="[('type_tax_use','=','sale')]" class="oe_inline" />
+								</div>
+							</div>
+						</group>
+						<separator string="Payment Information"
+							attrs="{'invisible': ['|',('fetch_token_boolean','=',True),('instance_id', '=', False)]}" />
+						<group attrs="{'invisible': ['|',('fetch_token_boolean','=',True),('instance_id', '=', False)]}">
+							<label for="id" string="Payment" />
+							<div name="payment_config">
+								<div>
+								<label for="pricelist_id" />
+								<field name="pricelist_id" attrs="{'required':[('instance_id','!=',False),('fetch_token_boolean','=',False)]}"
+									class="oe_inline" />
+								</div>
+								<div>
+									<label for="pay_mthd" />
+									<field name="pay_mthd" attrs="{'required':[('instance_id','!=',False),('fetch_token_boolean','=',False)]}"
+										class="oe_inline" />
+								</div>
+								<div>
+									<label for="email_add" />
+									<field name="email_add" attrs="{'required':[('instance_id','!=',False),('fetch_token_boolean','=',False)]}"
+										class="oe_inline" />
+								</div>
+							</div>
+						</group>
+						<separator string="Order Information"
+							attrs="{'invisible': ['|',('fetch_token_boolean','=',True),('instance_id', '=', False)]}" />
+						<group attrs="{'invisible': ['|',('fetch_token_boolean','=',True),('instance_id', '=', False)]}">
+							<label for="id" string="Orders" />
+							<div name="order_config">
+								<div>
+									<label for="order_auto_import" />
+									<field name="order_auto_import" class="oe_inline" />
+								</div>
+								<div attrs="{'invisible': [('order_auto_import', '=', False)]}">
+									<label for="id" string="I want to import order at every " />
+									<field name="order_import_interval_number"
+										attrs="{'required': [('order_auto_import', '=', True)]}" class="oe_inline" />
+									<field name="order_import_interval_type"
+										attrs="{'required': [('order_auto_import', '=', True)]}" class="oe_inline" />
+									<field name="order_import_next_execution"
+										attrs="{'required': [('order_auto_import', '=', True)]}" class="oe_inline" />
+									<field name="order_import_user_id"
+										attrs="{'required': [('order_auto_import', '=', True)]}" class="oe_inline" />
+								</div>
+								<div>
+									<label for="order_auto_update" />
+									<field name="order_auto_update" class="oe_inline"
+										help="If Ticked, Order shipment will be automatically updated by system to Shopify." />
+								</div>
+								<div attrs="{'invisible': [('order_auto_update', '=', False)]}">
+									<label for="id" string="I want to Auto Update Order at every " />
+									<field name="order_update_interval_number"
+										attrs="{'required': [('order_auto_update', '=', True)]}" class="oe_inline" />
+									<field name="order_update_interval_type"
+										attrs="{'required': [('order_auto_update', '=', True)]}" class="oe_inline" />
+									<field name="order_update_next_execution"
+										attrs="{'required': [('order_auto_update', '=', True)]}" class="oe_inline" />
+									<field name="order_status_update_user_id"
+										attrs="{'required': [('order_auto_update', '=', True)]}" class="oe_inline" />
+								</div>
+								<div>
+									<label for="create_new_product" />
+									<field name="create_new_product" class="oe_inline" />
+								</div>
+								<div attrs="{'invisible': [('create_new_product', '!=', False)]}">
+									<label for="create_quotation_without_product" />
+									<field name="create_quotation_without_product" class="oe_inline" />
+								</div>
+								<div>
+									<label for="manage_multi_tracking_number_in_delivery_order" />
+									<field name="manage_multi_tracking_number_in_delivery_order"
+										class="oe_inline" />
+								</div>
+								<div>
+									<label for="auto_update_payment"/>
+									<field name="auto_update_payment" class="oe_inline"/>
+								</div>								
+								<div>
+									<label for="order_prefix" />
+									<field name="order_prefix" class="oe_inline" />
+								</div>
+								<div>
+									<label for="team_id" />
+									<field name="team_id" options="{'no_create': True}" class="oe_inline" />
+								</div>
+							</div>
+						</group>
+						<separator string="Inventory Information"
+							attrs="{'invisible': ['|',('fetch_token_boolean','=',True),('instance_id', '=', False)]}" />
+						<group attrs="{'invisible': ['|',('fetch_token_boolean','=',True),('instance_id', '=', False)]}">
+							<label for="id" string="Inventory" />
+							<div name="stock_config">
+								<div>
+									<label for="stock_auto_export" />
+									<field name="stock_auto_export" class="oe_inline" />
+								</div>
+								<div attrs="{'invisible': [('stock_auto_export', '=', False)]}">
+									<label for="id" string="I want to Auto Update Inventory at every " />
+									<field name="update_stock_interval_number"
+										attrs="{'required': [('stock_auto_export', '=', True)]}" class="oe_inline" />
+									<field name="update_stock_interval_type"
+										attrs="{'required': [('stock_auto_export', '=', True)]}" class="oe_inline" />
+									<field name="update_stock_next_execution"
+										attrs="{'required': [('stock_auto_export', '=', True)]}" class="oe_inline" />
+									<field name="stock_update_user_id"
+										attrs="{'required': [('stock_auto_export', '=', True)]}" class="oe_inline" />
+								</div>
+								<div>
+									<label for="stock_field" />
+									<field name="stock_field" widget="selection" domain="[('model_id.model','=','product.product'),('name','in',['qty_available','virtual_available'])]"
+										attrs="{'required':[('instance_id','!=',False),('fetch_token_boolean','=',False)]}" class="oe_inline" />
+								</div>
+							</div>
+						</group>
+	                    <footer>
+	                    	<button name="action_next" type="object" string="Continue" class="oe_highlight"/>
+	                    </footer>
+                    </sheet>				
+				</form>
+			</field>
+		</record>
+
+		<record id="view_get_ebay_details" model="ir.ui.view">
+			<field name="name">Process to Import eBay Details</field>
+			<field name="model">ebay.operation.installer</field>
+			<field name="arch" type="xml">
+				<form string="Get eBay Details">
+					<sheet>
+						<p style="color: rgb(122, 115, 115);font-size: 17px;font-weight: 300; line-height: 175% !important;font-family: Lato;word-spacing: 1px !important;">
+							<strong>Use this operation to retrieve the available meta-data for the
+								specified eBay site. By storing the information, you can keep your
+								applications up to date with the latest details.</strong>
+						</p>
+						<group>
+							<field name='instance_ids' widget="many2many_tags"
+								options="{'no_create':True,'no_create_edit': True}" required="1" />
+						</group>
+						<group>
+							<field name="is_ebay_details" />
+						</group>
+						<footer>
+							<button name="action_next" context="{'get_ebay_detail': True}" type="object" string="Continue" class="oe_highlight"/>
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_configure_payment_options" model="ir.ui.view">
+			<field name="name">Configure Payment Options</field>
+			<field name="model">ebay.payment.option.instance.conf.installer</field>
+			<field name="arch" type="xml">
+				<form string="Configure Payment Options">
+					<sheet>
+						<group>
+							<field name="instance_id"/>
+						</group>
+						<field name="payment_option_ids" nolabel="1">
+							<tree string="Payment Option Lines" editable="top" create="false" delete="false">
+								<field name="instance_id" readonly="1"/>
+								<field name="payment_option_id" required="1" readonly="1"/>
+								<field name="description" invisible="1"/>
+								<field name="auto_workflow_id"/>
+								<field name="payment_term_id" attrs="{'required':[('auto_workflow_id','!=',False)]}"/>
+								<field name="update_payment_in_ebay"/>
+							</tree>
+						</field>
+						<footer>
+							<button name="action_next" type="object" string="Continue" class="oe_highlight"/>
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>		
+
+		<record id="view_get_user_preferences" model="ir.ui.view">
+			<field name="name">Get User Preferences</field>
+			<field name="model">ebay.operation.installer</field>
+			<field name="arch" type="xml">
+				<form string="Get User Preferences">
+					<sheet>
+						<p style="color: rgb(122, 115, 115);font-size: 17px;font-weight: 300; line-height: 175% !important;font-family: Lato;word-spacing: 1px !important;">
+							<strong>Use this operation to retrieve user preferences for the
+								authenticated caller. It will import eBay Seller Policy from eBay
+								seller account and those policies will be used in Product Export and
+								Update process.</strong>
+						</p>
+						<group>
+							<field name='instance_ids' widget="many2many_tags"
+								options="{'no_create':True,'no_create_edit': True}" required="1" />
+						</group>
+						<group>
+							<field name="get_use_preferences" />
+						</group>
+						<footer>
+							<button name="action_next" type="object" string="Continue" context="{'get_user_preferences': True, 'get_ebay_detail': False}" class="oe_highlight"/>
+							<button name="action_skip" type="object" string="Skip"/>
+						</footer>						
+					</sheet>				
+				</form>
+			</field>
+		</record>
+
+		<record id="view_import_categories" model="ir.ui.view">
+			<field name="name">Import Categories</field>
+			<field name="model">ebay.operation.installer</field>
+			<field name="arch" type="xml">
+				<form string="Import Categories">
+					<sheet>
+						<group>
+							<field name='instance_ids' widget="many2many_tags"
+								options="{'no_create':True,'no_create_edit': True}" required="1" />
+						</group>
+						<group>
+							<label for="id" string="Import Categories" />
+							<div>
+								<field name="is_import_category" class="oe_inline" />
+								<div attrs="{'invisible':[('is_import_category','=',False)]}">
+									<group>
+										<field name="level_limit" class="oe_inline" />
+										<field name="only_leaf_categories" class="oe_inline" />
+									</group>
+								</div>
+							</div>
+						</group>
+						<footer>
+							<button name="action_next" type="object" string="Continue" context="{'import_categories': True, 'get_ebay_detail': False, 'get_user_preferences' : False}" class="oe_highlight"/>
+							<button name="action_skip" type="object" string="Skip"/>
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_import_store_categories" model="ir.ui.view">
+			<field name="name">Import Store Categories</field>
+			<field name="model">ebay.operation.installer</field>
+			<field name="arch" type="xml">
+				<form string="Import Store Categories">
+					<sheet>
+						<group>
+							<field name='instance_ids' widget="many2many_tags"
+								options="{'no_create':True,'no_create_edit': True}" required="1" />
+						</group>
+						<group>
+							<label for="id" string="Import Store Categories" />
+							<div>
+								<field name="is_import_store_category" class="oe_inline" />
+								<div attrs="{'invisible':[('is_import_store_category','=',False)]}">
+									<group>
+										<field name="store_level_limit" class="oe_inline" />
+										<field name="store_only_leaf_categories" class="oe_inline" />
+									</group>
+								</div>
+							</div>
+						</group>
+						<footer>
+							<button name="action_next" type="object" context="{'import_store_categories': True, 'import_categories' : False, 'get_ebay_detail': False, 'get_user_preferences' : False}" string="Continue" class="oe_highlight"/>
+							<button name="action_skip" type="object" string="Skip"/>
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>		
+
+		<record id="view_sync_product" model="ir.ui.view">
+			<field name="name">Sync Active Products</field>
+			<field name="model">ebay.operation.installer</field>
+			<field name="arch" type="xml">
+				<form string="Sync Active Products">
+					<sheet>
+						<p style="color: rgb(122, 115, 115);font-size: 17px;font-weight: 300; line-height: 175% !important;font-family: Lato;word-spacing: 1px !important;">
+							<strong>Using this process, you can synchronize the products from eBay
+								into Odoo. However, Odoo will not create any new product, but it'll
+								sync the eBay products with existing ones which are in Odoo.</strong>
+							<strong>Note : Each of the time ranges must be a value less than 120 days.</strong>
+						</p>
+						<group>
+							<field name='instance_ids' widget="many2many_tags"
+								options="{'no_create':True,'no_create_edit': True}" required="1" />
+						</group>
+						<group>
+							<label for="id" string="Sync Products" />
+							<div>
+								<field name="is_import_product" string="Sync Products" />
+								<br />
+								<label for="from_date" string="Date"
+									attrs="{'invisible':[('is_import_product','=',False)]}" />
+								<div attrs="{'invisible':[('is_import_product','=',False)]}">
+									<field name="from_date"
+										attrs="{'required':[('is_import_product','=',True)]}"
+										class="oe_inline" />
+									to
+									<field name="to_date"
+										attrs="{'required':[('is_import_product','=',True)]}"
+										class="oe_inline" />
+								</div>
+							</div>
+						</group>
+						<footer>
+							<button name="action_next" type="object" context="{'sync_active_products': True, 'import_store_categories' : False, 'import_categories' : False, 'get_ebay_detail': False, 'get_user_preferences' : False}" string="Continue" class="oe_highlight"/>
+							<button name="action_skip" type="object" string="Skip"/>
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_import_sale_order" model="ir.ui.view">
+			<field name="name">Import Sale Order</field>
+			<field name="model">ebay.operation.installer</field>
+			<field name="arch" type="xml">
+				<form string="Import Sale Order">
+					<sheet>
+						<group>
+							<field name='instance_ids' widget="many2many_tags"
+								options="{'no_create':True,'no_create_edit': True}" required="1" />
+						</group>
+						<group>
+							<field name="import_sales_orders" />
+						</group>
+						<footer>
+							<button name="action_next" type="object" context="{'import_sale_order': True, 'sync_active_products': False, 'import_store_categories' : False, 'import_categories' : False, 'get_ebay_detail': False, 'get_user_preferences' : False}" string="Complete Process" class="oe_highlight"/>
+							<button name="action_skip" type="object" string="Skip and Complete Process"/>
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+										
+        <record id="action_configure_instance_installer" model="ir.actions.act_window">
+            <field name="name"><![CDATA[<center><h2 class="oe_slogan" style="letter-spacing: -1px !important; color:#087DDA !important;">Setup your eBay Instance</h2></center>]]></field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ebay.instance.conf.installer</field>
+            <field name="view_id" ref="view_configure_instance_installer"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+        <record id="action_set_general_configuration" model="ir.actions.act_window">
+            <field name="name"><![CDATA[<center><h2 class="oe_slogan" style="letter-spacing: -1px !important; color:#087DDA !important;">Configure your eBay Instance</h2></center>]]></field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ebay.instance.general.conf.installer</field>
+            <field name="view_id" ref="view_general_configuration"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="action_get_ebay_details" model="ir.actions.act_window">
+            <field name="name"><![CDATA[<center><h2 class="oe_slogan" style="letter-spacing: -1px !important; color:#087DDA !important;">Get eBay Details</h2></center>]]></field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ebay.operation.installer</field>
+            <field name="view_id" ref="view_get_ebay_details"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="action_get_payment_option_details" model="ir.actions.act_window">
+            <field name="name"><![CDATA[<center><h2 class="oe_slogan" style="letter-spacing: -1px !important; color:#087DDA !important;">Configure Payment Options</h2></center>]]></field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ebay.payment.option.instance.conf.installer</field>
+            <field name="view_id" ref="view_configure_payment_options"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>   
+             
+        <record id="action_get_ebay_user_preferences_details" model="ir.actions.act_window">
+            <field name="name"><![CDATA[<center><h2 class="oe_slogan" style="letter-spacing: -1px !important; color:#087DDA !important">Get User Preferences</h2></center>]]></field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ebay.operation.installer</field>
+            <field name="view_id" ref="view_get_user_preferences"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>             
+               
+        <record id="action_import_categories_details" model="ir.actions.act_window">
+            <field name="name"><![CDATA[<center><h2 class="oe_slogan" style="letter-spacing: -1px !important; color:#087DDA !important;">Import Product Categories</h2></center>]]></field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ebay.operation.installer</field>
+            <field name="view_id" ref="view_import_categories"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="action_store_categories_details" model="ir.actions.act_window">
+            <field name="name"><![CDATA[<center><h2 class="oe_slogan" style="letter-spacing: -1px !important; color:#087DDA !important;">Import Product Store Categories</h2></center>]]></field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ebay.operation.installer</field>
+            <field name="view_id" ref="view_import_store_categories"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="action_sync_product_details" model="ir.actions.act_window">
+            <field name="name"><![CDATA[<center><h2 class="oe_slogan" style="letter-spacing: -1px !important; color:#087DDA !important;">Sync Active Products</h2></center>]]></field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ebay.operation.installer</field>
+            <field name="view_id" ref="view_sync_product"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="action_import_sale_order_details" model="ir.actions.act_window">
+            <field name="name"><![CDATA[<center><h2 class="oe_slogan" style="letter-spacing: -1px !important; color:#087DDA !important;">Import Sale Order</h2></center>]]></field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ebay.operation.installer</field>
+            <field name="view_id" ref="view_import_sale_order"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="ebay_operations_action_redirect" model="ir.actions.client">
+            <field name="name">Open eBay dashboard menu</field>
+            <field name="tag">reload</field>
+            <field name="params" eval="{'menu_id': ref('ebay_ept.ebay_instance_menu_item')}"/>
+        </record>                    
+
+		<record id="ebay_configuration_installer_todo" model="ir.actions.todo">
+        	<field name="name">Setup your eBay Instance</field>
+            <field name="action_id" ref="action_configure_instance_installer"/>
+            <field name="sequence">101</field>
+			<field name="state">open</field>
+        </record>
+
+        <record id="action_set_general_configuration_todo" model="ir.actions.todo">
+            <field name="name">Configure your eBay Instance</field>
+            <field name="action_id" ref="action_set_general_configuration"/>
+            <field name="sequence">102</field>
+			<field name="state">done</field>
+        </record>
+
+        <record id="action_get_ebay_details_todo" model="ir.actions.todo">
+            <field name="name">Get eBay Details</field>
+            <field name="action_id" ref="action_get_ebay_details"/>
+            <field name="sequence">103</field>
+			<field name="state">done</field>
+        </record>
+                
+        <record id="ebay_config_payment_option_installer_todo" model="ir.actions.todo">
+       		<field name="name">Configure Payment Options</field>
+            <field name="action_id" ref="action_get_payment_option_details"/>
+            <field name="sequence">104</field>
+            <field name="state">done</field>
+        </record>
+        
+        <record id="ebay_config_user_preferences_installer_todo" model="ir.actions.todo">
+        	<field name="name">Get User Preferences</field>
+            <field name="action_id" ref="action_get_ebay_user_preferences_details"/>
+            <field name="sequence">105</field>
+			<field name="state">done</field>
+        </record>     
+           
+        <record id="ebay_config_import_categories_installer_todo" model="ir.actions.todo">
+        	<field name="name">Import Product Categories</field>
+            <field name="action_id" ref="action_import_categories_details"/>
+            <field name="sequence">106</field>
+			<field name="state">done</field>
+        </record>
+
+        <record id="ebay_config_store_categories_installer_todo" model="ir.actions.todo">
+        	<field name="name">Import Product Store Categories</field>
+            <field name="action_id" ref="action_store_categories_details"/>
+            <field name="sequence">107</field>
+			<field name="state">done</field>
+        </record>     
+           
+        <record id="ebay_config_sync_product_todo" model="ir.actions.todo">
+        	<field name="name">Sync Active Products</field>
+            <field name="action_id" ref="action_sync_product_details"/>
+            <field name="sequence">108</field>
+            <field name="state">done</field>
+        </record>           
+
+        <record id="ebay_config_import_sale_order_todo" model="ir.actions.todo">
+        	<field name="name">Import Sale Order</field>
+            <field name="action_id" ref="action_import_sale_order_details"/>
+            <field name="sequence">109</field>
+            <field name="state">done</field>
+        </record>
+                
+        <record id="ebay_main_dashboard_todo" model="ir.actions.todo">
+        	<field name="name">eBay Dashboard</field>
+            <field name="action_id" ref="ebay_operations_action_redirect"/>
+            <field name="sequence">110</field>
+            <field name="state">done</field>
+        </record>
+        
+    </data>
+</odoo>

@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<odoo>
+	<data>
+		<record id="amazon_fba_dashboard_operations_kanban_ept" model="ir.ui.view">
+			<field name="name">amazon.operations.fba.kanban.ept</field>
+			<field name="model">amazon.operations.ept</field>
+			<field name="inherit_id" ref="amazon_ept.navigate_amazon_kanban_view" />
+			<field name="arch" type="xml">
+				<field name="use_log" position="after">
+					<field name="use_inbound_shipment_plan"/>
+					<field name="use_inbound_shipment"/>					
+				</field>
+				<xpath expr="//div[@id='amazon_dashboard_auto_workflow']" position="before">
+					 <div id="amazon_dashboard_inbound_shipment_plan" t-if="record.use_inbound_shipment_plan.raw_value" style="margin-left:25px;margin-bottom:10px;width:40%;float:left;">
+	                	<a name="%(action_draft_tree_amazon_inbound_shipment_plan)d" type="action" class="oe_sparkline_bar_link"><field name="count_draft_inbound_shipment_plan"/> Draft</a>
+					 </div>
+	                 <div t-if="record.use_inbound_shipment_plan.raw_value" style="margin-left:25px;width:40%;float:right;">
+	                	<a name="%(action_approved_tree_amazon_inbound_shipment_plan)d" type="action"><field name="count_approved_inbound_shipment_plan"/> Approved</a>
+					 </div>
+					 <div style="clear:both"></div>										
+                     <div id="amazon_dashboard_inbound_shipments" t-if="record.use_inbound_shipment.raw_value" style="margin-left:25px;margin-bottom:10px;width:40%;float:left;">
+                         <a name="%(action_amazon_working_inbound_shipment_ept)d" type="action" class="oe_sparkline_bar_link"><field name="count_working_inbound_shipment"/> Working</a>
+					 </div>
+                     <div  t-if="record.use_inbound_shipment.raw_value" style="margin-left:25px;width:40%;float:right;">
+                         <a name="%(action_amazon_shipped_inbound_shipment_ept)d" 
+                         type="action" class="oe_sparkline_bar_link"><field name="count_shipped_inbound_shipment"/> Shipped</a>
+					 </div>
+					 <div style="clear:both"></div>			
+					 
+                     <div  t-if="record.use_inbound_shipment.raw_value" style="margin-left:25px;width:40%;float:left;">
+                        <a name="%(action_amazon_cancelled_inbound_shipment_ept)d" type="action" class="oe_sparkline_bar_link"><field name="count_cancelled_inbound_shipment"/> Cancelled</a>
+					 </div>
+                     <div  t-if="record.use_inbound_shipment.raw_value" style="margin-left:25px;width:40%;float:right;">
+                         <a name="%(action_amazon_closed_inbound_shipment_ept)d" type="action" class="oe_sparkline_bar_link"><field name="count_closed_inbound_shipment"/> Closed</a>
+					 </div>					 									
+					 <div style="clear:both"></div>			
+					
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

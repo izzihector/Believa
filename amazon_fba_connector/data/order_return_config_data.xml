@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data noupdate="1">
+    
+    	<record id="order_return_config_defective1" model="order.return.config">
+            <field name="condition">DEFECTIVE</field>
+            <field name="is_reimbursed">False</field><!-- True -->
+        </record>
+        
+        <record id="order_return_config_customer_damaged1" model="order.return.config">
+            <field name="condition">CUSTOMER_DAMAGED</field>
+            <field name="is_reimbursed">False</field><!-- True -->
+        </record>
+        
+        <record id="order_return_config_customerdamaged1" model="order.return.config">
+            <field name="condition">CUSTOMERDAMAGED</field>
+            <field name="is_reimbursed">False</field><!-- True -->
+        </record>
+        
+        <record id="order_return_config_sellable1" model="order.return.config">
+            <field name="condition">SELLABLE</field>
+            <field name="is_reimbursed">False</field><!-- True -->
+        </record>
+        
+        <record id="order_return_config_damaged1" model="order.return.config">
+            <field name="condition">DAMAGED</field>
+            <field name="is_reimbursed">True</field><!-- True -->
+        </record>
+        
+        <record id="order_return_config_carrier_damaged1" model="order.return.config">
+            <field name="condition">CARRIER_DAMAGED</field>
+            <field name="is_reimbursed">True</field><!-- True -->
+        </record>
+        
+        <record id="order_return_config_expired1" model="order.return.config">
+            <field name="condition">EXPIRED</field>
+            <field name="is_reimbursed">False</field><!-- True -->
+        </record>
+        
+    </data>
+</odoo>
